@@ -4,47 +4,68 @@ var Snake = require('../Snake');
 class Game {
 
   constructor( boardArr ) {
-    if (!(boardArr instanceof Array()) && length === 3) {
+    if (!(boardArr instanceof Array) && length === 3) {
       return console.log('Invalid board game dimensions');
     }
 
     this.gameBoard = new GameBoard( boardArr );
-    this.snake = new Snake(this._getStartingHead());
-    this.nodes = [];
+    this.snake = new Snake( this._getStartingHead( this.gameBoard.levelUpPosition ) );
     this.status = true;
   }
 
   // only checks for an edge crash currently
-  _checkSnakeCrash() {
+  _didSnakeCrash() {
 
-    var head = this.nodes[ this.nodes.length -1 ];
-
-    return (head[0] < 0 || head[0] > this.gameBoard.limits[0] ||
-        head[1] < 0 || head[1] > this.gameBoard.limits[1] ||
-        head[2] < 0 || head[2] > this.gameBoard.limits[2]);
+    var head = this.snake.nodes[ this.snake.nodes.length -1 ];
+    return (
+      (head[0] < 0 || head[0] > this.gameBoard.limits[0]) ||
+      (head[1] < 0 || head[1] > this.gameBoard.limits[1]) ||
+      (head[2] < 0 || head[2] > this.gameBoard.limits[2])
+    );
   }
 
-  _getStartingHead() {
-    var initX = Math.floor( Math.random() * this.gameBoard[0] );
-    var initY = Math.floor( Math.random() * this.gameBoard[1] );
-    var initZ = 0; // no 3d for now
-    return [ initX, initY, initZ ]; 
+  _getStartingHead( avoid ) {
+
+    avoid = avoid.join('');
+    var rnd;
+
+    do {
+      rnd = [
+        Math.floor( Math.random() * this.gameBoard.limits[0] ),
+        Math.floor( Math.random() * this.gameBoard.limits[1] ),
+        Math.floor( Math.random() * this.gameBoard.limits[2] )
+      ];
+    } while ( rnd.join('') === avoid )
+
+    return rnd;
   }
 
   tick() {
-    if ( !this.status ) { return console.log('Game is over.'); }
+    if ( !this.status ) { return console.log('XXXX Crashed! Game is over.'); }
 
-    this.nodes = this.snake._tick();
-    this.status = this._checkSnakeCrash();
+    console.log('----> tick');
+    this.snake._tick();
+    this.status = !this._didSnakeCrash();
+    if (this.snake.head === this.gameBoard.levelUpPosition) {
+      this.snake.setExtensionTicks( this.gameBoard.level );
+    }
+    this.getState();
   }
 
   changeDirection(dir) {
+    if ( !this.status ) { return null; }
     this.direction = this.snake._changeDirection(dir);
+    console.log('----> new direction: ', dir);
   }
 
   getState() {
-    console.log('nodes: ', this.nodes);
+    console.log('----');
+    console.log('nodes: ', this.snake.nodes);
+    console.log('levelup: ', this.gameBoard.levelUpPosition);
     console.log('direction: ', this.direction);
-    console.log('status: ', this.status);
+    console.log('status: ', this.status ? 'OK' : 'OVER');
+    console.log('----');
   }
 } 
+
+module.exports = Game;

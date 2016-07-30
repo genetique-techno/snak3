@@ -1,4 +1,4 @@
-var util = require.'../../util';
+var util = require('../../util');
 
 class Snake {
 
@@ -22,7 +22,7 @@ class Snake {
     console.log('Extended! by', val);
   }
 
-  tick() {
+  _tick() {
     var headStub = [0, 0, 0];
 
     switch ( this.direction ) {
@@ -42,11 +42,20 @@ class Snake {
       case 'right':
         headStub = [1, 0, 0];
         break;
+
+      case 'in':
+        headStub = [0, 0, 1];
+        break;
+
+      case 'out':
+        headStub = [0, 0, -1];
+        break;
       default:
     }
 
     // add the new head position
-    this.nodes.push( util.addNodes( this.head, headStub ) );
+    this.head = util.addNodes( this.head, headStub);
+    this.nodes.push( this.head );
     // extend the snake if necessary
     if ( this.extensionsTicks === 0 ) {
       // remove node from tail of snake
@@ -58,3 +67,5 @@ class Snake {
     return this.nodes; 
   }
 }
+
+module.exports = Snake;

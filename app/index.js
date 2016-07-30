@@ -1,23 +1,21 @@
-// var _ = require('underscore');
-var EventEmitter = require('events');
+
+
+var Game = require('./Classes/Game');
+
 
 console.log('Welcome to snak3');
 
+var game = new Game([5, 5, 1]);
 
+game.getState();
 
-
-
-var snake = new Snake([0, 0, 0]);
-console.log('head', snake.head);
-snake.eventer.emit( 'dir', 'down' );
-snake.eventer.emit( 'tick' );
-snake.eventer.emit( 'extend', 2 );
-snake.eventer.emit( 'tick' );
-snake.eventer.emit( 'dir', 'right' );
-snake.eventer.emit( 'tick' );
-snake.eventer.emit( 'tick' );
-snake.eventer.emit( 'tick' );
-snake.eventer.emit( 'tick' );
-
-
-
+game.changeDirection('up');
+game.tick();
+game.tick();
+game.changeDirection('right');
+game.tick();
+game.tick();
+game.changeDirection('down');
+game.tick();
+game.tick();
+game.tick();
