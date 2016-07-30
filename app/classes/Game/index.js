@@ -2,6 +2,7 @@ import _ from 'underscore';
 
 import GameBoard from 'app/classes/GameBoard';
 import Snake from 'app/classes/Snake';
+import util from 'app/util';
 
 class Game {
 
@@ -19,6 +20,12 @@ class Game {
   _didSnakeCrash() {
 
     var head = this.snake.nodes[ this.snake.nodes.length -1 ];
+    
+    if ( util.isNodeIncluded( this.snake.head, this.snake.nodes.slice(0, this.snake.nodes.length - 2 ) ) ) {
+      console.log('crashed into your own snake');
+      return true;
+    }
+
     return (
       (head[0] < 0 || head[0] > this.gameBoard.limits[0]) ||
       (head[1] < 0 || head[1] > this.gameBoard.limits[1]) ||
@@ -69,6 +76,7 @@ class Game {
     console.log('direction: ', this.direction);
     console.log('status: ', this.status ? 'OK' : 'OVER');
     console.log('----');
+    if ( !this.status ) { console.log('XXXX Crashed! Game is over.'); }
   }
 } 
 
