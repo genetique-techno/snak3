@@ -1,5 +1,7 @@
-var GameBoard = require('../GameBoard');
-var Snake = require('../Snake');
+import _ from 'underscore';
+
+import GameBoard from 'app/classes/GameBoard';
+import Snake from 'app/classes/Snake';
 
 class Game {
 
@@ -46,7 +48,8 @@ class Game {
     console.log('----> tick');
     this.snake._tick();
     this.status = !this._didSnakeCrash();
-    if (this.snake.head === this.gameBoard.levelUpPosition) {
+    if (this.snake.head.join('') === this.gameBoard.levelUpPosition.join('')) {
+      this.gameBoard.levelUp(this.snake.nodes);
       this.snake.setExtensionTicks( this.gameBoard.level );
     }
     this.getState();
@@ -60,7 +63,8 @@ class Game {
 
   getState() {
     console.log('----');
-    console.log('nodes: ', this.snake.nodes);
+    console.log('nodes: ');
+    this.snake.nodes.forEach((node) => ( console.log(node) ));
     console.log('levelup: ', this.gameBoard.levelUpPosition);
     console.log('direction: ', this.direction);
     console.log('status: ', this.status ? 'OK' : 'OVER');
@@ -68,4 +72,4 @@ class Game {
   }
 } 
 
-module.exports = Game;
+export default Game;

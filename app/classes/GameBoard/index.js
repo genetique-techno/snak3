@@ -2,17 +2,15 @@ class GameBoard {
   constructor( [x, y, z] ) {
     this.limits = [x-1, y-1, z-1];
     this.level = 0;
-    this.levelUpPosition = this._getRandomStartLevelUp();
+    this.levelUpPosition = this._getRandomPositionExceptNodes();
   }
 
   levelUp(avoidNodes) {  // pass in all nodes of the snake so they won't be randomly generated on
-    this.levelUpPosition = this._getRandomStartLevelUp(avoidNodes);
-    console.log(levelUpPosition);
+    this.levelUpPosition = this._getRandomPositionExceptNodes(avoidNodes);
     this.level++;
-    return this.levelUpPosition;
   }
 
-  _getRandomStartLevelUp(avoid) {
+  _getRandomPositionExceptNodes(avoid) {
     avoid = avoid ? avoid.map( function(item) {
       return item.join('');
     }) : [ -1, -1, -1];
@@ -29,4 +27,4 @@ class GameBoard {
   }
 }
 
-module.exports = GameBoard;
+export default GameBoard;
