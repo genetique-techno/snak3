@@ -1,9 +1,9 @@
-
+import "babel-polyfill";
 
 var Game = require('./Classes/Game');
 
 
-console.log('Welcome to snak3');
+console.log('Welcome to snak3!');
 
 var game = new Game([5, 5, 1]);
 
