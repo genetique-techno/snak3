@@ -23,5 +23,8 @@
     "babel-preset-es2015": "^6.9.0",
     "html-webpack-plugin": "^2.22.0",
     "webpack": "^1.13.1"
+  },
+  "dependencies": {
+    "underscore": "^1.8.3"
   }
 }
