@@ -48,6 +48,8 @@ export default class Renderer {
     cube.position.set( s*pos[0], s*pos[1], s*pos[2] );
 
     if (group) {
+      material.wireframe = true;
+      material.wireframeLinewidth = 2;
       this[group].add(cube);
     } else {
       this.cubes.add(cube);    
@@ -82,7 +84,6 @@ export default class Renderer {
 
     let removeNodes = _.difference( renderedCubes, nodes );
     let addNodes = _.difference( nodes, renderedCubes );
-    console.log('remove', removeNodes, 'add', addNodes);
 
     // remove any cubes no longer in the snake nodes
     removeNodes.forEach((node) => {

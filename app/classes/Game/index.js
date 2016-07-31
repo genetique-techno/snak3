@@ -59,7 +59,6 @@ class Game {
       this.gameBoard.levelUp(this.snake.nodes);
       this.snake.setExtensionTicks( this.gameBoard.level );
     }
-    this.getState();
   }
 
   changeDirection(dir) {

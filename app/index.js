@@ -7,7 +7,12 @@ import 'app/styles/styles.less';
 
 console.log('Welcome to snak3!');
 
-let game = new Game([5, 5, 1]);
+const gameSize = [ 10, 10, 1 ];
+
+
+
+
+let game = new Game( gameSize );
 let app = document.getElementById('app');
 let renderer = new Renderer( app );
 
@@ -26,10 +31,20 @@ renderer.setNodeCubes( game.snake.nodes, {
 renderer.setLevelUpPosition( game.gameBoard.levelUpPosition );
 
 
-renderer.setCameraPosition({ pos: [0, 1, 10], lookAt: [0, 0, 0] });
-renderer.render();
+renderer.setCameraPosition({ 
+  pos: [
+    gameSize[0]/2, 
+    gameSize[1]/2, 
+    _.max(gameSize)
+  ],
+  lookAt: [
+    gameSize[0]/2, 
+    gameSize[1]/2, 
+    0
+  ] 
+});
 
-game.getState();
+renderer.render();
 
 function keyChecker(e) {
   let keyCode = _.result({
@@ -46,12 +61,16 @@ function keyChecker(e) {
   }
 
   if (e.keyCode === 84) {
-    game.tick();
-    renderer.setNodeCubes( game.snake.nodes, {
-      color: '#55ff22'
-    });
-    renderer.setLevelUpPosition( game.gameBoard.levelUpPosition );
+    window.setInterval( gameTick, 500 );
   }
+}
+
+function gameTick() {
+  game.tick();
+  renderer.setNodeCubes( game.snake.nodes, {
+    color: '#55ff22'
+  });
+  renderer.setLevelUpPosition( game.gameBoard.levelUpPosition );  
 }
 
 window.addEventListener('keydown', keyChecker);
