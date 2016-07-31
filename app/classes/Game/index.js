@@ -19,7 +19,7 @@ class Game {
   // only checks for an edge crash currently
   _didSnakeCrash() {
 
-    var head = this.snake.nodes[ this.snake.nodes.length -1 ];
+    var head = this.snake.nodes[ this.snake.nodes.length - 1 ];
     
     if ( util.isNodeIncluded( this.snake.head, this.snake.nodes.slice(0, this.snake.nodes.length - 2 ) ) ) {
       console.log('crashed into your own snake');
@@ -27,9 +27,9 @@ class Game {
     }
 
     return (
-      (head[0] < 0 || head[0] > this.gameBoard.limits[0]) ||
-      (head[1] < 0 || head[1] > this.gameBoard.limits[1]) ||
-      (head[2] < 0 || head[2] > this.gameBoard.limits[2])
+      (head[0] < 0 || head[0] > this.gameBoard.limits[0] - 1) ||
+      (head[1] < 0 || head[1] > this.gameBoard.limits[1] - 1) ||
+      (head[2] < 0 || head[2] > this.gameBoard.limits[2] - 1)
     );
   }
 
@@ -40,9 +40,9 @@ class Game {
 
     do {
       rnd = [
-        Math.floor( Math.random() * this.gameBoard.limits[0] ),
-        Math.floor( Math.random() * this.gameBoard.limits[1] ),
-        Math.floor( Math.random() * this.gameBoard.limits[2] )
+        Math.floor( Math.random() * (this.gameBoard.limits[0] - 1) ),
+        Math.floor( Math.random() * (this.gameBoard.limits[1] - 1) ),
+        Math.floor( Math.random() * (this.gameBoard.limits[2] - 1) )
       ];
     } while ( rnd.join('') === avoid )
 

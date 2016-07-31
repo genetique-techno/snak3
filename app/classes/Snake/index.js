@@ -28,11 +28,11 @@ class Snake {
     switch ( this.direction ) {
 
       case 'up':
-        headStub = [0, -1, 0];
+        headStub = [0, 1, 0];
         break;
 
       case 'down':
-        headStub = [0, 1, 0];
+        headStub = [0, -1, 0];
         break;
 
       case 'left':

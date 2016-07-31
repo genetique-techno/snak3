@@ -17,23 +17,15 @@ renderer.addGrid({
   size: 100,
   step: 100
 });
-
-renderer.addCube({
-  pos: [0, 0, 0],
-  color: '#3bbb00',
-  scale: 2
+renderer.setBoundaryCubes( game.gameBoard.limits, {
+  color: '#33aacc'
+});
+renderer.setNodeCubes( game.snake.nodes, {
+  color: '#55ff22'
 });
 
-function keyAdd() {  
-  renderer.addCube({
-    pos: [2, 0, 0],
-    color: '#3bbb00',
-    scale: 2
-  });
-  console.log(renderer.scene.children);
-}
 
-renderer.setCameraPosition({ pos: [0, 20, 20], lookAt: [0, 0, 0] });
+renderer.setCameraPosition({ pos: [0, 1, 10], lookAt: [0, 0, 0] });
 renderer.render();
 
 game.getState();
@@ -50,11 +42,13 @@ function keyChecker(e) {
   
   if (keyCode) {
     game.changeDirection(keyCode);
-    keyAdd();
   }
 
   if (e.keyCode === 84) {
     game.tick();
+    renderer.setNodeCubes( game.snake.nodes, {
+      color: '#55ff22'
+    });
   }
 }
 

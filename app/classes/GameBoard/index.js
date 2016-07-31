@@ -1,6 +1,6 @@
 class GameBoard {
   constructor( [x, y, z] ) {
-    this.limits = [x-1, y-1, z-1];
+    this.limits = [x, y, z];
     this.level = 0;
     this.levelUpPosition = this._getRandomPositionExceptNodes();
   }

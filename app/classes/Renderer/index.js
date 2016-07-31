@@ -8,12 +8,6 @@ export default class Renderer {
     this.camera = new THREE.PerspectiveCamera(75, div.clientWidth / div.clientHeight, 0.1, 1000);
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize( div.clientWidth, div.clientHeight );
-
-    this.cubes = new THREE.Group();
-    this.scene.add( this.cubes );
-
-    this.gameBoard = new THREE.Group();
-    this.scene.add( this.gameBoard );
   }
 
   appendToDom( div ) {
@@ -60,8 +54,42 @@ export default class Renderer {
     }
   }
 
+  setNodeCubes( nodes, options ) {
+    if ( !this.cubes ) {
+      this.cubes = new THREE.Group();
+      this.scene.add( this.cubes );
+    }
+
+    nodes = nodes.map((node) => {
+      return node.join('');
+    });
+
+    let renderedCubes = this.cubes.children.map((node) => {
+      return node.name;
+    });
+
+    let removeNodes = _.difference( renderedCubes, nodes );
+    let addNodes = _.difference( nodes, renderedCubes );
+
+    // remove any cubes no longer in the snake nodes
+    removeNodes.forEach((node) => {
+      this.cubes.remove( _.find( this.cubes.children, (cube) => {
+        return cube.name === node;
+      }));
+    });
+
+    // add new cubes for any new snake nodes
+    addNodes.forEach((node) => {
+      this.addCube({
+        color: options.color,
+        pos: node.split('')
+      });
+    }); 
+
+  }
+
   setBoundaryCubes( limits, options ) {
-    if ( !limits instancof Array && limits.length ) { return null; }
+    if ( !limits instanceof Array && limits.length ) { return null; }
     this.gameBoard = new THREE.Group();
     this.scene.add( this.gameBoard );
 
