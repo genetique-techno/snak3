@@ -35,7 +35,7 @@ class Game {
 
   _getStartingHead( avoid ) {
 
-    avoid = avoid.join('-');
+    avoid = avoid.join('$');
     var rnd;
 
     do {
@@ -44,7 +44,7 @@ class Game {
         Math.floor( Math.random() * (this.gameBoard.limits[1] - 1) ),
         Math.floor( Math.random() * (this.gameBoard.limits[2] - 1) )
       ];
-    } while ( rnd.join('-') === avoid )
+    } while ( rnd.join('$') === avoid )
 
     return rnd;
   }
@@ -55,7 +55,7 @@ class Game {
     console.log('----> tick');
     this.snake._tick();
     this.status = !this._didSnakeCrash();
-    if (this.snake.head.join('-') === this.gameBoard.levelUpPosition.join('-')) {
+    if (this.snake.head.join('$') === this.gameBoard.levelUpPosition.join('$')) {
       this.gameBoard.levelUp(this.snake.nodes);
       this.snake.setExtensionTicks( this.gameBoard.level );
     }

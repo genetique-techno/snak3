@@ -12,7 +12,7 @@ class GameBoard {
 
   _getRandomPositionExceptNodes(avoid) {
     avoid = avoid ? avoid.map( function(item) {
-      return item.join('-');
+      return item.join('$');
     }) : [ -1, -1, -1];
     var rnd;
 
@@ -22,7 +22,7 @@ class GameBoard {
         Math.floor( Math.random() * this.limits[1] ),
         Math.floor( Math.random() * this.limits[2] )
       ];
-    } while ( avoid.indexOf( rnd.join('-') ) !== -1 )
+    } while ( avoid.indexOf( rnd.join('$') ) !== -1 )
     return rnd;
   }
 }

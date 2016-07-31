@@ -44,7 +44,7 @@ export default class Renderer {
     let material = new THREE.MeshBasicMaterial({ color: color });
     let cube = new THREE.Mesh(geometry, material);
 
-    cube.name = name || pos.join('-');
+    cube.name = name || pos.join('$');
     cube.position.set( s*pos[0], s*pos[1], s*pos[2] );
 
     if (group) {
@@ -61,7 +61,7 @@ export default class Renderer {
     }
 
     nodes = nodes.map((node) => {
-      return node.join('-');
+      return node.join('$');
     });
 
     let renderedCubes = this.cubes.children.map((node) => {
@@ -70,6 +70,7 @@ export default class Renderer {
 
     let removeNodes = _.difference( renderedCubes, nodes );
     let addNodes = _.difference( nodes, renderedCubes );
+    console.log('remove', removeNodes, 'add', addNodes);
 
     // remove any cubes no longer in the snake nodes
     removeNodes.forEach((node) => {
@@ -82,7 +83,7 @@ export default class Renderer {
     addNodes.forEach((node) => {
       this.addCube({
         color: options.color,
-        pos: node.split('-')
+        pos: node.split('$')
       });
     }); 
 
