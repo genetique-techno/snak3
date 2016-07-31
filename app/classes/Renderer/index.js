@@ -27,6 +27,28 @@ export default class Renderer {
     this.scene.add( grid );
   }
 
+  addCube(options) {
+    if ( !options ) { return null; }
+
+    const {
+      color,
+      pos,
+      name,
+      scale
+    } = options;
+
+    let s = +scale || 1;
+
+    let geometry = new THREE.BoxGeometry( s*1, s*1, s*1 );
+    let material = new THREE.MeshBasicMaterial({ color: color });
+    let cube = new THREE.Mesh(geometry, material);
+
+    cube.name = name || pos.join('');
+    cube.position.set( s*pos[0], s*pos[1], s*pos[2] );
+
+    this.scene.add(cube);
+  }
+
   setCameraPosition(options) {
     const { pos, lookAt} = options;
 
