@@ -3,38 +3,45 @@ import THREE from 'three';
 
 export default class Renderer {
 
-  constructor(div) {
+  constructor( div ) {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, div.clientWidth / div.clientHeight, 0.1, 1000);
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize( div.clientWidth, div.clientHeight );
+
+    this.cubes = new THREE.Group();
+    this.scene.add( this.cubes );
+
+    this.gameBoard = new THREE.Group();
+    this.scene.add( this.gameBoard );
   }
 
-  appendToDom(div) {
+  appendToDom( div ) {
     div.appendChild( this.renderer.domElement );
   }
 
-  addFog(options = {}) {
+  addFog( options = {} ) {
     options = _.defaults(options, { color: 0x000000, near: 100, far: 500 });
 
     this.scene.fog = new THREE.Fog( options.color, options.near, options.far );
   }
 
-  addGrid(options = {}) {
+  addGrid( options = {} ) {
     options = _.defaults(options, { size: 500, step: 50 });
 
     let grid = new THREE.GridHelper( options.size, options.step );
     this.scene.add( grid );
   }
 
-  addCube(options) {
+  addCube( options ) {
     if ( !options ) { return null; }
 
     const {
       color,
       pos,
       name,
-      scale
+      scale,
+      group
     } = options;
 
     let s = +scale || 1;
@@ -46,10 +53,65 @@ export default class Renderer {
     cube.name = name || pos.join('');
     cube.position.set( s*pos[0], s*pos[1], s*pos[2] );
 
-    this.scene.add(cube);
+    if (group) {
+      this[group].add(cube);
+    } else {
+      this.cubes.add(cube);    
+    }
   }
 
-  setCameraPosition(options) {
+  setBoundaryCubes( limits, options ) {
+    if ( !limits instancof Array && limits.length ) { return null; }
+    this.gameBoard = new THREE.Group();
+    this.scene.add( this.gameBoard );
+
+    // [5, 5, 1]
+
+    let edges = [];
+    for ( let z = 0; z < limits[2]; z++ ) {
+      for ( let y = 0; y < limits[1]; y++ ) {
+        for ( let x = 0; x < limits[0]; x++ ) {
+          
+          if ( x === 0 ) {
+            edges.push( [ -1, y, z ] );
+
+            if ( y === 0 ) {
+              edges.push( [ -1, -1, z ] );
+            }
+          }
+
+          if ( x === limits[0] - 1 ) {
+            edges.push( [ limits[0], y, z ] );
+            if ( y === 0 ) {
+              edges.push( [ limits[0], -1, z ] );
+            }
+          }
+          
+          if ( y === 0 ) {
+            edges.push( [ x, - 1, z ] );
+          }
+
+          if ( y === limits[1] - 1) {
+            edges.push( [ x, limits[1], z ] );
+
+            if ( x === 0 ) {
+              edges.push( [ -1, limits[1], z ] );
+            }
+            if ( x === limits[0] - 1 ) {
+              edges.push( [ limits[0], limits[1], z ] );
+            }
+
+          }
+        }
+      }
+    }
+
+    edges.forEach((edge) => {
+      this.addCube( _.extend( options, { group: 'gameBoard', pos: edge } ) );
+    });
+  }
+
+  setCameraPosition( options ) {
     const { pos, lookAt} = options;
 
     if (pos instanceof Array && pos.length === 3) {
