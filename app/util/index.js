@@ -13,9 +13,9 @@ export default {
    */
   isNodeIncluded( head, nodes ) {
     nodes = nodes.map((node) => {
-      return node.join('');
+      return node.join('-');
     });
-    return nodes.includes( head.join('') );
+    return nodes.includes( head.join('-') );
   }
 
 };
