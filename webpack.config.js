@@ -1,6 +1,7 @@
 var path = require("path");
 var appPaths = require("./root.js").paths;
 var HtmlWebpackPlugin = require ("html-webpack-plugin");
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
   devServer: {
@@ -16,7 +17,8 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
-      { test: /\.css$/, loader: "style!css" }
+      {test: /\.css$/, exclude: /\.useable\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader')},
+      {test: /\.less$/, exclude: /\.useable\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')},
     ]
   },
   resolveLoader: {
@@ -30,10 +32,16 @@ module.exports = {
     }
   },
   plugins: [
+    
     new HtmlWebpackPlugin({
       chunks: ['app', 'devServer'],
       template: path.join(appPaths.appDir, "example.template.html"),
       filename: 'index.html'
+    }),
+
+    new ExtractTextPlugin('[name].bundle.css', {
+      allChunks: true
     })
+  
   ]
 };
