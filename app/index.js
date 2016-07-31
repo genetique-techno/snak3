@@ -23,6 +23,7 @@ renderer.setBoundaryCubes( game.gameBoard.limits, {
 renderer.setNodeCubes( game.snake.nodes, {
   color: '#55ff22'
 });
+renderer.setLevelUpPosition( game.gameBoard.levelUpPosition );
 
 
 renderer.setCameraPosition({ pos: [0, 1, 10], lookAt: [0, 0, 0] });
@@ -49,6 +50,7 @@ function keyChecker(e) {
     renderer.setNodeCubes( game.snake.nodes, {
       color: '#55ff22'
     });
+    renderer.setLevelUpPosition( game.gameBoard.levelUpPosition );
   }
 }
 

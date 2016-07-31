@@ -54,6 +54,18 @@ export default class Renderer {
     }
   }
 
+  setLevelUpPosition( node, options ) {
+    if ( !node ) { return };
+    if ( !this.sphere ) {
+      let geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
+      let material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+      this.sphere = new THREE.Mesh( geometry, material );
+      this.scene.add( this.sphere );
+    }
+
+    this.sphere.position.set( node[0], node[1], node[2] );
+  }
+
   setNodeCubes( nodes, options ) {
     if ( !this.cubes ) {
       this.cubes = new THREE.Group();
