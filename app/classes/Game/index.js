@@ -16,7 +16,6 @@ class Game {
     this.status = true;
   }
 
-  // only checks for an edge crash currently
   _didSnakeCrash() {
 
     var head = this.snake.nodes[ this.snake.nodes.length - 1 ];
