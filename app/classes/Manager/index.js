@@ -5,7 +5,6 @@ import Renderer from 'app/classes/Renderer';
 export default class Manager {
 
   constructor( gameSize ) {
-
     this.game = new Game( gameSize );
 
     let app = document.getElementById( 'app' );
@@ -38,7 +37,14 @@ export default class Manager {
     });
 
     this.renderer.render();
+
     window.addEventListener( 'keydown', this.keyChecker.bind( this ) );
+    
+    this.game.on( 'gameOver', () => {
+      console.log(' game over message received' );
+      window.removeEventListener( 'keyDown', this.keyChecker.bind( this ) );
+      window.clearInterval( this.ticker );
+    });
   }
 
   keyChecker(e) {
@@ -56,7 +62,7 @@ export default class Manager {
     }
 
     if (e.keyCode === 84) {
-      window.setInterval( this.gameTick.bind( this ), 500 );
+      this.ticker = window.setInterval( this.gameTick.bind( this ), 500 );
     }
   }
 

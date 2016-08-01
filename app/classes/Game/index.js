@@ -1,12 +1,15 @@
 import _ from 'underscore';
+import EventEmitter from 'events';
 
 import GameBoard from 'app/classes/GameBoard';
 import Snake from 'app/classes/Snake';
 import util from 'app/util';
 
-class Game {
+class Game extends EventEmitter {
 
   constructor( boardArr ) {
+    super();
+
     if (!(boardArr instanceof Array) && length === 3) {
       return console.log('Invalid board game dimensions');
     }
@@ -22,6 +25,7 @@ class Game {
     
     if ( util.isNodeIncluded( this.snake.head, this.snake.nodes.slice(0, this.snake.nodes.length - 2 ) ) ) {
       console.log('crashed into your own snake');
+      this.emit( 'gameOver' );
       return true;
     }
 
@@ -49,7 +53,10 @@ class Game {
   }
 
   tick() {
-    if ( !this.status ) { return console.log('XXXX Crashed! Game is over.'); }
+    if ( !this.status ) { 
+      this.emit( 'gameOver' );
+      return console.log('XXXX Crashed! Game is over.'); 
+    }
 
     console.log('----> tick');
     this.snake._tick();
