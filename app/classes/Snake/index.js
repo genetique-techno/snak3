@@ -18,7 +18,7 @@ class Snake {
   }
 
   setExtensionTicks( val ) {
-    this.extensionTicks = val;
+    this.extensionTicks = this.extensionTicks + val;
     console.log('Extended! by', val);
   }
 
