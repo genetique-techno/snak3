@@ -8,6 +8,7 @@ export default class Renderer {
     this.camera = new THREE.PerspectiveCamera(75, div.clientWidth / div.clientHeight, 0.1, 1000);
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize( div.clientWidth, div.clientHeight );
+    this.head = [];
   }
 
   appendToDom( div ) {
@@ -99,7 +100,6 @@ export default class Renderer {
         pos: node.split('$')
       });
     }); 
-
   }
 
   setBoundaryCubes( limits, options ) {
@@ -153,18 +153,24 @@ export default class Renderer {
     });
   }
 
-  setCameraPosition( options ) {
-    const { pos, lookAt} = options;
-
-    if (pos instanceof Array && pos.length === 3) {
-      let [x, y, z] = pos;
-      this.camera.position.set(x, y, z );
-    }
+  setCameraPosition( gameBoard, head ) {
     
-    if (lookAt instanceof Array && lookAt.length === 3) {
-      let [x, y, z] = lookAt;
-      this.camera.lookAt( new THREE.Vector3(x, y, z) );
-    }
+    let headZ = head[2];
+
+    let pos = [
+      gameBoard[0]/2,
+      gameBoard[1]/2,
+      _.max( gameBoard.slice(0,2) ) + headZ
+    ];
+
+    let lookAt = [
+      gameBoard[0]/2,
+      gameBoard[1]/2,
+      0
+    ];
+
+    this.camera.position.set( pos[0], pos[1], pos[2] );
+    this.camera.lookAt( new THREE.Vector3( lookAt[0], lookAt[1], lookAt[2] ) );
   }
 
   render() {

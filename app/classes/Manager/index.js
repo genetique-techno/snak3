@@ -26,18 +26,7 @@ export default class Manager {
     });
     this.renderer.setLevelUpPosition( this.game.gameBoard.levelUpPosition );
 
-    this.renderer.setCameraPosition({
-      pos: [
-        gameSize[0]/2,
-        gameSize[1]/2,
-        _.max( gameSize )
-      ],
-      lookAt: [
-        gameSize[0]/2,
-        gameSize[1]/2,
-        0
-      ]
-    });
+    this.renderer.setCameraPosition( this.game.gameBoard.limits, this.game.snake.head );
 
     this.renderer.render();
 
@@ -64,7 +53,8 @@ export default class Manager {
     }
 
     if (e.keyCode === 84) {
-      this.ticker = window.setInterval( this.gameTick.bind( this ), 500 );
+      this.gameTick();
+      // this.ticker = window.setInterval( this.gameTick.bind( this ), 500 );
     }
   }
 
@@ -74,5 +64,6 @@ export default class Manager {
       color: '#55ff22'
     });
     this.renderer.setLevelUpPosition( this.game.gameBoard.levelUpPosition );
+    this.renderer.setCameraPosition( this.game.gameBoard.limits, this.game.snake.head );
   }
 }
