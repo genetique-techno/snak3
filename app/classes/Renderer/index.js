@@ -164,8 +164,8 @@ export default class Renderer {
     ];
 
     let lookAt = [
-      gameBoard[0]/2,
-      gameBoard[1]/2,
+      gameBoard[0]/2 + 0.1*(head[0]-gameBoard[0]/2),
+      gameBoard[1]/2 + 0.1*(head[1]-gameBoard[1]/2),
       0
     ];
 
