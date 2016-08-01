@@ -7,5 +7,7 @@ console.log('Welcome to snak3!');
 
 const gameSize = [ 10, 10, 1 ];
 
-new Manager( gameSize );
+let manager = new Manager();
+
+manager.newGame( gameSize );
 

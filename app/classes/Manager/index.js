@@ -4,8 +4,7 @@ import Renderer from 'app/classes/Renderer';
 
 export default class Manager {
 
-  constructor( gameSize ) {
-    this.game = new Game( gameSize );
+  constructor() {
 
     let app = document.getElementById( 'app' );
     this.renderer = new Renderer( app );
@@ -15,6 +14,10 @@ export default class Manager {
       size: 100,
       step: 100
     });
+  }
+
+  newGame( gameSize ) {
+    this.game = new Game( gameSize );
     this.renderer.setBoundaryCubes( this.game.gameBoard.limits, {
       color: '#33aacc'
     });
@@ -41,7 +44,6 @@ export default class Manager {
     window.addEventListener( 'keydown', this.keyChecker.bind( this ) );
     
     this.game.on( 'gameOver', () => {
-      console.log(' game over message received' );
       window.removeEventListener( 'keyDown', this.keyChecker.bind( this ) );
       window.clearInterval( this.ticker );
     });
