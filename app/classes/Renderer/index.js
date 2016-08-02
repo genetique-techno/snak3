@@ -86,7 +86,37 @@ export default class Renderer {
       this.scene.add( this.sphere );
     }
 
+    if ( !this.levelUpBeacons ) {
+      this.levelUpBeacons = new THREE.Group();
+      for ( let i = 0; i < 4; i++ ) {
+        let geometry = new THREE.SphereGeometry( 0.5, 16, 16 );
+        let material = new THREE.MeshBasicMaterial( { color: "#E30A15" } );
+        let beacon = new THREE.Mesh( geometry, material );
+        this.levelUpBeacons.add( beacon );
+      }
+      this.scene.add( this.levelUpBeacons );
+    }
+
+    // change the positions of the beacons
+    this._setLevelUpBeaconLocations( node );
+
     this.sphere.position.set( node[0], node[1], node[2] );
+  }
+
+  _setLevelUpBeaconLocations( node ) {
+    // get the x position at the edge of the board
+    let xEdge = _.max( this.gameBoard.children, (edge) => {
+      return edge.position.x;
+    }).position.x;
+    // get the y position at the edge of the board
+    let yEdge = _.max( this.gameBoard.children, (edge) => {
+      return edge.position.y;
+    }).position.y;
+
+    this.levelUpBeacons.children[0].position.set( -1, node[1], node[2] );
+    this.levelUpBeacons.children[1].position.set( node[0], -1, node[2] );
+    this.levelUpBeacons.children[2].position.set( node[0], yEdge, node[2] );
+    this.levelUpBeacons.children[3].position.set( xEdge, node[1], node[2] );
   }
 
   setNodeCubes( nodes, options ) {
