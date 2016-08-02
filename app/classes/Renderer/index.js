@@ -43,6 +43,8 @@ export default class Renderer {
 
     let geometry = new THREE.BoxGeometry( s*1, s*1, s*1 );
     let material = new THREE.MeshBasicMaterial({ color: color });
+    material.transparent = true;
+    material.opacity = 1.0;
     let cube = new THREE.Mesh(geometry, material);
 
     cube.name = name || pos.join('$');
@@ -75,6 +77,8 @@ export default class Renderer {
       this.scene.add( this.cubes );
     }
 
+    let head = nodes[ nodes.length-1 ];
+
     nodes = nodes.map((node) => {
       return node.join('$');
     });
@@ -100,6 +104,16 @@ export default class Renderer {
         pos: node.split('$')
       });
     }); 
+    
+    let highZCubes = _.forEach( this.cubes.children, (cube) => {
+
+      if (+cube.name.split('$')[2] > head[2]) {
+        cube.material.opacity = 0.5;
+      } else {
+        cube.material.opacity = 1.0;
+      }
+
+    });
   }
 
   setBoundaryCubes( limits, options ) {
