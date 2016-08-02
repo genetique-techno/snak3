@@ -43,11 +43,11 @@ class Snake {
         headStub = [1, 0, 0];
         break;
 
-      case 'in':
+      case 'out':
         headStub = [0, 0, 1];
         break;
 
-      case 'out':
+      case 'in':
         headStub = [0, 0, -1];
         break;
       default:
