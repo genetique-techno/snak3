@@ -53,8 +53,8 @@ export default class Manager {
     }
 
     if (e.keyCode === 84) {
-      this.gameTick();
-      // this.ticker = window.setInterval( this.gameTick.bind( this ), 500 );
+      // this.gameTick();
+      this.ticker = window.setInterval( this.gameTick.bind( this ), 500 );
     }
   }
 
