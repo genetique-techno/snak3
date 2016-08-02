@@ -16,21 +16,23 @@ export default class Manager {
     });
   }
 
-  newGame( gameSize ) {
-    this.game = new Game( gameSize );
-    this.renderer.setBoundaryCubes( this.game.gameBoard.limits, {
-      color: '#33aacc'
-    });
-    this.renderer.setNodeCubes( this.game.snake.nodes, {
-      color: '#55ff22'
+  newGame( options = {} ) {
+    options = _.defaults( options, {
+      gameSize: [10, 10, 3],
+      boundaryColor: "#33aacc",
+      cubeColor: "#55ff22"
     });
 
-    this.renderer.highlightBoundaryCubes( this.game.snake.head, { color: "#33aacc" } );
+    this.gameSize = options.gameSize;
+    this.boundaryColor = options.boundaryColor;
+    this.cubeColor = options.cubeColor;
 
+    this.game = new Game( this.gameSize );
+    this.renderer.setBoundaryCubes( this.game.gameBoard.limits, { color: this.boundaryColor });
+    this.renderer.setNodeCubes( this.game.snake.nodes, { color: this.cubeColor });
+    this.renderer.highlightBoundaryCubes( this.game.snake.head, { color: this.boundaryColor } );
     this.renderer.setLevelUpPosition( this.game.gameBoard.levelUpPosition );
-
     this.renderer.setCameraPosition( this.game.gameBoard.limits, this.game.snake.head );
-
     this.renderer.render();
 
     window.addEventListener( 'keydown', this.keyChecker.bind( this ) );
@@ -63,10 +65,8 @@ export default class Manager {
 
   gameTick() {
     this.game.tick();
-    this.renderer.setNodeCubes( this.game.snake.nodes, {
-      color: '#55ff22'
-    });
-    this.renderer.highlightBoundaryCubes( this.game.snake.head, { color: "#33aacc" } );
+    this.renderer.setNodeCubes( this.game.snake.nodes, { color: this.cubeColor } );
+    this.renderer.highlightBoundaryCubes( this.game.snake.head, { color: this.boundaryColor } );
     this.renderer.setLevelUpPosition( this.game.gameBoard.levelUpPosition );
     this.renderer.setCameraPosition( this.game.gameBoard.limits, this.game.snake.head );
   }
