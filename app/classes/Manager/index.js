@@ -17,6 +17,7 @@ export default class Manager {
   }
 
   newGame( options = {} ) {
+    console.log( options );
     options = _.defaults( options, {
       gameSize: [10, 10, 3],
       boundaryColor: "#33aacc",
@@ -68,6 +69,6 @@ export default class Manager {
     this.renderer.setNodeCubes( this.game.snake.nodes, { color: this.cubeColor } );
     this.renderer.highlightBoundaryCubes( this.game.snake.head, { color: this.boundaryColor } );
     this.renderer.setLevelUpPosition( this.game.gameBoard.levelUpPosition );
-    this.renderer.setCameraPosition( this.game.gameBoard.limits, this.game.snake.head );
+    this.renderer.moveCameraPosition( this.game.gameBoard.limits, this.game.snake.head );
   }
 }

@@ -32,6 +32,7 @@
   "dependencies": {
     "jquery": "^3.1.0",
     "three": "^0.79.0",
+    "tween.js": "^16.3.4",
     "underscore": "^1.8.3"
   }
 }

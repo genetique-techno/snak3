@@ -1,5 +1,6 @@
 import _ from 'underscore';
 import THREE from 'three';
+import TWEEN from 'tween.js';
 import util from 'app/util';
 
 export default class Renderer {
@@ -90,7 +91,7 @@ export default class Renderer {
       this.levelUpBeacons = new THREE.Group();
       for ( let i = 0; i < 4; i++ ) {
         let geometry = new THREE.SphereGeometry( 0.5, 16, 16 );
-        let material = new THREE.MeshBasicMaterial( { color: "#E30A15" } );
+        let material = new THREE.MeshBasicMaterial( { color: "#FF2300" } );
         let beacon = new THREE.Mesh( geometry, material );
         this.levelUpBeacons.add( beacon );
       }
@@ -236,7 +237,6 @@ export default class Renderer {
   }
 
   setCameraPosition( gameBoard, head ) {
-    
     let headZ = head[2];
 
     let pos = [
@@ -253,11 +253,34 @@ export default class Renderer {
 
     this.camera.position.set( pos[0], pos[1], pos[2] );
     this.camera.lookAt( new THREE.Vector3( lookAt[0], lookAt[1], lookAt[2] ) );
+
+  }
+
+  moveCameraPosition( gameBoard, head ) {
+
+    let headZ = head[2];
+    let camZ = this.camera.position.z;
+    let newCamZ = _.max( gameBoard.slice(0,2) ) + headZ;
+    
+    if ( camZ !== newCamZ ) {
+      this.camZTween = new TWEEN.Tween(this.camera.position)
+        .to( { z: newCamZ }, 1000 )
+        .start();
+    }
+
+    let lookAt = [
+      gameBoard[0]/2 + 0.1*(head[0]-gameBoard[0]/2),
+      gameBoard[1]/2 + 0.1*(head[1]-gameBoard[1]/2),
+      0
+    ];
+
+    this.camera.lookAt( new THREE.Vector3( lookAt[0], lookAt[1], lookAt[2] ) );
   }
 
   render() {
     window.requestAnimationFrame( this.render.bind( this ) );
 
+    TWEEN.update();
 
     this.renderer.render( this.scene, this.camera );
   }
