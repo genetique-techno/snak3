@@ -132,8 +132,10 @@ export default class Renderer {
         cube.material.opacity = 1.0;
       }
 
-      if (+cube.name.split('$')[2] < head[2]) {
-        cube.material.color.set( util.colorLuminance( options.color, -0.2) );
+      let cubeZ = +cube.name.split('$')[2];
+      if (cubeZ < head[2]) {
+        let factor = _.min( [ head[2] - cubeZ, 4 ] );
+        cube.material.color.set( util.colorLuminance( options.color, ( -0.2 * factor ) ) );
       }
     });
   }
