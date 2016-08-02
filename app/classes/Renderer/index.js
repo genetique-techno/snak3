@@ -4,11 +4,28 @@ import THREE from 'three';
 export default class Renderer {
 
   constructor( div ) {
+    this.div = div;
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, div.clientWidth / div.clientHeight, 0.1, 1000);
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize( div.clientWidth, div.clientHeight );
     this.head = [];
+
+    this.raycaster = new THREE.Raycaster();
+    this.mouse = new THREE.Vector2();
+    window.addEventListener( 'mousedown', this.cubeClick.bind( this ) );
+  }
+
+  cubeClick( e ) {
+
+    this.mouse.x = 2 * (e.clientX / this.div.clientWidth) - 1;
+    this.mouse.y = 1 - 2 * ( e.clientY / this.div.clientHeight );
+
+    this.raycaster.setFromCamera( this.mouse, this.camera ); 
+    let intersects = this.raycaster.intersectObjects( this.cubes.children );
+
+    console.log(intersects[0]);
+
   }
 
   appendToDom( div ) {
@@ -52,7 +69,7 @@ export default class Renderer {
 
     if (group) {
       material.wireframe = true;
-      material.wireframeLinewidth = 2;
+      material.wireframeLinewidth = 3;
       this[group].add(cube);
     } else {
       this.cubes.add(cube);    
