@@ -1,5 +1,6 @@
 import _ from 'underscore';
 import THREE from 'three';
+import util from 'app/util';
 
 export default class Renderer {
 
@@ -122,14 +123,18 @@ export default class Renderer {
       });
     }); 
     
+    // change cube colors at different z depths
     let highZCubes = _.forEach( this.cubes.children, (cube) => {
-
+      cube.material.color.set( options.color );
       if (+cube.name.split('$')[2] > head[2]) {
         cube.material.opacity = 0.5;
       } else {
         cube.material.opacity = 1.0;
       }
 
+      if (+cube.name.split('$')[2] < head[2]) {
+        cube.material.color.set( util.colorLuminance( options.color, -0.2) );
+      }
     });
   }
 
@@ -181,6 +186,20 @@ export default class Renderer {
 
     edges.forEach((edge) => {
       this.addCube( _.extend( options, { group: 'gameBoard', pos: edge } ) );
+    });
+  }
+
+  highlightBoundaryCubes( head, options ) {
+
+    let headZ = head[2];
+    _.forEach( this.gameBoard.children, (cube) => {
+
+      if ( cube.position.z === headZ ) {
+        cube.material.color.set( util.colorLuminance( options.color, 0.8 ) );
+      } else {
+        cube.material.color.set( options.color );
+      }
+
     });
   }
 

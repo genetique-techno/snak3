@@ -24,6 +24,9 @@ export default class Manager {
     this.renderer.setNodeCubes( this.game.snake.nodes, {
       color: '#55ff22'
     });
+
+    this.renderer.highlightBoundaryCubes( this.game.snake.head, { color: "#33aacc" } );
+
     this.renderer.setLevelUpPosition( this.game.gameBoard.levelUpPosition );
 
     this.renderer.setCameraPosition( this.game.gameBoard.limits, this.game.snake.head );
@@ -63,6 +66,7 @@ export default class Manager {
     this.renderer.setNodeCubes( this.game.snake.nodes, {
       color: '#55ff22'
     });
+    this.renderer.highlightBoundaryCubes( this.game.snake.head, { color: "#33aacc" } );
     this.renderer.setLevelUpPosition( this.game.gameBoard.levelUpPosition );
     this.renderer.setCameraPosition( this.game.gameBoard.limits, this.game.snake.head );
   }
