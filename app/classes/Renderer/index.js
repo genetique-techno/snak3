@@ -240,15 +240,9 @@ export default class Renderer {
     let headZ = head[2];
 
     let pos = [
-      gameBoard[0]/2,
-      gameBoard[1]/2,
-      _.max( gameBoard.slice(0,2) ) + headZ
-    ];
-
-    let lookAt = [
       gameBoard[0]/2 + 0.1*(head[0]-gameBoard[0]/2),
-      gameBoard[1]/2 + 0.1*(head[1]-gameBoard[1]/2),
-      0
+      gameBoard[1]/2 + 0.1*(head[1]-gameBoard[0]/2),
+      _.max( gameBoard.slice(0,2) ) + headZ
     ];
 
     this.camera.position.set( pos[0], pos[1], pos[2] );
