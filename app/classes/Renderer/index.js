@@ -64,14 +64,14 @@ export default class Renderer {
     let material = new THREE.MeshBasicMaterial({ color: color });
     material.transparent = true;
     material.opacity = 1.0;
-    let cube = new THREE.Mesh(geometry, material);
+    let cube = new THREE.Mesh(geometry, material );
 
     cube.name = name || pos.join('$');
     cube.position.set( s*pos[0], s*pos[1], s*pos[2] );
 
     if (group) {
       material.wireframe = true;
-      material.wireframeLinewidth = 3;
+      material.wireframeLinewidth = 2;
       this[group].add(cube);
     } else {
       this.cubes.add(cube);    
@@ -252,8 +252,8 @@ export default class Renderer {
     ];
 
     this.camera.position.set( pos[0], pos[1], pos[2] );
-    this.camera.lookAt( new THREE.Vector3( lookAt[0], lookAt[1], lookAt[2] ) );
 
+    console.log( this.camera );
   }
 
   moveCameraPosition( gameBoard, head ) {
@@ -261,20 +261,19 @@ export default class Renderer {
     let headZ = head[2];
     let camZ = this.camera.position.z;
     let newCamZ = _.max( gameBoard.slice(0,2) ) + headZ;
+
+    let headX = head[0];
+    let camX = this.camera.position.x;
+    let newCamX = gameBoard[0]/2 + 0.1*(headX-gameBoard[0]/2);
+
+    let headY = head[1];
+    let camY = this.camera.position.y;
+    let newCamY = gameBoard[1]/2 + 0.1*(headY-gameBoard[0]/2);
     
-    if ( camZ !== newCamZ ) {
-      this.camZTween = new TWEEN.Tween(this.camera.position)
-        .to( { z: newCamZ }, 1000 )
-        .start();
-    }
+    this.camZTween = new TWEEN.Tween( this.camera.position )
+      .to( { z: newCamZ, x: newCamX, y: newCamY }, 1000 )
+      .start();
 
-    let lookAt = [
-      gameBoard[0]/2 + 0.1*(head[0]-gameBoard[0]/2),
-      gameBoard[1]/2 + 0.1*(head[1]-gameBoard[1]/2),
-      0
-    ];
-
-    this.camera.lookAt( new THREE.Vector3( lookAt[0], lookAt[1], lookAt[2] ) );
   }
 
   render() {

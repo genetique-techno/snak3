@@ -6,7 +6,9 @@ import 'app/styles/styles.less';
 console.log('Welcome to snak3!');
 
 const gameOptions = {
-  gameSize: [ 10, 10, 8 ]
+  gameSize: [ 10, 10, 3 ],
+  // cubeColor: '#ff2300',
+  // boundaryColor: '#ee2399'
 };
 
 let manager = new Manager();
