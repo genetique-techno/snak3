@@ -8,13 +8,29 @@ class Snake {
     this.direction = null;
     this.nodes = [ [initX, initY, initZ] ];
     this.extensionTicks = 0;
+    this.directionQueue = [];
   }
 
   _changeDirection( newDir ) {
+    if (this.nodes.length === 1) { return this.direction = newDir };
+    
+    // ignore inputs that would reverse the snake on itself
+    if ( newDir === 'up' && this.direction === 'down' ) {
+      return null;
+    } else if ( newDir === 'left' && this.direction === 'right' ) {
+      return null;
+    } else if ( newDir === 'right' && this.direction === 'left' ) {
+      return null;
+    } else if ( newDir === 'down' && this.direction === 'up' ) {
+      return null;
+    } else if ( newDir === 'in' && this.direction === 'out' ) {
+      return null;
+    } else if ( newDir === 'out' && this.direction === 'in' ) {
+      return null;
+    } else {
+      this.direction = newDir;
+    }
 
-    if ( newDir === this.direction ) { return null; }
-    this.direction = newDir;
-    return this.direction;
   }
 
   setExtensionTicks( val ) {

@@ -69,20 +69,19 @@ class Game extends EventEmitter {
 
   changeDirection(dir) {
     if ( !this.status ) { return null; }
-    this.direction = this.snake._changeDirection(dir);
-    console.log('----> new direction: ', dir);
+    this.snake._changeDirection(dir);
   }
 
-  getState() {
-    console.log('----');
-    console.log('nodes: ');
-    this.snake.nodes.forEach((node) => ( console.log(node) ));
-    console.log('levelup: ', this.gameBoard.levelUpPosition);
-    console.log('direction: ', this.direction);
-    console.log('status: ', this.status ? 'OK' : 'OVER');
-    console.log('----');
-    if ( !this.status ) { console.log('XXXX Crashed! Game is over.'); }
-  }
+  // getState() {
+  //   console.log('----');
+  //   console.log('nodes: ');
+  //   this.snake.nodes.forEach((node) => ( console.log(node) ));
+  //   console.log('levelup: ', this.gameBoard.levelUpPosition);
+  //   // console.log('direction: ', this.direction);
+  //   console.log('status: ', this.status ? 'OK' : 'OVER');
+  //   console.log('----');
+  //   if ( !this.status ) { console.log('XXXX Crashed! Game is over.'); }
+  // }
 } 
 
 export default Game;
