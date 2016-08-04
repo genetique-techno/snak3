@@ -105,8 +105,8 @@ export default class Renderer {
     cube.position.set( s*pos[0], s*pos[1], s*pos[2] );
 
     if (group) {
-      material.wireframe = true;
-      material.wireframeLinewidth = 2;
+      // material.wireframe = true;
+      // material.wireframeLinewidth = 2;
       this[group].add(cube);
     } else {
       this.cubes.add(cube);    
@@ -117,7 +117,7 @@ export default class Renderer {
     if ( !node ) { return };
     if ( !this.sphere ) {
       let geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
-      let material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+      let material = new THREE.MeshPhongMaterial( {color: 0xffff00, specular: 0x555555, shininess: 30 } );
       this.sphere = new THREE.Mesh( geometry, material );
       this.scene.add( this.sphere );
     }
@@ -126,7 +126,7 @@ export default class Renderer {
       this.levelUpBeacons = new THREE.Group();
       for ( let i = 0; i < 4; i++ ) {
         let geometry = new THREE.SphereGeometry( 0.5, 16, 16 );
-        let material = new THREE.MeshBasicMaterial( { color: "#FF2300" } );
+        let material = new THREE.MeshPhongMaterial( { color: "#FF2300", specular: 0x555555, shininess: 30 } );
         let beacon = new THREE.Mesh( geometry, material );
         this.levelUpBeacons.add( beacon );
       }
@@ -149,10 +149,10 @@ export default class Renderer {
       return edge.position.y;
     }).position.y;
 
-    this.levelUpBeacons.children[0].position.set( -1, node[1], node[2] );
-    this.levelUpBeacons.children[1].position.set( node[0], -1, node[2] );
-    this.levelUpBeacons.children[2].position.set( node[0], yEdge, node[2] );
-    this.levelUpBeacons.children[3].position.set( xEdge, node[1], node[2] );
+    this.levelUpBeacons.children[0].position.set( -0.9, node[1], node[2] );
+    this.levelUpBeacons.children[1].position.set( node[0], -0.9, node[2] );
+    this.levelUpBeacons.children[2].position.set( node[0], yEdge-0.1, node[2] );
+    this.levelUpBeacons.children[3].position.set( xEdge-0.1, node[1], node[2] );
   }
 
   setNodeCubes( nodes, options ) {
@@ -303,10 +303,12 @@ export default class Renderer {
     
     this.camZTween = new TWEEN.Tween( this.camera.position )
       .to( { x: newCamX, y: newCamY, z: newCamZ }, 1000 )
+      .easing( TWEEN.Easing.Linear.None )
       .start();
 
     this.lightTween = new TWEEN.Tween( this.light.position )
       .to( { x: newCamZ+5, y: newCamY+5, z: newCamZ }, 1000 )
+      .easing( TWEEN.Easing.Linear.None )
       .start();
 
   }
