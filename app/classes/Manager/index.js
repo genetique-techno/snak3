@@ -8,12 +8,7 @@ export default class Manager {
 
     let app = document.getElementById( 'app' );
     this.renderer = new Renderer( app );
-    this.renderer.appendToDom( app );
     this.renderer.addFog({ new: 300, far: 800 });
-    this.renderer.addGrid({
-      size: 100,
-      step: 100
-    });
   }
 
   newGame( options = {} ) {    
@@ -35,11 +30,6 @@ export default class Manager {
 
     this.game = new Game( this.gameSize );
 
-    // this.renderer.setBoundaryCubes( this.game.gameBoard.limits, { color: this.boundaryColor });
-    // this.renderer.setNodeCubes( this.game.snake.nodes, { color: this.cubeColor });
-    // this.renderer.highlightBoundaryCubes( this.game.snake.head, { color: this.boundaryColor } );
-    // this.renderer.setLevelUpPosition( this.game.gameBoard.levelUpPosition );
-    // this.renderer.setCameraPosition( this.game.gameBoard.limits, this.game.snake.head );
     this.renderer.initializeGame(
       this.game.gameBoard.limits,
       this.game.snake.nodes,

@@ -10,6 +10,7 @@ export default class Renderer {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, div.clientWidth / div.clientHeight, 0.1, 1000);
     this.renderer = new THREE.WebGLRenderer();
+    div.appendChild( this.renderer.domElement );
     this.renderer.setSize( div.clientWidth, div.clientHeight );
     this.head = [];
 
@@ -20,7 +21,6 @@ export default class Renderer {
   }
 
   initializeGame( limits, nodes, headNode, initLevelUpPos, cubeOptions, boundaryCubeOptions ) {
-
     this.cubeOptions = cubeOptions;
     this.boundaryCubeOptions = boundaryCubeOptions;
     this.limits = limits;
@@ -30,19 +30,22 @@ export default class Renderer {
     this.highlightBoundaryCubes( headNode, boundaryCubeOptions );
     this.setLevelUpPosition( initLevelUpPos );
     this.setCameraPosition( limits, headNode );
+
+    this.addGrid({
+      size: 100,
+      step: 200
+    });
+
   }
 
   tick( nodes, headNode, currentLevelUpPos ) {
-
     this.setNodeCubes( nodes, this.cubeOptions );
     this.highlightBoundaryCubes( headNode, this.boundaryCubeOptions );
     this.setLevelUpPosition( currentLevelUpPos );
     this.moveCameraPosition( this.limits, headNode );
-
   }
 
   cubeClick( e ) {
-
     this.mouse.x = 2 * (e.clientX / this.div.clientWidth) - 1;
     this.mouse.y = 1 - 2 * ( e.clientY / this.div.clientHeight );
 
@@ -50,11 +53,6 @@ export default class Renderer {
     let intersects = this.raycaster.intersectObjects( this.cubes.children );
 
     console.log(intersects[0]);
-
-  }
-
-  appendToDom( div ) {
-    div.appendChild( this.renderer.domElement );
   }
 
   addFog( options = {} ) {
@@ -66,7 +64,10 @@ export default class Renderer {
   addGrid( options = {} ) {
     options = _.defaults(options, { size: 500, step: 50 });
 
-    let grid = new THREE.GridHelper( options.size, options.step );
+    let grid = new THREE.GridHelper( options.size, options.step, options.color, options.color );
+    console.log(grid);
+    grid.rotation.set( 1.5707, 0, 0 );
+    grid.position.set( -0.5, -0.5, -0.5);
     this.scene.add( grid );
   }
 
