@@ -16,7 +16,7 @@ class Game extends EventEmitter {
 
     this.gameBoard = new GameBoard( boardArr );
     this.snake = new Snake( this._getStartingHead( this.gameBoard.levelUpPosition ) );
-    this.status = true;
+    this.status = 'ready';
   }
 
   _didSnakeCrash() {

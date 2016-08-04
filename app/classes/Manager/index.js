@@ -57,10 +57,10 @@ export default class Manager {
     
     if (keyCode) {
       this.game.changeDirection(keyCode);
-    }
 
-    if (e.keyCode === 84) {
-      this.ticker = window.setInterval( this.tick.bind( this ), 500 );
+      if ( this.game.status === 'ready' ) {
+        this.ticker = this.ticker || window.setInterval( this.tick.bind( this ), 500 );
+      }
     }
   }
 

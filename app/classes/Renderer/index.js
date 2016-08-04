@@ -254,7 +254,7 @@ export default class Renderer {
     _.forEach( this.gameBoard.children, (cube) => {
 
       if ( cube.position.z === headZ ) {
-        cube.material.color.set( util.colorLuminance( options.color, 0.8 ) );
+        cube.material.color.set( util.colorLuminance( options.color, 1.0 ) );
       } else {
         cube.material.color.set( options.color );
       }
