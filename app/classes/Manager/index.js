@@ -16,8 +16,7 @@ export default class Manager {
     });
   }
 
-  newGame( options = {} ) {
-    console.log( options );
+  newGame( options = {} ) {    
     options = _.defaults( options, {
       gameSize: [10, 10, 3],
       boundaryColor: "#33aacc",
@@ -25,16 +24,30 @@ export default class Manager {
     });
 
     this.gameSize = options.gameSize;
-    this.boundaryColor = options.boundaryColor;
-    this.cubeColor = options.cubeColor;
+    
+    this.boundaryCubeOptions = {
+      color: options.boundaryColor
+    };
+    
+    this.cubeOptions = {
+      color: options.cubeColor
+    };
 
     this.game = new Game( this.gameSize );
-    this.renderer.setBoundaryCubes( this.game.gameBoard.limits, { color: this.boundaryColor });
-    this.renderer.setNodeCubes( this.game.snake.nodes, { color: this.cubeColor });
-    this.renderer.highlightBoundaryCubes( this.game.snake.head, { color: this.boundaryColor } );
-    this.renderer.setLevelUpPosition( this.game.gameBoard.levelUpPosition );
-    this.renderer.setCameraPosition( this.game.gameBoard.limits, this.game.snake.head );
-    this.renderer.render();
+
+    // this.renderer.setBoundaryCubes( this.game.gameBoard.limits, { color: this.boundaryColor });
+    // this.renderer.setNodeCubes( this.game.snake.nodes, { color: this.cubeColor });
+    // this.renderer.highlightBoundaryCubes( this.game.snake.head, { color: this.boundaryColor } );
+    // this.renderer.setLevelUpPosition( this.game.gameBoard.levelUpPosition );
+    // this.renderer.setCameraPosition( this.game.gameBoard.limits, this.game.snake.head );
+    this.renderer.initializeGame(
+      this.game.gameBoard.limits,
+      this.game.snake.nodes,
+      this.game.snake.head,
+      this.game.gameBoard.levelUpPosition,
+      this.cubeOptions,
+      this.boundaryCubeOptions
+    );
 
     window.addEventListener( 'keydown', this.keyChecker.bind( this ) );
     
@@ -59,16 +72,12 @@ export default class Manager {
     }
 
     if (e.keyCode === 84) {
-      // this.gameTick();
-      this.ticker = window.setInterval( this.gameTick.bind( this ), 500 );
+      this.ticker = window.setInterval( this.tick.bind( this ), 500 );
     }
   }
 
-  gameTick() {
+  tick() {
     this.game.tick();
-    this.renderer.setNodeCubes( this.game.snake.nodes, { color: this.cubeColor } );
-    this.renderer.highlightBoundaryCubes( this.game.snake.head, { color: this.boundaryColor } );
-    this.renderer.setLevelUpPosition( this.game.gameBoard.levelUpPosition );
-    this.renderer.moveCameraPosition( this.game.gameBoard.limits, this.game.snake.head );
+    this.renderer.tick( this.game.snake.nodes, this.game.snake.head, this.game.gameBoard.levelUpPosition );
   }
 }

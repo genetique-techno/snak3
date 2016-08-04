@@ -16,6 +16,29 @@ export default class Renderer {
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
     window.addEventListener( 'mousedown', this.cubeClick.bind( this ) );
+    this.render();
+  }
+
+  initializeGame( limits, nodes, headNode, initLevelUpPos, cubeOptions, boundaryCubeOptions ) {
+
+    this.cubeOptions = cubeOptions;
+    this.boundaryCubeOptions = boundaryCubeOptions;
+    this.limits = limits;
+
+    this.setBoundaryCubes( limits, boundaryCubeOptions );
+    this.setNodeCubes( nodes, cubeOptions );
+    this.highlightBoundaryCubes( headNode, boundaryCubeOptions );
+    this.setLevelUpPosition( initLevelUpPos );
+    this.setCameraPosition( limits, headNode );
+  }
+
+  tick( nodes, headNode, currentLevelUpPos ) {
+
+    this.setNodeCubes( nodes, this.cubeOptions );
+    this.highlightBoundaryCubes( headNode, this.boundaryCubeOptions );
+    this.setLevelUpPosition( currentLevelUpPos );
+    this.moveCameraPosition( this.limits, headNode );
+
   }
 
   cubeClick( e ) {
