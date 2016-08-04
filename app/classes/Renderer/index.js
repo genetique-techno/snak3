@@ -10,14 +10,16 @@ export default class Renderer {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, div.clientWidth / div.clientHeight, 0.1, 1000);
     this.renderer = new THREE.WebGLRenderer();
-    div.appendChild( this.renderer.domElement );
     this.renderer.setSize( div.clientWidth, div.clientHeight );
-    this.head = [];
+    div.appendChild( this.renderer.domElement );
 
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
     window.addEventListener( 'mousedown', this.cubeClick.bind( this ) );
+
+    this.addFog({ new: 300, far: 800 });
     this.render();
+    this.head = [];
   }
 
   initializeGame( limits, nodes, headNode, initLevelUpPos, cubeOptions, boundaryCubeOptions ) {

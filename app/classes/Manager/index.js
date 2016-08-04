@@ -5,10 +5,8 @@ import Renderer from 'app/classes/Renderer';
 export default class Manager {
 
   constructor() {
-
     let app = document.getElementById( 'app' );
     this.renderer = new Renderer( app );
-    this.renderer.addFog({ new: 300, far: 800 });
   }
 
   newGame( options = {} ) {    
