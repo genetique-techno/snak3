@@ -20,6 +20,13 @@ export default class Renderer {
     this.addFog({ new: 300, far: 800 });
     this.render();
     this.head = [];
+
+    this.ambientLight = new THREE.AmbientLight( 0x404040, 2 );
+    this.scene.add( this.ambientLight );
+    console.log(this.ambientLight);
+
+    this.light = new THREE.PointLight( 0xffffff, 1, 100, 1 );
+    this.scene.add(this.light);
   }
 
   initializeGame( limits, nodes, headNode, initLevelUpPos, cubeOptions, boundaryCubeOptions ) {
@@ -87,9 +94,11 @@ export default class Renderer {
     let s = +scale || 1;
 
     let geometry = new THREE.BoxGeometry( s*1, s*1, s*1 );
-    let material = new THREE.MeshBasicMaterial({ color: color });
+
+    let material = new THREE.MeshPhongMaterial( { color: color, specular: 0x555555, shininess: 30 } );
     material.transparent = true;
     material.opacity = 1.0;
+
     let cube = new THREE.Mesh(geometry, material );
 
     cube.name = name || pos.join('$');
@@ -254,7 +263,7 @@ export default class Renderer {
     _.forEach( this.gameBoard.children, (cube) => {
 
       if ( cube.position.z === headZ ) {
-        cube.material.color.set( util.colorLuminance( options.color, 1.0 ) );
+        cube.material.color.set( util.colorLuminance( options.color, 2.0 ) );
       } else {
         cube.material.color.set( options.color );
       }
@@ -272,8 +281,10 @@ export default class Renderer {
     ];
 
     this.camera.position.set( pos[0], pos[1], pos[2] );
+    this.light.position.set( pos[0]+5, pos[1]+5, pos[2] )
 
-    console.log( this.camera );
+
+    console.log( this.camera, this.light );
   }
 
   moveCameraPosition( gameBoard, head ) {
@@ -291,7 +302,11 @@ export default class Renderer {
     let newCamY = gameBoard[1]/2 + 0.1*(headY-gameBoard[0]/2);
     
     this.camZTween = new TWEEN.Tween( this.camera.position )
-      .to( { z: newCamZ, x: newCamX, y: newCamY }, 1000 )
+      .to( { x: newCamX, y: newCamY, z: newCamZ }, 1000 )
+      .start();
+
+    this.lightTween = new TWEEN.Tween( this.light.position )
+      .to( { x: newCamZ+5, y: newCamY+5, z: newCamZ }, 1000 )
       .start();
 
   }

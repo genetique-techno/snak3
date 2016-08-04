@@ -43,6 +43,8 @@ export default class Manager {
       window.removeEventListener( 'keyDown', this.keyChecker.bind( this ) );
       window.clearInterval( this.ticker );
     });
+
+    this.ticker = null;
   }
 
   keyChecker(e) {
