@@ -21,3 +21,6 @@ paths.buildDir = path.join( paths.rootDir, 'build' );
 
 // Sheet build directory
 paths.sheetBuildDir = path.join( paths.rootDir, 'examples' );
+
+// Node modules directory
+paths.modulesDirectory = path.join( paths.rootDir, 'node_modules' );

@@ -3,6 +3,8 @@ import THREE from 'three';
 import TWEEN from 'tween.js';
 import util from 'app/util';
 
+import { EffectComposer, RenderPass, BloomPass } from 'postprocessing';
+
 export default class Renderer {
 
   constructor( div ) {
@@ -11,6 +13,24 @@ export default class Renderer {
     this.camera = new THREE.PerspectiveCamera(75, div.clientWidth / div.clientHeight, 0.1, 1000);
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize( div.clientWidth, div.clientHeight );
+
+
+    // Shader experiment ------
+    this.composer = new EffectComposer( this.renderer );
+    this.composer.addPass(new RenderPass( this.scene, this.camera ));
+     
+    let pass = new BloomPass({
+      resolutionScale: 0.2,
+      blurriness: 0,
+      strength: 1.0,
+      distinction: 1.4
+    });
+    pass.renderToScreen = true;
+    this.composer.addPass(pass);
+    this.clock = new THREE.Clock();
+
+    // -----------
+
     div.appendChild( this.renderer.domElement );
 
     this.raycaster = new THREE.Raycaster();
@@ -105,8 +125,6 @@ export default class Renderer {
     cube.position.set( s*pos[0], s*pos[1], s*pos[2] );
 
     if (group) {
-      // material.wireframe = true;
-      // material.wireframeLinewidth = 2;
       this[group].add(cube);
     } else {
       this.cubes.add(cube);    
@@ -117,7 +135,11 @@ export default class Renderer {
     if ( !node ) { return };
     if ( !this.sphere ) {
       let geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
-      let material = new THREE.MeshPhongMaterial( {color: 0xffff00, specular: 0x555555, shininess: 30 } );
+      let material = new THREE.MeshPhongMaterial({
+        color: 0xffff00, 
+        specular: 0x555555, 
+        shininess: 30,
+      });
       this.sphere = new THREE.Mesh( geometry, material );
       this.scene.add( this.sphere );
     }
@@ -314,10 +336,12 @@ export default class Renderer {
   }
 
   render() {
+    
+    let delta = this.clock.getDelta();
+    this.composer.render(delta);
+
     window.requestAnimationFrame( this.render.bind( this ) );
 
     TWEEN.update();
-
-    this.renderer.render( this.scene, this.camera );
   }
 }
