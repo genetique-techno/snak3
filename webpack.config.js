@@ -28,7 +28,8 @@ module.exports = {
     extensions: [ "", ".js" ],
     modulesDirectories: ["node_modules"],
     alias: {
-      app: path.join(appPaths.appSrcDir)
+      app: path.join(appPaths.appSrcDir),
+      node_modules: path.join(appPaths.modulesDirectory)
     }
   },
   plugins: [
