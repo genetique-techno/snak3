@@ -7,6 +7,8 @@ export default class Manager {
   constructor() {
     let app = document.getElementById( 'app' );
     this.renderer = new Renderer( app );
+    this.view = 'menu';
+    window.addEventListener( 'keydown', this.keyChecker.bind( this ) );
   }
 
   newGame( options = {} ) {    
@@ -37,7 +39,6 @@ export default class Manager {
       this.boundaryCubeOptions
     );
 
-    window.addEventListener( 'keydown', this.keyChecker.bind( this ) );
     
     this.game.on( 'gameOver', () => {
       window.removeEventListener( 'keyDown', this.keyChecker.bind( this ) );
@@ -45,23 +46,47 @@ export default class Manager {
     });
 
     this.ticker = null;
+    this.view = 'game';
   }
 
   keyChecker(e) {
-    let keyCode = _.result({
-      '37': 'left',
-      '38': 'up',
-      '39': 'right',
-      '40': 'down',
-      '16': 'in',
-      '17': 'out'
-    }, e.keyCode, null);
-    
-    if (keyCode) {
-      this.game.changeDirection(keyCode);
+    if ( this.view === 'menu' ) {
 
-      if ( this.game.status === 'ready' ) {
-        this.ticker = this.ticker || window.setInterval( this.tick.bind( this ), 500 );
+      // key bindings when in menu mode
+          let keyCode = _.result({
+            '37': 'left',
+            '38': 'up',
+            '39': 'right',
+            '40': 'down',
+            '16': 'in',
+            '17': 'out'
+          }, e.keyCode, null);
+          
+          if (keyCode) {
+            this.game.changeDirection(keyCode);
+          }
+
+    } else if ( this.view === 'game' ) {
+
+      // key bindings when in game mode
+      switch ( this.game.status ) {
+        case 'ready':
+          this.ticker = this.ticker || window.setInterval( this.tick.bind( this ), 500 );
+        case true:
+          let keyCode = _.result({
+            '37': 'left',
+            '38': 'up',
+            '39': 'right',
+            '40': 'down',
+            '16': 'in',
+            '17': 'out'
+          }, e.keyCode, null);
+          
+          if (keyCode) {
+            this.game.changeDirection(keyCode);
+          }
+        case false:
+          console.log(e);        
       }
     }
   }
