@@ -26,17 +26,12 @@ export default class GamePass {
     this.boundaryCubeOptions = boundaryCubeOptions;
     this.limits = limits;
 
-    this.addFog({
-      color: 0x000000,
-      near: 0,
-      far: 0
-    });
-
     this.setBoundaryCubes( limits, boundaryCubeOptions );
     this.setNodeCubes( nodes, cubeOptions );
     this.highlightBoundaryCubes( headNode, boundaryCubeOptions );
     this.setLevelUpPosition( initLevelUpPos );
     this.setCameraPosition( limits, headNode );
+    this.renderPass = new RenderPass( this.scene, this.camera );
 
     this.addGrid({
       size: 100,
@@ -44,23 +39,23 @@ export default class GamePass {
     });
 
     emitter.on( 'tick', this.tick.bind( this ) );
-
-    return new RenderPass( this.scene, this.camera );
   }
 
-  addFog( options = {} ) {
-    options = _.defaults( options, { color: 0x000000, near: 0, far: 100 } );
+  unloader() {
+    console.log(this.scene.fog);
+    this.fogTween = new TWEEN.Tween( this.scene.fog )
+      .to( { near: 0, far: 0 }, 3000 )
+      .start();
 
-    this.scene.fog = new THREE.Fog( options.color, options.near, options.far );
+  }
 
-    console.log( this.scene.fog );
+  loader() {
     var lim = this.limits[2];
+
+    this.scene.fog = new THREE.Fog( 0x000000, 0, 0 );
 
     this.fogTween = new TWEEN.Tween( this.scene.fog )
       .to( { near: lim, far: 10*lim }, 200*lim )
-      .onUpdate(function() {
-        console.log(this.far);
-      })
       .start();
   }
 

@@ -12,8 +12,6 @@ export default class Renderer {
 
     // Shader experiment ------
     this.composer = new EffectComposer( this.renderer );
-    this.composer.passes.push({});
-    this.composer.passes.push({});
     let bloomPass = new BloomPass({
       resolutionScale: 0.2,
       blurriness: 0,
@@ -21,7 +19,12 @@ export default class Renderer {
       distinction: 1.4
     });
     bloomPass.renderToScreen = true;
+
+    this.mainPassInstance = {};
+    this.composer.passes.push({});
+    this.composer.passes.push({});
     this.composer.addPass( bloomPass, 2 );
+
     this.clock = new THREE.Clock();
 
     window.__GAME_DIV__.appendChild( this.renderer.domElement );
@@ -31,10 +34,19 @@ export default class Renderer {
   }
 
   setMainPass( pass ) {
-    if ( !typeof this.composer.passes[0].destructor === 'undefined' ) {
-      this.composer.passes[0].destructor();
-    };
-    this.composer.passes[0] = pass;
+    if ( this.mainPassInstance.unloader ) {
+
+      this.mainPassInstance.unloader();
+      window.setTimeout(() => {
+        this.composer.passes[0] = pass.renderPass;
+        this.mainPassInstance = pass;
+        this.mainPassInstance.loader();
+      }, 3000 );
+    } else {
+      this.composer.passes[0] = pass.renderPass;
+      this.mainPassInstance = pass;
+      this.mainPassInstance.loader();
+    }
   }
 
   render() {
