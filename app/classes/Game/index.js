@@ -27,7 +27,7 @@ class Game extends EventEmitter {
 
     switch ( this.status ) {
       case 'ready':
-        this.ticker = this.ticker || window.setInterval( this.tick.bind( this ), 500 );
+        this.ticker = this.ticker || window.setInterval( this.tick.bind( this ), this.gameBoard.interval );
       case true:
         let keyCode = _.result({
           '37': 'left',
