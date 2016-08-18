@@ -255,6 +255,7 @@ export default class GamePass {
   }
 
   highlightBoundaryCubes( head, options ) {
+    if ( this.limits[2] === 1 ) { return null; }
 
     let headZ = head[2];
     _.forEach( this.gameBoard.children, (cube) => {
