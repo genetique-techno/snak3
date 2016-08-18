@@ -2,12 +2,15 @@ import _ from 'underscore';
 import Game from 'app/classes/Game';
 import Renderer from 'app/classes/Renderer';
 
+import GamePass from 'app/classes/Passes/GamePass.js';
+
+window.__GAME_DIV__ = document.getElementById( 'app' );
+
 export default class Manager {
 
   constructor() {
-    let app = document.getElementById( 'app' );
-    this.renderer = new Renderer( app );
     this.view = 'menu';
+    this.renderer = new Renderer();
     window.addEventListener( 'keydown', this.keyChecker.bind( this ) );
   }
 
@@ -29,16 +32,15 @@ export default class Manager {
     };
 
     this.game = new Game( this.gameSize );
-
-    this.renderer.initializeGame(
-      this.game.gameBoard.limits,
-      this.game.snake.nodes,
-      this.game.snake.head,
-      this.game.gameBoard.levelUpPosition,
-      this.cubeOptions,
-      this.boundaryCubeOptions
-    );
-
+    this.renderer.setMainPass( new GamePass({
+      limits: this.game.gameBoard.limits,
+      nodes: this.game.snake.nodes,
+      headNode: this.game.snake.head,
+      initLevelUpPos: this.game.gameBoard.levelUpPosition,
+      cubeOptions: this.cubeOptions,
+      boundaryCubeOptions: this.boundaryCubeOptions,
+      emitter: this.game
+    }) );
     
     this.game.on( 'gameOver', () => {
       window.removeEventListener( 'keyDown', this.keyChecker.bind( this ) );
@@ -71,7 +73,7 @@ export default class Manager {
       // key bindings when in game mode
       switch ( this.game.status ) {
         case 'ready':
-          this.ticker = this.ticker || window.setInterval( this.tick.bind( this ), 500 );
+          this.ticker = this.ticker || window.setInterval( this.game.tick.bind( this.game ), 500 );
         case true:
           let keyCode = _.result({
             '37': 'left',
@@ -89,10 +91,5 @@ export default class Manager {
           console.log(e);        
       }
     }
-  }
-
-  tick() {
-    this.game.tick();
-    this.renderer.tick( this.game.snake.nodes, this.game.snake.head, this.game.gameBoard.levelUpPosition );
   }
 }

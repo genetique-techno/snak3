@@ -65,23 +65,18 @@ class Game extends EventEmitter {
       this.gameBoard.levelUp(this.snake.nodes);
       this.snake.setExtensionTicks( this.gameBoard.level );
     }
+
+    this.emit( 'tick', {
+      nodes: this.snake.nodes,
+      head: this.snake.head,
+      levelUpPosition: this.gameBoard.levelUpPosition
+    });
   }
 
   changeDirection(dir) {
     if ( !this.status ) { return null; }
     this.snake._changeDirection(dir);
   }
-
-  // getState() {
-  //   console.log('----');
-  //   console.log('nodes: ');
-  //   this.snake.nodes.forEach((node) => ( console.log(node) ));
-  //   console.log('levelup: ', this.gameBoard.levelUpPosition);
-  //   // console.log('direction: ', this.direction);
-  //   console.log('status: ', this.status ? 'OK' : 'OVER');
-  //   console.log('----');
-  //   if ( !this.status ) { console.log('XXXX Crashed! Game is over.'); }
-  // }
 } 
 
 export default Game;
