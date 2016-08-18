@@ -7,7 +7,7 @@ export default class Menu extends EventEmitter {
   constructor() {
     super();
 
-    this.selectionIndex = 1;
+    this.selectionIndex = 0;
     this.menuItems = [
       {
         difficulty: 'easy',
@@ -30,6 +30,7 @@ export default class Menu extends EventEmitter {
         interval: 200
       }
     ];
+    console.log( this.menuItems[ this.selectionIndex ].difficulty, 'selected' );
 
     window.addEventListener( 'keydown', this.keyListener.bind( this ) );
   }

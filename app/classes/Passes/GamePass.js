@@ -55,7 +55,7 @@ export default class GamePass {
     this.scene.fog = new THREE.Fog( 0x000000, 0, 0 );
 
     this.fogTween = new TWEEN.Tween( this.scene.fog )
-      .to( { near: lim, far: 10*lim }, 200*lim )
+      .to( { near: lim+10, far: 10*lim+10 }, 2000 )
       .start();
   }
 
