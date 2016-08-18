@@ -1,20 +1,15 @@
 import _ from 'underscore';
 import EventEmitter from 'events';
 
-import GameBoard from 'app/classes/GameBoard';
 import Snake from 'app/classes/Snake';
 import util from 'app/util';
 
 class Game extends EventEmitter {
 
-  constructor( boardArr ) {
+  constructor( gameBoard ) {
     super();
 
-    if (!(boardArr instanceof Array) && length === 3) {
-      return console.log('Invalid board game dimensions');
-    }
-
-    this.gameBoard = new GameBoard( boardArr );
+    this.gameBoard = gameBoard;
     this.snake = new Snake( this._getStartingHead( this.gameBoard.levelUpPosition ) );
     this.status = 'ready';
 
