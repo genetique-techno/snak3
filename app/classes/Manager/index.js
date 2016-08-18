@@ -11,7 +11,6 @@ export default class Manager {
   constructor() {
     this.view = 'menu';
     this.renderer = new Renderer();
-    window.addEventListener( 'keydown', this.keyChecker.bind( this ) );
   }
 
   newGame( options = {} ) {    
@@ -42,12 +41,7 @@ export default class Manager {
       emitter: this.game
     }) );
     
-    this.game.on( 'gameOver', () => {
-      window.removeEventListener( 'keyDown', this.keyChecker.bind( this ) );
-      window.clearInterval( this.ticker );
-    });
 
-    this.ticker = null;
     this.view = 'game';
   }
 
@@ -70,27 +64,7 @@ export default class Manager {
 
     } else if ( this.view === 'game' ) {
 
-      // key bindings when in game mode
-      switch ( this.game.status ) {
-        case 'ready':
-          this.ticker = this.ticker || window.setInterval( this.game.tick.bind( this.game ), 500 );
-        case true:
-          let keyCode = _.result({
-            '37': 'left',
-            '38': 'up',
-            '39': 'right',
-            '40': 'down',
-            '16': 'in',
-            '17': 'out'
-          }, e.keyCode, null);
-          
-          if (keyCode) {
-            this.game.changeDirection(keyCode);
-          }
-          break;
-        case false:
-          console.log(e);        
-      }
+
     }
   }
 }

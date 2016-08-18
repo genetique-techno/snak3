@@ -17,6 +17,39 @@ class Game extends EventEmitter {
     this.gameBoard = new GameBoard( boardArr );
     this.snake = new Snake( this._getStartingHead( this.gameBoard.levelUpPosition ) );
     this.status = 'ready';
+
+    this.ticker = null;
+    window.addEventListener( 'keydown', this.keyListener.bind( this ) );
+
+    this.on( 'gameOver', () => {
+      window.removeEventListener( 'keyDown', this.keyListener.bind( this ) );
+      window.clearInterval( this.ticker );
+    });
+
+  }
+
+  keyListener(e) {
+
+    switch ( this.status ) {
+      case 'ready':
+        this.ticker = this.ticker || window.setInterval( this.tick.bind( this ), 500 );
+      case true:
+        let keyCode = _.result({
+          '37': 'left',
+          '38': 'up',
+          '39': 'right',
+          '40': 'down',
+          '16': 'in',
+          '17': 'out'
+        }, e.keyCode, null);
+        
+        if (keyCode) {
+          this.changeDirection(keyCode);
+        }
+        break;
+      case false:
+        console.log(e);        
+    }
   }
 
   _didSnakeCrash() {
