@@ -14,7 +14,6 @@ export default class GamePass {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, window.__GAME_DIV__.clientWidth / window.__GAME_DIV__.clientHeight, 0.1, 1000);
 
-    this.addFog({ new: 300, far: 800 });
     this.head = [];
 
     this.ambientLight = new THREE.AmbientLight( 0x404040, 2 );
@@ -26,6 +25,12 @@ export default class GamePass {
     this.cubeOptions = cubeOptions;
     this.boundaryCubeOptions = boundaryCubeOptions;
     this.limits = limits;
+
+    this.addFog({
+      color: 0x000000,
+      near: 0,
+      far: 0
+    });
 
     this.setBoundaryCubes( limits, boundaryCubeOptions );
     this.setNodeCubes( nodes, cubeOptions );
@@ -43,17 +48,27 @@ export default class GamePass {
     return new RenderPass( this.scene, this.camera );
   }
 
+  addFog( options = {} ) {
+    options = _.defaults( options, { color: 0x000000, near: 0, far: 100 } );
+
+    this.scene.fog = new THREE.Fog( options.color, options.near, options.far );
+
+    console.log( this.scene.fog );
+    var lim = this.limits[2];
+
+    this.fogTween = new TWEEN.Tween( this.scene.fog )
+      .to( { near: lim, far: 10*lim }, 200*lim )
+      .onUpdate(function() {
+        console.log(this.far);
+      })
+      .start();
+  }
+
   tick( { head, nodes, levelUpPosition } ) {
     this.setNodeCubes( nodes, this.cubeOptions );
     this.highlightBoundaryCubes( head, this.boundaryCubeOptions );
     this.setLevelUpPosition( levelUpPosition );
     this.moveCameraPosition( this.limits, head );
-  }
-
-  addFog( options = {} ) {
-    options = _.defaults(options, { color: 0x000000, near: 100, far: 500 });
-
-    this.scene.fog = new THREE.Fog( options.color, options.near, options.far );
   }
 
   addGrid( options = {} ) {
