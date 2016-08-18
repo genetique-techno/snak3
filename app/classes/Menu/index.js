@@ -49,9 +49,11 @@ export default class Menu extends EventEmitter {
   }
 
   acceptSelection() {
-    let gameBoard = new GameBoard( [10, 10, 3] );
-    console.log(gameBoard);
-    this.emit( 'acceptSelection', new GameBoard( [10, 10, 3] ) );
+
+    this.emit( 'acceptSelection', new GameBoard({
+      limits: [10, 10, 3],
+      difficulty: 'easy'
+    }) );
 
   }
 }

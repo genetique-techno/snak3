@@ -1,9 +1,20 @@
 class GameBoard {
-  constructor( [x, y, z] ) {
-    this.limits = [x, y, z];
+  constructor( { limits, difficulty } ) {
+    this.limits = limits;
     this.level = 0;
     this.levelUpPosition = this._getRandomPositionExceptNodes();
 
+    switch ( difficulty ) {
+      case 'easy': 
+        this._setEasyOptions();
+        break;
+    }
+
+    return this;
+  }
+
+  _setEasyOptions() {
+    
     this.boundaryCubeOptions = {
       color: "#33aacc"
     };
@@ -12,7 +23,6 @@ class GameBoard {
       color: "#55ff22"
     };
 
-    return this;
   }
 
   levelUp(avoidNodes) {  // pass in all nodes of the snake so they won't be randomly generated on
