@@ -14,11 +14,6 @@ export default class GamePass {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, window.__GAME_DIV__.clientWidth / window.__GAME_DIV__.clientHeight, 0.1, 1000);
 
-    this.raycaster = new THREE.Raycaster();
-    this.mouse = new THREE.Vector2();
-    // window.addEventListener( 'mousedown', this.cubeClick.bind( this ) );
-
-
     this.addFog({ new: 300, far: 800 });
     this.head = [];
 
@@ -55,16 +50,6 @@ export default class GamePass {
     this.moveCameraPosition( this.limits, head );
   }
 
-  cubeClick( e ) {
-    this.mouse.x = 2 * (e.clientX / this.div.clientWidth) - 1;
-    this.mouse.y = 1 - 2 * ( e.clientY / this.div.clientHeight );
-
-    this.raycaster.setFromCamera( this.mouse, this.camera ); 
-    let intersects = this.raycaster.intersectObjects( this.cubes.children );
-
-    console.log(intersects[0]);
-  }
-
   addFog( options = {} ) {
     options = _.defaults(options, { color: 0x000000, near: 100, far: 500 });
 
@@ -75,7 +60,6 @@ export default class GamePass {
     options = _.defaults(options, { size: 500, step: 50 });
 
     let grid = new THREE.GridHelper( options.size, options.step, options.color, options.color );
-    console.log(grid);
     grid.rotation.set( 1.5707, 0, 0 );
     grid.position.set( -0.5, -0.5, -0.5);
     this.scene.add( grid );

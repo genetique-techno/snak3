@@ -87,6 +87,7 @@ export default class Manager {
           if (keyCode) {
             this.game.changeDirection(keyCode);
           }
+          break;
         case false:
           console.log(e);        
       }
