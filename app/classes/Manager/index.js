@@ -3,6 +3,7 @@ import Game from 'app/classes/Game';
 import Menu from 'app/classes/Menu';
 import Renderer from 'app/classes/Renderer';
 
+import TitlePass from 'app/classes/Passes/TitlePass.js';
 import GamePass from 'app/classes/Passes/GamePass.js';
 
 window.__GAME_DIV__ = document.getElementById( 'app' );
@@ -18,10 +19,12 @@ export default class Manager {
 
   newMenu() {
     this.menu = new Menu();
+    this.renderer.setMainPass( new TitlePass({}) );
+
     this.menu.on( 'acceptSelection', ( gameBoard ) => {
       console.log('menu accepted');
       this.newGame( gameBoard );
-      // set render pass from menu to game pass
+
     });
   }
 

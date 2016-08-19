@@ -10,7 +10,6 @@ import Game from 'app/classes/Game';
 export default class GamePass {
 
   constructor( { limits, nodes, headNode, initLevelUpPos, cubeOptions, boundaryCubeOptions, emitter } ) {
-
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, window.__GAME_DIV__.clientWidth / window.__GAME_DIV__.clientHeight, 0.1, 1000);
 
@@ -42,7 +41,6 @@ export default class GamePass {
   }
 
   unloader() {
-    console.log(this.scene.fog);
     this.fogTween = new TWEEN.Tween( this.scene.fog )
       .to( { near: 0, far: 0 }, 3000 )
       .start();

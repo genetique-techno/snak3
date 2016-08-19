@@ -17,8 +17,9 @@ module.exports = {
   module: {
     loaders: [
       { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
-      {test: /\.css$/, exclude: /\.useable\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader')},
-      {test: /\.less$/, exclude: /\.useable\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')},
+      { test: /\.css$/, exclude: /\.useable\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader') },
+      { test: /\.less$/, exclude: /\.useable\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader') },
+      { test: /\.json/, loader: 'json-loader' }
     ]
   },
   resolveLoader: {
