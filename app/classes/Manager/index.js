@@ -6,6 +6,8 @@ import Renderer from 'app/classes/Renderer';
 import TitlePass from 'app/classes/Passes/TitlePass.js';
 import GamePass from 'app/classes/Passes/GamePass.js';
 
+import MenuOverlay from 'app/classes/Overlays/MenuOverlay.js';
+
 window.__GAME_DIV__ = document.getElementById( 'app' );
 
 export default class Manager {
@@ -20,6 +22,8 @@ export default class Manager {
   newMenu() {
     this.menu = new Menu();
     this.renderer.setMainPass( new TitlePass({}) );
+
+    this.renderer.setOverlayPass( new MenuOverlay( this.menu ) );
 
     this.menu.on( 'acceptSelection', ( gameBoard ) => {
       console.log('menu accepted');
@@ -40,6 +44,7 @@ export default class Manager {
       boundaryCubeOptions: gameBoard.boundaryCubeOptions,
       emitter: this.game
     }) );
+    this.renderer.setOverlayPass();
     
 
     this.view = 'game';

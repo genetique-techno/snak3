@@ -1,5 +1,6 @@
 import THREE from 'three';
 import TWEEN from 'tween.js';
+import _ from 'underscore';
 
 import { EffectComposer, RenderPass, BloomPass } from 'postprocessing';
 
@@ -21,6 +22,8 @@ export default class Renderer {
     bloomPass.renderToScreen = true;
 
     this.mainPassInstance = {};
+    this.overlayPassInstance = {};
+
     this.composer.passes.push({});
     this.composer.passes.push({});
     this.composer.addPass( bloomPass, 2 );
@@ -46,6 +49,14 @@ export default class Renderer {
       this.composer.passes[0] = pass.renderPass;
       this.mainPassInstance = pass;
       this.mainPassInstance.loader();
+    }
+  }
+
+  setOverlayPass( pass ) {
+    if ( !pass || _.isEmpty( pass ) ) {
+      this.composer.passes[1] = {};
+    } else {
+      this.composer.passes[1] = pass.renderPass;
     }
   }
 
