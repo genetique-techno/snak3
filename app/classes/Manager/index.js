@@ -23,7 +23,9 @@ export default class Manager {
     this.menu = new Menu();
     this.renderer.setMainPass( new TitlePass({}) );
 
-    this.renderer.setOverlayPass( new MenuOverlay( this.menu ) );
+    window.setTimeout(() => {
+      this.renderer.setOverlayPass( new MenuOverlay( this.menu ) );
+    }, 5200);
 
     this.menu.on( 'acceptSelection', ( gameBoard ) => {
       console.log('menu accepted');
