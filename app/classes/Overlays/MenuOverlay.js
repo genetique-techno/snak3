@@ -39,6 +39,7 @@ export default class MenuOverlay {
     this.setSelection(0);
     emitter.on( 'changeSelection', this.setSelection.bind( this ) );
     // emitter.on( 'acceptSelection', this.acceptSelection );
+
   }
 
   setItems() {
@@ -69,10 +70,15 @@ export default class MenuOverlay {
     if ( !this.selector ) {
       this.selector = new THREE.Mesh( new THREE.TextGeometry( '>', this.fontOptions ), this.material );
       this.selector.position.x = selectorPosition.x;
+      this.selector.position.y = selectorPosition.y;
       this.selector.position.z = selectorPosition.z;
       this.scene.add( this.selector );
     }
 
-    this.selector.position.y = selectorPosition.y;
+    // this.selector.position.y = selectorPosition.y;
+
+    this.selectorTween = new TWEEN.Tween( this.selector.position )
+      .to( { y: selectorPosition.y }, 75 )
+      .start();
   }
 };
