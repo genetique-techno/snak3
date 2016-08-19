@@ -88,7 +88,7 @@ export default class GamePass {
 
     let geometry = new THREE.BoxGeometry( s*1, s*1, s*1 );
 
-    let material = new THREE.MeshPhongMaterial( { color: color, specular: 0x555555, shininess: 30 } );
+    let material = new THREE.MeshPhongMaterial( { color: color, specular: 0x555555, shininess: 0 } );
     material.transparent = true;
     material.opacity = 1.0;
 
