@@ -1,6 +1,8 @@
 
 export default [
   {
+    type: 'game',
+    label: 'easy',
     difficulty: 'easy',
     limits: [10, 10, 1],
     interval: 500,
@@ -11,6 +13,8 @@ export default [
   },
 
   {
+    type: 'game',
+    label: 'medium',
     difficulty: 'medium',
     limits: [10, 10, 3],
     interval: 500,
@@ -21,6 +25,8 @@ export default [
   },
 
   {
+    type: 'game',
+    label: 'hard',
     difficulty: 'hard',
     limits: [15, 15, 6],
     interval: 250,
@@ -31,6 +37,8 @@ export default [
   },
 
   {
+    type: 'game',
+    label: 'impossible',
     difficulty: 'impossible',
     limits: [30, 30, 10],
     interval: 150,
@@ -38,5 +46,23 @@ export default [
       boundaryCubes: '#7408C7',
       cubes: '#F90018'
     }
+  },
+
+  {
+    type: 'separator',
+    label: ''
+  },
+
+  {
+    type: 'instructions',
+    label: 'how to play',
+    func: 'newInstructions'
+  },
+
+  {
+    type: 'highscores',
+    label: 'high scores',
+    func: 'newHighScores'
   }
+
 ];

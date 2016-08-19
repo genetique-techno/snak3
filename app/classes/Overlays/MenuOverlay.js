@@ -2,14 +2,14 @@ import THREE from 'three';
 import TWEEN from 'tween.js';
 import _ from 'underscore';
 
-import games from 'app/config/games.js';
+import menuItems from 'app/config/menuItems.js';
 
 import { RenderPass } from 'postprocessing';
 
 const alegreya = require('app/fonts/Alegreya Sans SC Light_Regular.json');
 
 const basePosition = { x: 0, y: -5, z: 0 };
-const itemGap = 2;
+const itemGap = 1.2;
 
 export default class MenuOverlay {
 
@@ -44,9 +44,9 @@ export default class MenuOverlay {
   setItems() {
 
     this.items = new THREE.Group();
-    games.forEach( ( game, index ) => {
+    menuItems.forEach( ( item, index ) => {
 
-      let text = new THREE.TextGeometry( game.difficulty, this.fontOptions );
+      let text = new THREE.TextGeometry( item.label, this.fontOptions );
       let mesh = new THREE.Mesh( text, this.material );
       mesh.position.set( basePosition.x, basePosition.y - itemGap * index, basePosition.z );
       this.items.add( mesh );

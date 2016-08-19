@@ -2,7 +2,7 @@ import EventEmitter from 'events';
 import _ from 'underscore';
 import GameBoard from 'app/classes/GameBoard';
 
-import games from 'app/config/games.js';
+import menuItems from 'app/config/menuItems.js';
 
 export default class Menu extends EventEmitter {
 
@@ -10,9 +10,25 @@ export default class Menu extends EventEmitter {
     super();
 
     this.selectionIndex = 0;
-    console.log( games[ this.selectionIndex ].difficulty, 'selected' );
+    this.logSelection;
 
     window.addEventListener( 'keydown', this.keyListener.bind( this ) );
+  }
+
+  logSelection() {
+    let item = menuItems[ this.selectionIndex ];
+
+    switch ( item.type ) {
+      case 'game':
+        console.log( item.difficulty, 'selected' );
+        break;
+      case 'instructions':
+        console.log( item.label, 'selected' );
+        break;
+      case 'highscores':
+        console.log( item.label, 'selected' );
+        break;
+    }
   }
 
 
@@ -42,19 +58,25 @@ export default class Menu extends EventEmitter {
   }
 
   decrementSelection() {
-    this.selectionIndex = this.selectionIndex === 0 ? games.length - 1 : this.selectionIndex - 1;
-    console.log(games[this.selectionIndex].difficulty, 'selected');
+    this.selectionIndex = this.selectionIndex === 0 ? 0 : this.selectionIndex - 1;
+    if ( menuItems[ this.selectionIndex ].type === 'separator' ) {
+      this.selectionIndex--;
+    }
+    this.logSelection();
     this.emit( 'changeSelection', this.selectionIndex );
   }
 
   incrementSelection() {
-    this.selectionIndex = this.selectionIndex === games.length - 1 ? 0 : this.selectionIndex + 1;
-    console.log(games[this.selectionIndex].difficulty, 'selected');
+    this.selectionIndex = this.selectionIndex === menuItems.length - 1 ? menuItems.length - 1 : this.selectionIndex + 1;
+    if ( menuItems[ this.selectionIndex ].type === 'separator' ) {
+      this.selectionIndex++;
+    }
+    this.logSelection();
     this.emit( 'changeSelection', this.selectionIndex );
   }
 
   acceptSelection() {
-    this.emit( 'acceptSelection', new GameBoard( games[ this.selectionIndex ] ) );
+    this.emit( 'acceptSelection', new GameBoard( menuItems[ this.selectionIndex ] ) );
   }
 }
 
