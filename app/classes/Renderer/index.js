@@ -41,7 +41,7 @@ export default class Renderer {
         this.composer.passes[0] = pass.renderPass;
         this.mainPassInstance = pass;
         this.mainPassInstance.loader();
-      }, 3000 );
+      }, 2000 );
     } else {
       this.composer.passes[0] = pass.renderPass;
       this.mainPassInstance = pass;

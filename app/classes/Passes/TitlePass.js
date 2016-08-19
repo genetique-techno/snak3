@@ -49,7 +49,7 @@ export default class TitlePass {
 
   unloader() {
     this.fogTween = new TWEEN.Tween( this.scene.fog )
-      .to( { near: 0, far: 0 }, 3000 )
+      .to( { near: 0, far: 0 }, 2000 )
       .start();
   }
 
