@@ -54,13 +54,13 @@ export default [
   },
 
   {
-    type: 'instructions',
+    type: 'other',
     label: 'how to play',
     func: 'newInstructions'
   },
 
   {
-    type: 'highscores',
+    type: 'other',
     label: 'high scores',
     func: 'newHighScores'
   }

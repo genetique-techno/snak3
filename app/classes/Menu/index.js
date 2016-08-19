@@ -1,6 +1,5 @@
 import EventEmitter from 'events';
 import _ from 'underscore';
-import GameBoard from 'app/classes/GameBoard';
 
 import menuItems from 'app/config/menuItems.js';
 
@@ -76,18 +75,6 @@ export default class Menu extends EventEmitter {
   }
 
   acceptSelection() {
-    this.emit( 'acceptSelection', new GameBoard( menuItems[ this.selectionIndex ] ) );
+    this.emit( 'acceptSelection', menuItems[ this.selectionIndex ] );
   }
 }
-
-// menu options
-/*
-
-  Easy
-  Medium
-  Hard
-  Impossible
-
-
-  returns a gameBoard object
-*/

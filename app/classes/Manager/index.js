@@ -1,5 +1,6 @@
 import _ from 'underscore';
 import Game from 'app/classes/Game';
+import GameBoard from 'app/classes/GameBoard';
 import Menu from 'app/classes/Menu';
 import Renderer from 'app/classes/Renderer';
 
@@ -27,9 +28,15 @@ export default class Manager {
       this.renderer.setOverlayPass( new MenuOverlay( this.menu ) );
     }, 5200);
 
-    this.menu.on( 'acceptSelection', ( gameBoard ) => {
+    this.menu.on( 'acceptSelection', ( item ) => {
       console.log('menu accepted');
-      this.newGame( gameBoard );
+      switch ( item.type ) {
+        case 'game':
+          this.newGame( new GameBoard( item ) );
+          break;
+        case 'other':
+          this[item.func]();
+      }
 
     });
   }
@@ -50,5 +57,13 @@ export default class Manager {
     
 
     this.view = 'game';
+  }
+
+  newInstructions() {
+    console.log('new instructions called');
+  }
+
+  newHighScores() {
+    console.log('new high scores called');
   }
 }
