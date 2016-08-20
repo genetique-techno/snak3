@@ -38,8 +38,7 @@ export default class MenuOverlay {
 
     this.setSelection(0);
     emitter.on( 'changeSelection', this.setSelection.bind( this ) );
-    // emitter.on( 'acceptSelection', this.acceptSelection );
-
+    
   }
 
   setItems() {
@@ -76,8 +75,6 @@ export default class MenuOverlay {
       this.selector.position.z = selectorPosition.z;
       this.scene.add( this.selector );
     }
-
-    // this.selector.position.y = selectorPosition.y;
 
     this.selectorTween = new TWEEN.Tween( this.selector.position )
       .to( { y: selectorPosition.y }, 75 )

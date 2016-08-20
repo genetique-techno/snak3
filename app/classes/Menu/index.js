@@ -14,23 +14,6 @@ export default class Menu extends EventEmitter {
     window.addEventListener( 'keydown', this.keyListener.bind( this ) );
   }
 
-  logSelection() {
-    let item = menuItems[ this.selectionIndex ];
-
-    switch ( item.type ) {
-      case 'game':
-        console.log( item.difficulty, 'selected' );
-        break;
-      case 'instructions':
-        console.log( item.label, 'selected' );
-        break;
-      case 'highscores':
-        console.log( item.label, 'selected' );
-        break;
-    }
-  }
-
-
   keyListener(e) {
 
     let keyCode = _.result({
@@ -61,7 +44,6 @@ export default class Menu extends EventEmitter {
     if ( menuItems[ this.selectionIndex ].type === 'separator' ) {
       this.selectionIndex--;
     }
-    this.logSelection();
     this.emit( 'changeSelection', this.selectionIndex );
   }
 
@@ -70,7 +52,6 @@ export default class Menu extends EventEmitter {
     if ( menuItems[ this.selectionIndex ].type === 'separator' ) {
       this.selectionIndex++;
     }
-    this.logSelection();
     this.emit( 'changeSelection', this.selectionIndex );
   }
 
