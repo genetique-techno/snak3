@@ -46,12 +46,14 @@ export default class MenuOverlay {
 
     this.items = new THREE.Group();
     menuItems.forEach( ( item, index ) => {
-
-      let text = new THREE.TextGeometry( item.label, this.fontOptions );
-      let mesh = new THREE.Mesh( text, this.material );
-      mesh.position.set( basePosition.x, basePosition.y - itemGap * index, basePosition.z );
-      this.items.add( mesh );
-
+      if ( item.type !== 'separator' ) {
+        let text = new THREE.TextGeometry( item.label, this.fontOptions );
+        let mesh = new THREE.Mesh( text, this.material );
+        mesh.position.set( basePosition.x, basePosition.y - itemGap * index, basePosition.z );
+        this.items.add( mesh );
+      } else {
+        this.items.add( new THREE.Object3D() );
+      }
     });   
 
     this.scene.add( this.items );
