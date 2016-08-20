@@ -1,4 +1,7 @@
-import { RenderPass } from 'postprocessing';
+// import { RenderPass } from 'postprocessing';
+require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
+require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
+require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
 
 const geoOblique = require('app/fonts/Geo_Oblique.json');
 
@@ -12,7 +15,7 @@ export default class TitlePass {
     this._setLighting();
     this._setTitleText();
 
-    this.renderPass = new RenderPass( this.scene, this.camera );
+    this.renderPass = new THREE.RenderPass( this.scene, this.camera );
 
   }
 

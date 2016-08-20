@@ -1,7 +1,11 @@
 import _ from 'underscore';
 import util from 'app/util';
 
-import { RenderPass } from 'postprocessing';
+// import { RenderPass } from 'postprocessing';
+require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
+require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
+require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
+
 import Game from 'app/classes/Game';
 
 export default class GamePass {
@@ -27,7 +31,7 @@ export default class GamePass {
     this.highlightBoundaryCubes( headNode, boundaryCubeOptions );
     this.setLevelUpPosition( initLevelUpPos );
     this.setCameraPosition( limits, headNode );
-    this.renderPass = new RenderPass( this.scene, this.camera );
+    this.renderPass = new THREE.RenderPass( this.scene, this.camera );
 
     this.addGrid({
       size: 100,

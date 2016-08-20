@@ -2,7 +2,9 @@ import _ from 'underscore';
 
 import menuItems from 'app/config/menuItems.js';
 
-import { RenderPass } from 'postprocessing';
+// import { RenderPass } from 'postprocessing';
+require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
+
 
 const alegreya = require('app/fonts/Alegreya Sans SC Light_Regular.json');
 
@@ -31,7 +33,7 @@ export default class MenuOverlay {
     this.setItems();
 
     this.camera.position.set( 0, 0, 20);
-    this.renderPass = new RenderPass( this.scene, this.camera );
+    this.renderPass = new THREE.RenderPass( this.scene, this.camera );
     this.renderPass.clear = false;
 
     this.setSelection(0);

@@ -4,7 +4,6 @@ import GameBoard from 'app/classes/GameBoard';
 import Menu from 'app/classes/Menu';
 import Renderer from 'app/classes/Renderer';
 
-import TitlePass from 'app/classes/Passes/TitlePass.js';
 import GamePass from 'app/classes/Passes/GamePass.js';
 
 import MenuOverlay from 'app/classes/Overlays/MenuOverlay.js';
@@ -22,10 +21,11 @@ export default class Manager {
 
   newMenu() {
     this.menu = new Menu();
-    this.renderer.setMainPass( new TitlePass({}) );
+    // this.renderer.setMainPass( new TitlePass({}) );
 
     window.setTimeout(() => {
-      this.renderer.setOverlayPass( new MenuOverlay( this.menu ) );
+      // this.renderer.setOverlayPass( new MenuOverlay( this.menu ) );
+      console.log(this.renderer.composer);
     }, 5200);
 
     this.menu.on( 'acceptSelection', ( item ) => {
