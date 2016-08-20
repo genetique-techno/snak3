@@ -2,6 +2,7 @@ var path = require("path");
 var appPaths = require("./root.js").paths;
 var HtmlWebpackPlugin = require ("html-webpack-plugin");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var webpack = require('webpack');
 
 module.exports = {
   devServer: {
@@ -34,6 +35,11 @@ module.exports = {
     }
   },
   plugins: [
+
+    new webpack.ProvidePlugin({
+        THREE: "three",
+        TWEEN: "tween.js",
+    }),
     
     new HtmlWebpackPlugin({
       chunks: ['app', 'devServer'],

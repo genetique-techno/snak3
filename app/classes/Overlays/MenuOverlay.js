@@ -1,5 +1,3 @@
-import THREE from 'three';
-import TWEEN from 'tween.js';
 import _ from 'underscore';
 
 import menuItems from 'app/config/menuItems.js';

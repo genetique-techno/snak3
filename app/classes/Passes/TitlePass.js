@@ -1,6 +1,3 @@
-import THREE from 'three';
-import TWEEN from 'tween.js';
-
 import { RenderPass } from 'postprocessing';
 
 const geoOblique = require('app/fonts/Geo_Oblique.json');
