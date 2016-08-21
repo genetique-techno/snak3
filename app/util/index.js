@@ -56,5 +56,18 @@ export default {
       this[key] = obj[key];
     }
   }
+
+  keyToAction: {
+    'ArrowUp': 'up',
+    'ArrowDown': 'down',
+    'ArrowRight': 'right',
+    'ArrowLeft': 'left',
+    'ShiftLeft': 'in',
+    'ShiftRight': 'in',
+    'ControlLeft': 'out',
+    'ControlRight': 'out',
+    'Escape': 'esc',
+    'KeyP': 'esc'
+  };
   
 };
