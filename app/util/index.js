@@ -49,5 +49,12 @@ export default {
     }
 
     return rgb;
+  },
+
+  assignKeys( obj ) {
+    for ( key in obj ) {
+      this[key] = obj[key];
+    }
   }
+  
 };
