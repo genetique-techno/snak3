@@ -26,7 +26,7 @@ export default class GamePass extends CubeDrawer {
     this.scene.add(this.light);
 
     this.setBoundaryCubePositions();
-    this.setNodeCubes();
+    this.setInitialCube();
     this.highlightBoundaryCubes();
     this.setLevelUpPosition();
     this.setInitialCameraPosition();
@@ -37,7 +37,7 @@ export default class GamePass extends CubeDrawer {
       step: 200
     });
 
-    emitter.on( 'tick', this.tick.bind( this ) );
+    this._game.on( 'tick', this.tick.bind( this ) );
   }
 
   unloader() {
@@ -107,6 +107,15 @@ export default class GamePass extends CubeDrawer {
 
   }
 
+  setInitialCube() {
+    let head = this._game._snake.head;
+    this.addCube({
+      group: 'cubes',
+      color: this.colors.cubes,
+      pos: head
+    });
+  }
+
   setNodeCubes() {
     let nodes = this._game._snake.nodes;
 
@@ -160,9 +169,9 @@ export default class GamePass extends CubeDrawer {
   setBoundaryCubePositions() {
 
     let edges = [];
-    for ( let z = 0; z < limits[2]; z++ ) {
-      for ( let y = 0; y < limits[1]; y++ ) {
-        for ( let x = 0; x < limits[0]; x++ ) {
+    for ( let z = 0; z < this.limits[2]; z++ ) {
+      for ( let y = 0; y < this.limits[1]; y++ ) {
+        for ( let x = 0; x < this.limits[0]; x++ ) {
           
           if ( x === 0 ) {
             edges.push( [ -1, y, z ] );
@@ -172,10 +181,10 @@ export default class GamePass extends CubeDrawer {
             }
           }
 
-          if ( x === limits[0] - 1 ) {
-            edges.push( [ limits[0], y, z ] );
+          if ( x === this.limits[0] - 1 ) {
+            edges.push( [ this.limits[0], y, z ] );
             if ( y === 0 ) {
-              edges.push( [ limits[0], -1, z ] );
+              edges.push( [ this.limits[0], -1, z ] );
             }
           }
           
@@ -183,14 +192,14 @@ export default class GamePass extends CubeDrawer {
             edges.push( [ x, - 1, z ] );
           }
 
-          if ( y === limits[1] - 1) {
-            edges.push( [ x, limits[1], z ] );
+          if ( y === this.limits[1] - 1) {
+            edges.push( [ x, this.limits[1], z ] );
 
             if ( x === 0 ) {
-              edges.push( [ -1, limits[1], z ] );
+              edges.push( [ -1, this.limits[1], z ] );
             }
-            if ( x === limits[0] - 1 ) {
-              edges.push( [ limits[0], limits[1], z ] );
+            if ( x === this.limits[0] - 1 ) {
+              edges.push( [ this.limits[0], this.limits[1], z ] );
             }
 
           }

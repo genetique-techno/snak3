@@ -52,10 +52,10 @@ export default {
   },
 
   assignKeys( obj ) {
-    for ( key in obj ) {
+    for ( let key in obj ) {
       this[key] = obj[key];
     }
-  }
+  },
 
   keyToAction: {
     'ArrowUp': 'up',
@@ -68,6 +68,6 @@ export default {
     'ControlRight': 'out',
     'Escape': 'esc',
     'KeyP': 'esc'
-  };
+  }
   
 };

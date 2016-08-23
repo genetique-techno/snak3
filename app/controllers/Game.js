@@ -1,5 +1,6 @@
 import 'app/util';
 import EventEmitter from 'events';
+import util from 'app/util';
 
 import Snake from 'app/controllers/Snake';
 
@@ -61,7 +62,7 @@ class Game extends EventEmitter {
 
     avoid.map( function( item ) {
       return item.join('$');
-    }) : [ -1, -1, -1];
+    });
 
     do {
       rnd = [

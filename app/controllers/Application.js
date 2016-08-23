@@ -1,6 +1,6 @@
 
 import stateManager from 'app/controllers/stateManager.js';
-import { mainPasses, overlays } from 'app/config/stateMappings.js';
+import stateMappings from 'app/config/stateMappings.js';
 
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/ConvolutionShader.js' );
@@ -39,19 +39,20 @@ class Application {
     this.render();
 
     stateManager.on( 'newApplicationState', this.setApplicationView.bind( this ) );
-    stateManager.on( 'newGameTypeState', null );
+    // stateManager.on( 'newGameTypeState', null );
     stateManager.on( 'newOverlayState', this.setOverlayView.bind( this ) );
 
+    stateManager.emitCurrentState();
   }
 
   setApplicationView( state ) {
 
-    if ( this.mainPass.unloader ) {
+    if ( this.mainPass && this.mainPass.unloader ) {
       this.mainPass.unloader();
       window.setTimeout(() => {
-        this.mainPass = new mainPasses[ state[ 'mainPass' ] ]( state[ 'gameType' ] );
+        this.mainPass = new stateMappings.mainPasses[ state[ 'mainPass' ] ]( state[ 'gameType' ] );
         this.mainPass.setSize( this.width, this.height );
-        this.overlayPass = new overlays[ state[ 'overlay' ] ]();
+        this.overlayPass = new stateMappings.overlays[ state[ 'overlay' ] ]();
         this.overlayPass.setSize( this.width, this.height );
 
         this.composer.passes[0] = this.mainPass.renderPass;
@@ -59,9 +60,9 @@ class Application {
         this.composer.passes[2] = this.overlayPass;
       }, 2000 );
     } else {
-      this.mainPass = new mainPasses[ state[ 'mainPass' ] ]( state[ 'gameType' ] );
+      this.mainPass = new stateMappings.mainPasses[ state[ 'mainPass' ] ]( state[ 'gameType' ] );
       this.mainPass.setSize( this.width, this.height );
-      this.overlayPass = new overlays[ state[ 'overlay' ] ]();
+      this.overlayPass = new stateMappings.overlays[ state[ 'overlay' ] ]();
       this.overlayPass.setSize( this.width, this.height );
 
       this.composer.passes[0] = this.mainPass.renderPass;
@@ -79,8 +80,6 @@ class Application {
   render() {
     
     let delta = this.clock.getDelta();
-
-    this.titleComposer.render( delta );
 
     this.composer.render(delta);
 

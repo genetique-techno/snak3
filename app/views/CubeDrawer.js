@@ -49,7 +49,7 @@ class CubeDrawer {
     if (group) {
       if ( !this[group] ) { 
         this[group] = new THREE.Group(); 
-        this.scene.add( group );
+        this.scene.add( this[group] );
       }
       this[group].add(cube);
     } else {

@@ -5,9 +5,10 @@ import gameTypes from 'app/config/gameTypes.js';
 class StateManager extends EventEmitter {
 
   constructor() {
-  
+    super();
+
     this._state = {
-      mainPass: 'titlePass',
+      mainPass: 'gamePass',
       overlay: 'menu',
       gameType: gameTypes[0]
     };
@@ -42,6 +43,11 @@ class StateManager extends EventEmitter {
 
   getState() {
     return this._state;
+  }
+
+  emitCurrentState() {
+
+    this.emit( 'newApplicationState', this._state );
   }
 }
 
