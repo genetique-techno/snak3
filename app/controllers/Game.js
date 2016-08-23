@@ -11,7 +11,7 @@ class Game extends EventEmitter {
     util.assignKeys.call( this, gameType );
     
     this.level = 0;
-    this.status = 'ready';
+    this.gameStatus = 'ready';
     this._levelUpPosition;
     this._ticker;
     this._snake = new Snake( this.limits );
@@ -19,18 +19,17 @@ class Game extends EventEmitter {
     // game over listener
     this._snake.on( 'gameOver', this.endGame.bind( this ) );
 
-    // keydown listener
-    this._keyListener.on( 'keydown', this.processKey.bind( this ) );
-
+    this.listener = window.addEventListener( 'keydown', this._keyListener.bind( this ) );
   }
 
   _keyListener(e) {
 
-    switch ( this.status ) {
+    switch ( this.gameStatus ) {
+
       case 'ready':
         this.ticker = this.ticker || window.setInterval(() => {
           this.tick();
-          this.status = 'live';
+          this.gameStatus = 'live';
         }, this.interval );
         break;
 
@@ -46,19 +45,13 @@ class Game extends EventEmitter {
           this._snake.changeDirection( e.code );
         } else if ( e.code === 'KeyP' ) {
           // this.pauseGame;
+          console.log('p was pressed');
+          // set state: new overlay: pauseOverlay
         }
         break;
-
-      case 'paused':
-        // paused keys
-        break;
-
-      case false:
-        // gameover keys
-        break;
+      default:
 
     }
-
   }
 
 
@@ -86,7 +79,7 @@ class Game extends EventEmitter {
 
   tick() {
 
-    if ( !this.status ) { 
+    if ( !this.gameStatus ) { 
       return null;
     }
 
@@ -108,7 +101,7 @@ class Game extends EventEmitter {
 
     console.log( `GameOver: ${p.reason}` );
     window.clearTimeout( this.ticker );
-    this.status = false;
+    this.gameStatus = 'gameOver';
     
   }
 
