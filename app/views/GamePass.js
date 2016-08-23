@@ -128,7 +128,7 @@ export default class GamePass extends CubeDrawer {
       this.removeCube({ 
         node,
         group: 'cubes'
-      });
+      }));
     });
 
     // add new cubes for any new snake nodes
@@ -203,7 +203,7 @@ export default class GamePass extends CubeDrawer {
         group: 'boundaryCubes', 
         pos: edge, 
         color: this.colors.boundaryCubes 
-      } );
+      } ) );
     });
 
   }
