@@ -1,6 +1,6 @@
 
 import stateManager from 'app/controllers/stateManager.js';
-
+import { mainPasses, overlays } from 'app/config/stateMappings.js';
 
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/ConvolutionShader.js' );
@@ -21,12 +21,14 @@ class Application {
 
     this.renderer.setSize( this.width, this.height );
 
-    this.bloomOptions = {
+    let bloomOptions = {
       resolutionScale: 0.2,
       blurriness: 0,
       strength: 1.0,
       distinction: 1.4
     };
+    this.bloomPass = new THREE.BloomPass( bloomOptions );
+    this.bloomPass.setSize( this.width, this.height );
 
     this.composer = new THREE.EffectComposer( this.renderer );
 
@@ -40,6 +42,37 @@ class Application {
     stateManager.on( 'newGameTypeState', null );
     stateManager.on( 'newOverlayState', this.setOverlayView.bind( this ) );
 
+  }
+
+  setApplicationView( state ) {
+
+    if ( this.mainPass.unloader ) {
+      this.mainPass.unloader();
+      window.setTimeout(() => {
+        this.mainPass = new mainPasses[ state[ 'mainPass' ] ]( state[ 'gameType' ] );
+        this.mainPass.setSize( this.width, this.height );
+        this.overlayPass = new overlays[ state[ 'overlay' ] ]();
+        this.overlayPass.setSize( this.width, this.height );
+
+        this.composer.passes[0] = this.mainPass.renderPass;
+        this.composer.passes[1] = this.bloomPass;
+        this.composer.passes[2] = this.overlayPass;
+      }, 2000 );
+    } else {
+      this.mainPass = new mainPasses[ state[ 'mainPass' ] ]( state[ 'gameType' ] );
+      this.mainPass.setSize( this.width, this.height );
+      this.overlayPass = new overlays[ state[ 'overlay' ] ]();
+      this.overlayPass.setSize( this.width, this.height );
+
+      this.composer.passes[0] = this.mainPass.renderPass;
+      this.composer.passes[1] = this.bloomPass;
+      this.composer.passes[2] = this.overlayPass;      
+    }
+
+  }
+
+  setOverlayView( state ) {
+    //noop
   }
 
 
