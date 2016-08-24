@@ -13,7 +13,6 @@ class Game extends EventEmitter {
     
     this.level = 0;
     this.gameStatus = 'ready';
-    this._levelUpPosition;
     this._ticker;
     this._snake = new Snake( this.limits );
 
@@ -21,6 +20,7 @@ class Game extends EventEmitter {
     this._snake.on( 'gameOver', this.endGame.bind( this ) );
 
     this.listener = window.addEventListener( 'keydown', this._keyListener.bind( this ) );
+    this.levelUp();
   }
 
   _keyListener(e) {
@@ -75,7 +75,7 @@ class Game extends EventEmitter {
     this.level++;
     this._snake.extendBy( this.level );
 
-    return rnd;
+    this.levelUpPosition = rnd;
   }
 
   tick() {

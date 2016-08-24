@@ -15,15 +15,14 @@ class Snake extends EventEmitter {
   }
 
   _getStartingHead( avoid ) {
-
     avoid = avoid.join('$');
     var rnd;
 
     do {
       rnd = [
-        Math.floor( Math.random() * (avoid[0] - 1) ),
-        Math.floor( Math.random() * (avoid[1] - 1) ),
-        Math.floor( Math.random() * (avoid[2] - 1) )
+        Math.floor( Math.random() * (this.limits[0] - 1) ),
+        Math.floor( Math.random() * (this.limits[1] - 1) ),
+        Math.floor( Math.random() * (this.limits[2] - 1) )
       ];
     } while ( rnd.join('$') === avoid )
 
@@ -41,9 +40,9 @@ class Snake extends EventEmitter {
 
     // Check if crashed into floor, wall, or ceiling
     } else if (
-        (head[0] < 0 || head[0] > this.limits[0] - 1)
-        || (head[1] < 0 || head[1] > this.limits[1] - 1)
-        || (head[2] < 0 || head[2] > this.limits[2] - 1)
+        (this.head[0] < 0 || this.head[0] > this.limits[0] - 1)
+        || (this.head[1] < 0 || this.head[1] > this.limits[1] - 1)
+        || (this.head[2] < 0 || this.head[2] > this.limits[2] - 1)
     ) {
 
       this.emit( 'gameOver', {

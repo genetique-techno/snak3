@@ -23,14 +23,15 @@ export default class GamePass extends CubeDrawer {
     this.scene.add( this.ambientLight );
 
     this.light = new THREE.PointLight( 0xffffff, 1, 100, 1 );
-    this.scene.add(this.light);
+    this.scene.add( this.light );
 
     this.setBoundaryCubePositions();
     this.setInitialCube();
     this.highlightBoundaryCubes();
-    this.setLevelUpPosition();
+    this.setLevelUpPosition( this._game.levelUpPosition );
     this.setInitialCameraPosition();
     this.renderPass = new THREE.RenderPass( this.scene, this.camera );
+    this.renderPass.setSize( window.__GAME_DIV__.width, window.__GAME_DIV__.height );
 
     this.addGrid({
       size: 100,
@@ -38,14 +39,17 @@ export default class GamePass extends CubeDrawer {
     });
 
     this._game.on( 'tick', this.tick.bind( this ) );
+    this.loader();
+
+    console.log(this.renderPass);
   }
 
-  unloader() {
-    this.fogTween = new TWEEN.Tween( this.scene.fog )
-      .to( { near: 0, far: 0 }, 3000 )
-      .start();
+  // unloader() {
+  //   this.fogTween = new TWEEN.Tween( this.scene.fog )
+  //     .to( { near: 0, far: 0 }, 3000 )
+  //     .start();
 
-  }
+  // }
 
   loader() {
     var lim = this.limits[2];
@@ -64,9 +68,10 @@ export default class GamePass extends CubeDrawer {
     this.moveCameraPosition();
   }
 
-  setLevelUpPosition( node, options ) {
+  setLevelUpPosition() {
 
-    if ( !node ) { return };
+    let node = this._game.levelUpPosition;
+
     if ( !this.sphere ) {
       let geometry = new THREE.SphereGeometry( 0.5, 32, 32 );
       let material = new THREE.MeshPhongMaterial({
@@ -92,11 +97,11 @@ export default class GamePass extends CubeDrawer {
     this.sphere.position.set( node[0], node[1], node[2] );
 
     // get the x position at the edge of the board
-    let xEdge = _.max( this.gameBoard.children, (edge) => {
+    let xEdge = _.max( this.boundaryCubes.children, (edge) => {
       return edge.position.x;
     }).position.x;
     // get the y position at the edge of the board
-    let yEdge = _.max( this.gameBoard.children, (edge) => {
+    let yEdge = _.max( this.boundaryCubes.children, (edge) => {
       return edge.position.y;
     }).position.y;
 
@@ -235,6 +240,7 @@ export default class GamePass extends CubeDrawer {
   setInitialCameraPosition() {
 
     let head = this._game._snake.head;
+    console.log('head in initialcameraposition', head);
 
     let pos = [
       this.limits[0]/2 + 0.1*(head[0]-this.limits[0]/2),
