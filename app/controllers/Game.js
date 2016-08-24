@@ -20,7 +20,9 @@ class Game extends EventEmitter {
     this._snake.on( 'gameOver', this.endGame.bind( this ) );
 
     this.listener = window.addEventListener( 'keydown', this._keyListener.bind( this ) );
-    this.levelUp();
+    let dontExtendSnake = true;
+    this.levelUp( dontExtendSnake );
+    console.log(this.gameStatus);
   }
 
   _keyListener(e) {
@@ -28,10 +30,20 @@ class Game extends EventEmitter {
     switch ( this.gameStatus ) {
 
       case 'ready':
-        this.ticker = this.ticker || window.setInterval(() => {
-          this.tick();
-          this.gameStatus = 'live';
-        }, this.interval );
+        if ( [
+            'ArrowUp', 
+            'ArrowDown', 
+            'ArrowRight', 
+            'ArrowLeft',
+            'ShiftLeft',
+            'ControlLeft'
+        ].indexOf( e.code ) !== -1 ) {
+          this._snake.changeDirection( e.code );
+          this.ticker = this.ticker || window.setInterval(() => {
+            this.gameStatus = 'live';
+            this.tick();
+          }, this.interval );
+        }
         break;
 
       case 'live':
@@ -56,7 +68,7 @@ class Game extends EventEmitter {
   }
 
 
-  levelUp() {
+  levelUp( initialBool ) {
     let avoid = this._snake.nodes;
     let rnd;
 
@@ -72,15 +84,17 @@ class Game extends EventEmitter {
       ];
     } while ( avoid.indexOf( rnd.join('$') ) !== -1 )
 
-    this.level++;
-    this._snake.extendBy( this.level );
+    if ( !initialBool ) {
+      this.level++;
+      this._snake.extendBy( this.level );      
+    }
 
     this.levelUpPosition = rnd;
   }
 
   tick() {
 
-    if ( !this.gameStatus ) { 
+    if ( this.gameStatus === 'gameOver' ) { 
       return null;
     }
 

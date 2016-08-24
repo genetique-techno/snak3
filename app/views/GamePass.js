@@ -39,7 +39,7 @@ export default class GamePass extends CubeDrawer {
     });
 
     this._game.on( 'tick', this.tick.bind( this ) );
-    this.loader();
+    // this.loader();
 
     console.log(this.renderPass);
   }
@@ -240,7 +240,6 @@ export default class GamePass extends CubeDrawer {
   setInitialCameraPosition() {
 
     let head = this._game._snake.head;
-    console.log('head in initialcameraposition', head);
 
     let pos = [
       this.limits[0]/2 + 0.1*(head[0]-this.limits[0]/2),

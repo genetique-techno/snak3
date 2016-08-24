@@ -73,7 +73,8 @@ class Application {
     
     let delta = this.clock.getDelta();
 
-    this.composer.render(delta);
+    // this.composer.render(delta);
+    this.renderer.render( this.mainPass.scene, this.mainPass.camera );
 
     window.requestAnimationFrame( this.render.bind( this ) );
 
