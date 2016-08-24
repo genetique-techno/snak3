@@ -40,7 +40,7 @@ export default class GamePass extends CubeDrawer {
     });
 
     this._game.on( 'tick', this.tick.bind( this ) );
-    // this.loader();
+    this.loader();
 
     console.log(this.renderPass);
   }
