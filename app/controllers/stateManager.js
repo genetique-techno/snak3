@@ -8,8 +8,8 @@ class StateManager extends EventEmitter {
     super();
 
     this._state = {
-      mainPass: 'gamePass',
-      overlay: 'menu',
+      mainPass: 'titlePass',
+      overlay: null,
       gameType: gameTypes[0]
     };
   }

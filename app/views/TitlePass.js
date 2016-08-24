@@ -1,4 +1,3 @@
-// import { RenderPass } from 'postprocessing';
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
@@ -16,7 +15,9 @@ export default class TitlePass {
     this._setTitleText();
 
     this.renderPass = new THREE.RenderPass( this.scene, this.camera );
+    this.renderPass.renderToScreen = true;
 
+    this.loader();
   }
 
   _setTitleText() {

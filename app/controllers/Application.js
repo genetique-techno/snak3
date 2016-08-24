@@ -48,18 +48,28 @@ class Application {
       this.mainPass.unloader();
       window.setTimeout(() => {
         this.mainPass = new stateMappings.mainPasses[ state[ 'mainPass' ] ]( state[ 'gameType' ] );
-        // this.overlayPass = new stateMappings.overlays[ state[ 'overlay' ] ]();
-
         this.composer.passes[0] = this.mainPass.renderPass;
         this.composer.passes[1] = this.bloomPass;
-        // this.composer.passes[2] = this.overlayPass;
+        
+        if ( state.overlayPass ) {
+          this.overlayPass = new stateMappings.overlays[ state[ 'overlay' ] ]();
+          this.composer.passes[2] = this.overlayPass.renderPass;          
+        } else if ( this.composer.passes[2] ) {
+          this.composer.passes[2].enabled = false;
+        }
+
       }, 2000 );
     } else {
       this.mainPass = new stateMappings.mainPasses[ state[ 'mainPass' ] ]( state[ 'gameType' ] );
-      // this.overlayPass = new stateMappings.overlays[ state[ 'overlay' ] ]();
       this.composer.passes[0] = this.mainPass.renderPass;
       this.composer.passes[1] = this.bloomPass;
-      // this.composer.passes[2] = this.overlayPass;      
+
+      if ( state.overlayPass ) {
+        this.overlayPass = new stateMappings.overlays[ state[ 'overlay' ] ]();
+        this.composer.passes[2] = this.overlayPass.renderPass;          
+      } else if ( this.composer.passes[2] ) {
+        this.composer.passes[2].enabled = false;
+      }
     }
 
   }
