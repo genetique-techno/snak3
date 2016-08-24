@@ -31,8 +31,8 @@ class Application {
       distinction: 1.4
     };
     this.bloomPass = new THREE.BloomPass( bloomOptions );
-    this.bloomPass.setSize( this.width, this.height );
     this.bloomPass.renderToScreen = true;
+    this.bloomPass.setSize( this.width, this.height );
 
     stateManager.on( 'newApplicationState', this.setApplicationView.bind( this ) );
     // stateManager.on( 'newGameTypeState', null );
@@ -73,8 +73,8 @@ class Application {
     
     let delta = this.clock.getDelta();
 
-    // this.composer.render(delta);
-    this.renderer.render( this.mainPass.scene, this.mainPass.camera );
+    this.composer.render(delta);
+    // this.renderer.render( this.mainPass.scene, this.mainPass.camera );
 
     window.requestAnimationFrame( this.render.bind( this ) );
 
