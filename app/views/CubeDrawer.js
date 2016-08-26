@@ -53,6 +53,10 @@ class CubeDrawer {
       }
       this[group].add(cube);
     } else {
+      if ( !this.cubes ) { 
+        this.cubes = new THREE.Group(); 
+        this.scene.add( this.cubes );
+      }
       this.cubes.add(cube);    
     }
   }

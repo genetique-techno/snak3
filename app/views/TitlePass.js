@@ -1,12 +1,19 @@
+import _ from 'underscore';
+
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
 
 const geoOblique = require('app/fonts/Geo_Oblique.json');
+import titleCubes from 'app/config/titleCubes.js';
 
-export default class TitlePass {
+import CubeDrawer from 'app/views/CubeDrawer.js';
+
+export default class TitlePass extends CubeDrawer {
 
   constructor() {
+    super();
+
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(75, window.__GAME_DIV__.clientWidth / window.__GAME_DIV__.clientHeight, 0.1, 1000);
 
@@ -16,6 +23,11 @@ export default class TitlePass {
 
     this.renderPass = new THREE.RenderPass( this.scene, this.camera );
     this.renderPass.renderToScreen = true;
+
+    this.nodes = [];
+    this.startRemovingNodes = false;
+    this.cubes = new THREE.Group();
+    this.scene.add( this.cubes );
 
     this.loader();
   }
@@ -69,6 +81,55 @@ export default class TitlePass {
       .to( { x: 0, y: 0, z: 0 }, 7000 )
       .easing( TWEEN.Easing.Quadratic.InOut )
       .start();
+
+    window.setTimeout(() => {
+      this.cubeInterval = window.setInterval(() => {
+        this._animateTitleCubes();
+      }, 100);
+    }, 7000 );
+  }
+
+  _animateTitleCubes() {
+
+    if ( titleCubes.length ) {
+      this.nodes.push( titleCubes.shift() );
+    }
+
+    if ( this.nodes.length === 8 ) {
+      this.startRemovingNodes = true;
+    }
+
+    if ( this.startRemovingNodes ) {
+      this.nodes.shift();
+      if ( this.nodes.length === 0 ) {
+        window.clearInterval( this.cubeInterval );
+      }
+    }
+
+    let renderedCubes = this.cubes.children.map((node) => {
+      return node.name;
+    });
+
+    let removeNodes = _.difference( renderedCubes, this.nodes );
+    let addNodes = _.difference( this.nodes, renderedCubes );
+
+    // remove any cubes no longer in the snake nodes
+    removeNodes.forEach((node) => {
+      this.removeCube({ 
+        node,
+        group: 'cubes'
+      });
+    });
+
+    // add new cubes for any new snake nodes
+    addNodes.forEach((node) => {
+      this.addCube({
+        group: 'cubes',
+        color: 0xA8ED1F,
+        pos: node
+      });
+    }); 
+  
   }
 
   _setLighting() {
