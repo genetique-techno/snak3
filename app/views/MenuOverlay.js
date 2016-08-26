@@ -1,19 +1,16 @@
 import _ from 'underscore';
-
-import menuItems from 'app/config/menuItems.js';
-
-// import { RenderPass } from 'postprocessing';
+import Menu from 'app/controllers/Menu.js';
 require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
 
-
 const alegreya = require('app/fonts/Alegreya Sans SC Light_Regular.json');
-
 const basePosition = { x: 0, y: -5, z: 0 };
 const itemGap = 1.2;
 
 export default class MenuOverlay {
 
   constructor( emitter ) {
+
+    this._menu = new Menu();
 
     this.font = new THREE.Font( alegreya );
     this.material = new THREE.MeshBasicMaterial({
@@ -35,16 +32,17 @@ export default class MenuOverlay {
     this.camera.position.set( 0, 0, 20);
     this.renderPass = new THREE.RenderPass( this.scene, this.camera );
     this.renderPass.clear = false;
+    this.renderPass.renderToScreen = true;
 
     this.setSelection(0);
-    emitter.on( 'changeSelection', this.setSelection.bind( this ) );
+    this._menu.on( 'changeSelection', this.setSelection.bind( this ) );
     
   }
 
   setItems() {
 
     this.items = new THREE.Group();
-    menuItems.forEach( ( item, index ) => {
+    this._menu.menuItems.forEach( ( item, index ) => {
       if ( item.type !== 'separator' ) {
         let text = new THREE.TextGeometry( item.label, this.fontOptions );
         let mesh = new THREE.Mesh( text, this.material );

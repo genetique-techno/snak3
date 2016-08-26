@@ -8,6 +8,7 @@ export default class Menu extends EventEmitter {
   constructor() {
     super();
 
+    this.menuItems = menuItems;
     this.selectionIndex = 0;
     this.logSelection;
 
