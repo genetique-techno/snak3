@@ -51,9 +51,13 @@ class Application {
         this.composer.passes[0] = this.mainPass.renderPass;
         this.composer.passes[1] = this.bloomPass;
         
-        if ( state.overlayPass ) {
-          this.overlayPass = new stateMappings.overlays[ state[ 'overlay' ] ]();
-          this.composer.passes[2] = this.overlayPass.renderPass;          
+        if ( state.overlay ) {
+          this.overlay = new stateMappings.overlays[ state[ 'overlay' ] ]();
+          
+          window.setTimeout(() => {
+            this.composer.passes[2] = this.overlay.renderPass;          
+          }, state['reset'] ? 6000 : 0 );
+        
         } else if ( this.composer.passes[2] ) {
           this.composer.passes[2].enabled = false;
         }
@@ -64,12 +68,18 @@ class Application {
       this.composer.passes[0] = this.mainPass.renderPass;
       this.composer.passes[1] = this.bloomPass;
 
-      if ( state.overlayPass ) {
-        this.overlayPass = new stateMappings.overlays[ state[ 'overlay' ] ]();
-        this.composer.passes[2] = this.overlayPass.renderPass;          
+      if ( state.overlay ) {
+        this.overlay = new stateMappings.overlays[ state[ 'overlay' ] ]();
+        
+        window.setTimeout(() => {
+          this.composer.passes[2] = this.overlay.renderPass;          
+        }, state['reset'] ? 6000 : 0 );          
+      
       } else if ( this.composer.passes[2] ) {
         this.composer.passes[2].enabled = false;
       }
+
+      console.log(this.composer.passes);
     }
 
   }

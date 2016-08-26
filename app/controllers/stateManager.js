@@ -9,8 +9,9 @@ class StateManager extends EventEmitter {
 
     this._state = {
       mainPass: 'titlePass',
-      overlay: null,
-      gameType: gameTypes[0]
+      overlay: 'menuOverlay',
+      gameType: gameTypes[0],
+      reset: true
     };
   }
 
@@ -19,8 +20,10 @@ class StateManager extends EventEmitter {
       return console.log( `Invalid State Transition: new MainPass requested with ${obj}` );
     }
 
+    this._state['reset'] = true;
     this._state = obj;
     this.emit( 'newApplicationState', this._state );
+    this._state['reset'] = false;
   }
 
   setNewGameTypeState( obj ) {
