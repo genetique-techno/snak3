@@ -1,4 +1,5 @@
 import _ from 'underscore';
+import util from 'app/util';
 
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
@@ -122,14 +123,18 @@ export default class TitlePass extends CubeDrawer {
     });
 
     // add new cubes for any new snake nodes
+
     addNodes.forEach((node) => {
       this.addCube({
         group: 'cubes',
-        color: 0xA8ED1F,
+        color: 0x55ff22,
         pos: node
       });
     }); 
-  
+    
+    this.cubes.children.forEach((cube, index) => {
+      cube.material.color.set( util.colorLuminance( 0x00FF00, 0 ) );
+    });
   }
 
   _setLighting() {
