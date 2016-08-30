@@ -1,51 +1,53 @@
+import gameTypes from 'app/config/gameTypes.js';
 
 export default [
   {
-    type: 'game',
+    type: 'function',
+    value: 'setNewApplicationState',
     label: 'easy',
-    difficulty: 'easy',
-    limits: [10, 10, 1],
-    interval: 500,
-    colors: {
-      boundaryCubes: '#00C19B',
-      cubes: '#F3F33D'
+    config: {
+      mainPass: 'gamePass',
+      overlay: null,
+      gameType: gameTypes[0],
+      reset: false
     }
   },
 
   {
-    type: 'game',
+    type: 'function',
+    value: 'setNewApplicationState',
     label: 'medium',
-    difficulty: 'medium',
-    limits: [10, 10, 3],
-    interval: 500,
-    colors: {
-      boundaryCubes: '#33aacc',
-      cubes: '#55ff22'
+    config: {
+      mainPass: 'gamePass',
+      overlay: null,
+      gameType: gameTypes[1],
+      reset: false
     }
   },
 
   {
-    type: 'game',
+    type: 'function',
+    value: 'setNewApplicationState',
     label: 'hard',
-    difficulty: 'hard',
-    limits: [15, 15, 6],
-    interval: 250,
-    colors: {
-      boundaryCubes: '#100D9A',
-      cubes: '#FFAE00'
+    config: {
+      mainPass: 'gamePass',
+      overlay: null,
+      gameType: gameTypes[2],
+      reset: false
     }
   },
 
   {
-    type: 'game',
+    type: 'function',
+    value: 'setNewApplicationState',
     label: 'impossible',
-    difficulty: 'impossible',
-    limits: [30, 30, 10],
-    interval: 150,
-    colors: {
-      boundaryCubes: '#7408C7',
-      cubes: '#F90018'
+    config: {
+      mainPass: 'gamePass',
+      overlay: null,
+      gameType: gameTypes[3],
+      reset: false
     }
+
   },
 
   {

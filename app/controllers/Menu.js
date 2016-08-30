@@ -1,5 +1,6 @@
 import EventEmitter from 'events';
 import _ from 'underscore';
+import stateManager from 'app/controllers/stateManager.js';
 
 import menuItems from 'app/config/menuItems.js';
 
@@ -57,6 +58,12 @@ export default class Menu extends EventEmitter {
   }
 
   acceptSelection() {
-    this.emit( 'acceptSelection', menuItems[ this.selectionIndex ] );
+    let item = menuItems[ this.selectionIndex ];
+
+    this.emit( 'acceptSelection', item );
+    if ( item.type = 'function' ) {
+      stateManager[ item.value ]( item.config );
+    }
+
   }
 }
