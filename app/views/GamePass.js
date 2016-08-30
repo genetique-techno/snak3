@@ -228,11 +228,10 @@ export default class GamePass extends CubeDrawer {
 
     let headZ = this._game._snake.head[2];
     _.forEach( this.boundaryCubes.children, (cube) => {
-
       if ( cube.position.z === headZ ) {
         cube.material.color.set( util.colorLuminance( this.colors.boundaryCubes, 2.0 ) );
       } else {
-        cube.material.color.set( this.color.boundaryCubes );
+        cube.material.color.set( this.colors.boundaryCubes );
       }
 
     });
