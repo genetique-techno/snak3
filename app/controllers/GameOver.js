@@ -2,7 +2,7 @@ import EventEmitter from 'events';
 import _ from 'underscore';
 import stateManager from 'app/controllers/stateManager.js';
 
-import menuItems from 'app/config/menuItems.js';
+import gameOverMenuItems from 'app/config/gameOverMenuItems.js';
 
 function keyListener(e) {
 
@@ -29,12 +29,12 @@ function keyListener(e) {
   }
 }
 
-export default class Menu extends EventEmitter {
+export default class GameOver extends EventEmitter {
 
   constructor() {
     super();
 
-    this.menuItems = menuItems;
+    this.gameOverMenuItems = gameOverMenuItems;
     this.selectionIndex = 0;
     this.logSelection;
     this.keyListener = keyListener.bind( this );
@@ -45,26 +45,25 @@ export default class Menu extends EventEmitter {
 
   decrementSelection() {
     this.selectionIndex = this.selectionIndex === 0 ? 0 : this.selectionIndex - 1;
-    if ( menuItems[ this.selectionIndex ].type === 'separator' ) {
+    if ( this.gameOverMenuItems[ this.selectionIndex ].type === 'separator' ) {
       this.selectionIndex--;
     }
     this.emit( 'changeSelection', this.selectionIndex );
   }
 
   incrementSelection() {
-    this.selectionIndex = this.selectionIndex === menuItems.length - 1 ? menuItems.length - 1 : this.selectionIndex + 1;
-    if ( menuItems[ this.selectionIndex ].type === 'separator' ) {
+    this.selectionIndex = this.selectionIndex === this.gameOverMenuItems.length - 1 ? this.gameOverMenuItems.length - 1 : this.selectionIndex + 1;
+    if ( this.gameOverMenuItems[ this.selectionIndex ].type === 'separator' ) {
       this.selectionIndex++;
     }
     this.emit( 'changeSelection', this.selectionIndex );
   }
 
   acceptSelection() {
-    let item = menuItems[ this.selectionIndex ];
+    let item = this.gameOverMenuItems[ this.selectionIndex ];
 
     this.emit( 'acceptSelection', item );
     if ( item.type = 'function' ) {
-      debugger;
       stateManager[ item.value ]( item.config );
     }
 

@@ -1,6 +1,7 @@
 import 'app/util';
 import EventEmitter from 'events';
 import util from 'app/util';
+import stateManager from 'app/controllers/stateManager.js';
 
 import Snake from 'app/controllers/Snake';
 
@@ -120,7 +121,8 @@ class Game extends EventEmitter {
     window.clearTimeout( this.ticker );
     this.gameStatus = 'gameOver';
     window.removeEventListener( 'keydown', this.keyListener );
-    
+    stateManager.setNewOverlayState( { overlay: 'gameOverOverlay' } );
+
   }
 
 }

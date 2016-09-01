@@ -1,6 +1,7 @@
 
 import EventEmitter from 'events';
 import gameTypes from 'app/config/gameTypes.js';
+import _ from 'underscore';
 
 class StateManager extends EventEmitter {
 
@@ -22,7 +23,7 @@ class StateManager extends EventEmitter {
 
     this._state['reset'] = true;
     this._state = obj;
-    this.emit( 'newApplicationState', this._state );
+    this.emitCurrentState();
     this._state['reset'] = false;
   }
 
@@ -41,6 +42,7 @@ class StateManager extends EventEmitter {
     }
 
     this._state['overlay'] = obj['overlay'];
+
     this.emit( 'newOverlayState', this._state );
   }
 
@@ -49,6 +51,7 @@ class StateManager extends EventEmitter {
   }
 
   emitCurrentState() {
+
 
     this.emit( 'newApplicationState', this._state );
   }

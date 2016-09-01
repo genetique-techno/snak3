@@ -4,6 +4,7 @@ import TitlePass from 'app/views/TitlePass.js';
 
 // Overlay Passes
 import MenuOverlay from 'app/views/MenuOverlay.js';
+import GameOverOverlay from 'app/views/GameOverOverlay.js';
 
 export default {
   
@@ -13,7 +14,9 @@ export default {
   },
 
   overlays: {
-    'menuOverlay': MenuOverlay
+    'menuOverlay': MenuOverlay,
+    'gameOverOverlay': GameOverOverlay,
+    'none': null
   }
 
 };

@@ -44,6 +44,7 @@ class Application {
   }
 
   setApplicationView( state ) {
+    console.log('new application state requested', state);
     if ( this.mainPass && this.mainPass.unloader ) {
       this.mainPass.unloader();
       window.setTimeout(() => {
@@ -51,16 +52,7 @@ class Application {
         this.composer.passes[0] = this.mainPass.renderPass;
         this.composer.passes[1] = this.bloomPass;
         
-        if ( state.overlay ) {
-          this.overlay = new stateMappings.overlays[ state[ 'overlay' ] ]();
-          
-          window.setTimeout(() => {
-            this.composer.passes[2] = this.overlay.renderPass;          
-          }, state['reset'] ? 6000 : 0 );
-        
-        } else if ( this.composer.passes[2] ) {
-          this.composer.passes[2].enabled = false;
-        }
+        this.setOverlayView( state );
 
       }, 2000 );
     } else {
@@ -68,24 +60,19 @@ class Application {
       this.composer.passes[0] = this.mainPass.renderPass;
       this.composer.passes[1] = this.bloomPass;
 
-      if ( state.overlay ) {
-        this.overlay = new stateMappings.overlays[ state[ 'overlay' ] ]();
-        
-        window.setTimeout(() => {
-          this.composer.passes[2] = this.overlay.renderPass;          
-        }, state['reset'] ? 6000 : 0 );          
-      
-      } else if ( this.composer.passes[2] ) {
-        this.composer.passes[2].enabled = false;
-      }
+      this.setOverlayView( state );
 
-      console.log(this.composer.passes);
     }
 
   }
 
   setOverlayView( state ) {
-    //noop
+    if ( stateMappings.overlays[ state.overlay ] ) {
+      this.overlay = new stateMappings.overlays[ state[ 'overlay' ] ];
+      this.composer.passes[2] = this.overlay.renderPass;
+    } else if ( this.composer.passes[2] ) {
+      this.composer.passes[2].enabled = false;
+    }
   }
 
 

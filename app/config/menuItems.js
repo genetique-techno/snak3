@@ -7,7 +7,7 @@ export default [
     label: 'easy',
     config: {
       mainPass: 'gamePass',
-      overlay: null,
+      overlay: 'none',
       gameType: gameTypes[0],
       reset: false
     }
@@ -19,7 +19,7 @@ export default [
     label: 'medium',
     config: {
       mainPass: 'gamePass',
-      overlay: null,
+      overlay: 'none',
       gameType: gameTypes[1],
       reset: false
     }
@@ -31,7 +31,7 @@ export default [
     label: 'hard',
     config: {
       mainPass: 'gamePass',
-      overlay: null,
+      overlay: 'none',
       gameType: gameTypes[2],
       reset: false
     }
@@ -43,7 +43,7 @@ export default [
     label: 'impossible',
     config: {
       mainPass: 'gamePass',
-      overlay: null,
+      overlay: 'none',
       gameType: gameTypes[3],
       reset: false
     }
