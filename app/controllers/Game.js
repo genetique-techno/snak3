@@ -4,6 +4,48 @@ import util from 'app/util';
 
 import Snake from 'app/controllers/Snake';
 
+function keyListener(e) {
+
+  switch ( this.gameStatus ) {
+
+    case 'ready':
+      if ( [
+          'ArrowUp', 
+          'ArrowDown', 
+          'ArrowRight', 
+          'ArrowLeft',
+          'ShiftLeft',
+          'ControlLeft'
+      ].indexOf( e.code ) !== -1 ) {
+        this._snake.changeDirection( e.code );
+        this.ticker = this.ticker || window.setInterval(() => {
+          this.gameStatus = 'live';
+          this.tick();
+        }, this.interval );
+      }
+      break;
+
+    case 'live':
+      if ( [
+          'ArrowUp', 
+          'ArrowDown', 
+          'ArrowRight', 
+          'ArrowLeft',
+          'ShiftLeft',
+          'ControlLeft'
+      ].indexOf( e.code ) !== -1 ) {
+        this._snake.changeDirection( e.code );
+      } else if ( e.code === 'KeyP' ) {
+        // this.pauseGame;
+        console.log('p was pressed');
+        // set state: new overlay: pauseOverlay
+      }
+      break;
+    default:
+
+  }
+}
+
 class Game extends EventEmitter {
 
   constructor( gameType ) {
@@ -19,53 +61,13 @@ class Game extends EventEmitter {
     // game over listener
     this._snake.on( 'gameOver', this.endGame.bind( this ) );
 
-    this.listener = window.addEventListener( 'keydown', this._keyListener.bind( this ) );
+    this.keyListener = keyListener.bind( this );
+    window.addEventListener( 'keydown', this.keyListener );
     let dontExtendSnake = true;
     this.levelUp( dontExtendSnake );
     console.log(this.gameStatus);
   }
 
-  _keyListener(e) {
-
-    switch ( this.gameStatus ) {
-
-      case 'ready':
-        if ( [
-            'ArrowUp', 
-            'ArrowDown', 
-            'ArrowRight', 
-            'ArrowLeft',
-            'ShiftLeft',
-            'ControlLeft'
-        ].indexOf( e.code ) !== -1 ) {
-          this._snake.changeDirection( e.code );
-          this.ticker = this.ticker || window.setInterval(() => {
-            this.gameStatus = 'live';
-            this.tick();
-          }, this.interval );
-        }
-        break;
-
-      case 'live':
-        if ( [
-            'ArrowUp', 
-            'ArrowDown', 
-            'ArrowRight', 
-            'ArrowLeft',
-            'ShiftLeft',
-            'ControlLeft'
-        ].indexOf( e.code ) !== -1 ) {
-          this._snake.changeDirection( e.code );
-        } else if ( e.code === 'KeyP' ) {
-          // this.pauseGame;
-          console.log('p was pressed');
-          // set state: new overlay: pauseOverlay
-        }
-        break;
-      default:
-
-    }
-  }
 
 
   levelUp( initialBool ) {
@@ -117,6 +119,7 @@ class Game extends EventEmitter {
     console.log( `GameOver: ${p.reason}` );
     window.clearTimeout( this.ticker );
     this.gameStatus = 'gameOver';
+    window.removeEventListener( 'keydown', this.keyListener );
     
   }
 
