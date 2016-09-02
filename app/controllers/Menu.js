@@ -64,7 +64,6 @@ export default class Menu extends EventEmitter {
 
     this.emit( 'acceptSelection', item );
     if ( item.type = 'function' ) {
-      debugger;
       stateManager[ item.value ]( item.config );
     }
 

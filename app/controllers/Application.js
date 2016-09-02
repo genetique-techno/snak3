@@ -35,35 +35,33 @@ class Application {
     this.bloomPass.setSize( this.width, this.height );
 
     stateManager.on( 'newApplicationState', this.setApplicationView.bind( this ) );
-    // stateManager.on( 'newGameTypeState', null );
-    stateManager.on( 'newOverlayState', this.setOverlayView.bind( this ) );
-
-    stateManager.emitCurrentState();
+    stateManager.emitInitialState();
 
     this.render();
   }
 
   setApplicationView( state ) {
-    console.log('new application state requested', state);
+
+    let oldState = stateManager.getOldState();
+    let delay = 0;
+
     if ( this.mainPass && this.mainPass.unloader ) {
       this.mainPass.unloader();
-      window.setTimeout(() => {
-        this.mainPass = new stateMappings.mainPasses[ state[ 'mainPass' ] ]( state[ 'gameType' ] );
-        this.composer.passes[0] = this.mainPass.renderPass;
-        this.composer.passes[1] = this.bloomPass;
-        
-        this.setOverlayView( state );
-
-      }, 2000 );
-    } else {
-      this.mainPass = new stateMappings.mainPasses[ state[ 'mainPass' ] ]( state[ 'gameType' ] );
-      this.composer.passes[0] = this.mainPass.renderPass;
-      this.composer.passes[1] = this.bloomPass;
-
-      this.setOverlayView( state );
-
+      delay = 2000;
     }
 
+    window.setTimeout(() => {
+      if ( oldState.mainPass !== state.mainPass ) {
+        this.setMainPass( state );
+      }
+      this.setOverlayView( state );
+    }, delay );
+  }
+
+  setMainPass( state ) {
+    this.mainPass = new stateMappings.mainPasses[ state[ 'mainPass' ] ]( state[ 'gameType' ] );
+    this.composer.passes[0] = this.mainPass.renderPass;
+    this.composer.passes[1] = this.bloomPass;
   }
 
   setOverlayView( state ) {

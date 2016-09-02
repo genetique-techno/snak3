@@ -9,14 +9,32 @@ class StateManager extends EventEmitter {
     super();
 
     this._state = {
+      mainPass: null,
+      overlay: null,
+      gameType: null,
+      reset: null
+    };
+
+    this._oldState = {
+      mainPass: null,
+      overlay: null,
+      gameType: null,
+      reset: null
+    };
+  }
+
+  emitInitialState() {
+    this.emit( 'newApplicationState', {
       mainPass: 'titlePass',
       overlay: 'menuOverlay',
       gameType: gameTypes[0],
       reset: true
-    };
+    });
   }
 
   setNewApplicationState( obj ) {
+    this._oldState = this._state;
+
     if ( !( obj instanceof Object ) && typeof obj['mainPass'] === 'undefined' ) {
       return console.log( `Invalid State Transition: new MainPass requested with ${obj}` );
     }
@@ -48,6 +66,10 @@ class StateManager extends EventEmitter {
 
   getState() {
     return this._state;
+  }
+
+  getOldState() {
+    return this._oldState;
   }
 
   emitCurrentState() {
