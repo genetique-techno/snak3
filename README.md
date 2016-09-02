@@ -8,5 +8,5 @@ Run the dev-server with this command:
 
 `webpack-dev-server --port=8999`
 
-Visit `http://localhost:8999/`.  Press `t` to start the game and then press the arrow keys to change the snake direction.
+Visit `http://localhost:8999/`.  Use arrow keys to change direction, shift to go in and ctrl to go out.
 
