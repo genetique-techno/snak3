@@ -12,6 +12,12 @@ require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/post
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/TexturePass.js' );
 
 
+const _main_ = 0;
+const _overlay_ = 2;
+const _effect1_ = 1;
+const _effect2_ = 3;
+
+
 class Application {
 
   constructor() {
@@ -31,7 +37,7 @@ class Application {
       distinction: 1.4
     };
     this.bloomPass = new THREE.BloomPass( bloomOptions );
-    this.bloomPass.renderToScreen = true;
+    // this.bloomPass.renderToScreen = true;
     this.bloomPass.setSize( this.width, this.height );
 
     stateManager.on( 'newApplicationState', this.setApplicationView.bind( this ) );
@@ -78,20 +84,25 @@ class Application {
       }, state.overlayPass.delay );
 
     }
+
   }
 
   setMainPass( state ) {
     this.mainPass = new stateMappings.mainPasses[ state.mainPass.value ]( state.gameType );
-    this.composer.passes[0] = this.mainPass.renderPass;
-    this.composer.passes[1] = this.bloomPass;
+    this.composer.passes[_main_] = this.mainPass.renderPass;
+    this.setEffects();
+  }
+
+  setEffects() {
+    this.composer.passes[_effect1_] = this.bloomPass;
   }
 
   setOverlayPass( state ) {
     if ( stateMappings.overlays[ state.overlayPass.value ] ) {
       this.overlayPass = new stateMappings.overlays[ state.overlayPass.value ]();
-      this.composer.passes[2] = this.overlayPass.renderPass;
-    } else if ( this.composer.passes[2] ) {
-      this.composer.passes[2].enabled = false;
+      this.composer.passes[_overlay_] = this.overlayPass.renderPass;
+    } else if ( this.composer.passes[_overlay_] ) {
+      this.composer.passes[_overlay_].enabled = false;
     }
   }
 
