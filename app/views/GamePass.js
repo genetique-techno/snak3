@@ -44,12 +44,12 @@ export default class GamePass extends CubeDrawer {
 
   }
 
-  // unloader() {
-  //   this.fogTween = new TWEEN.Tween( this.scene.fog )
-  //     .to( { near: 0, far: 0 }, 3000 )
-  //     .start();
+  unloader() {
+    this.fogTween = new TWEEN.Tween( this.scene.fog )
+      .to( { near: 0, far: 0 }, 3000 )
+      .start();
 
-  // }
+  }
 
   loader() {
     var lim = this.limits[2];
