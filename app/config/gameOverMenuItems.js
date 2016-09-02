@@ -7,8 +7,8 @@ export default [
     label: 'retry',
     config: {
       mainPass: 'gamePass',
-      overlay: null,
-      reset: false
+      overlay: 'none',
+      reset: true
     }
   },
 
