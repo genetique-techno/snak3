@@ -6,9 +6,16 @@ export default [
     value: 'setNewApplicationState',
     label: 'retry',
     config: {
-      mainPass: 'gamePass',
-      overlay: 'none',
-      reset: true
+      mainPass: {
+        change: true,
+        delay: false,
+        value: 'gamePass'        
+      },
+      overlayPass: {
+        change: true,
+        delay: false,
+        value: 'none'
+      }
     }
   },
 
@@ -17,10 +24,16 @@ export default [
     value: 'setNewApplicationState',
     label: 'main menu',
     config: {
-      mainPass: 'titlePass',
-      overlay: 'menuOverlay',
-      gameType: gameTypes[0],
-      reset: true
+      mainPass: {
+        change: true,
+        delay: false,
+        value: 'titlePass'        
+      },
+      overlayPass: {
+        change: true,
+        delay: true,
+        value: 'menuOverlay'
+      }
     }
   },
 

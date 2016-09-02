@@ -6,10 +6,17 @@ export default [
     value: 'setNewApplicationState',
     label: 'easy',
     config: {
-      mainPass: 'gamePass',
-      overlay: 'none',
-      gameType: gameTypes[0],
-      reset: false
+      mainPass: {
+        change: true,
+        delay: false,
+        value: 'gamePass'        
+      },
+      overlayPass: {
+        change: true,
+        delay: false,
+        value: 'none'
+      },
+      gameType: gameTypes[0]
     }
   },
 
@@ -18,10 +25,17 @@ export default [
     value: 'setNewApplicationState',
     label: 'medium',
     config: {
-      mainPass: 'gamePass',
-      overlay: 'none',
-      gameType: gameTypes[1],
-      reset: false
+      mainPass: {
+        change: true,
+        delay: false,
+        value: 'gamePass'        
+      },
+      overlayPass: {
+        change: true,
+        delay: false,
+        value: 'none'
+      },
+      gameType: gameTypes[1]
     }
   },
 
@@ -30,10 +44,17 @@ export default [
     value: 'setNewApplicationState',
     label: 'hard',
     config: {
-      mainPass: 'gamePass',
-      overlay: 'none',
-      gameType: gameTypes[2],
-      reset: false
+      mainPass: {
+        change: true,
+        delay: false,
+        value: 'gamePass'        
+      },
+      overlayPass: {
+        change: true,
+        delay: false,
+        value: 'none'
+      },
+      gameType: gameTypes[2]
     }
   },
 
@@ -42,10 +63,17 @@ export default [
     value: 'setNewApplicationState',
     label: 'impossible',
     config: {
-      mainPass: 'gamePass',
-      overlay: 'none',
-      gameType: gameTypes[3],
-      reset: false
+      mainPass: {
+        change: true,
+        delay: false,
+        value: 'gamePass'        
+      },
+      overlayPass: {
+        change: true,
+        delay: false,
+        value: 'none'
+      },
+      gameType: gameTypes[3]
     }
 
   },

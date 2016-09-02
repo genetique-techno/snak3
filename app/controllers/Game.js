@@ -122,7 +122,18 @@ class Game extends EventEmitter {
     window.clearTimeout( this.ticker );
     this.gameStatus = 'gameOver';
     window.removeEventListener( 'keydown', this.keyListener );
-    stateManager.setNewApplicationState( _.extend( {}, stateManager.getState(), { overlay: 'gameOverOverlay' } ) );
+    stateManager.setNewApplicationState({
+      mainPass: {
+        change: false,
+        delay: false,
+        value: 'gamePass'        
+      },
+      overlayPass: {
+        change: true,
+        delay: true,
+        value: 'gameOverOverlay'
+      }
+    });
 
   }
 
