@@ -38,7 +38,28 @@ export default class GameOverOverlay {
 
     this.setSelection(0);
     this._menu.on( 'changeSelection', this.setSelection.bind( this ) );
-    
+    this._menu.on( 'acceptSelection', this.acceptSelection.bind( this ) );
+  }
+
+  acceptSelection(e) {
+
+    let counter = 0;
+    let white =  new THREE.Color( 0xffffff );
+    let darker = new THREE.Color( 0x000000 );
+    let timer = window.setInterval(() => {
+      if ( counter % 2 === 0 ) {
+        // set the item's fount color to 0xffffff
+        this.selector.material.color = white;
+        this.items.children[ this._menu.selectionIndex ].material.color = white;
+      } else {
+        // set the item's font color to darker
+        this.selector.material.color = darker;
+        this.items.children[ this._menu.selectionIndex ].material.color = darker;
+      }
+      counter++;
+      if ( counter === 20 ) { window.clearInterval( timer ); };
+    }, 25 );
+
   }
 
   unloader() {
@@ -49,7 +70,7 @@ export default class GameOverOverlay {
 
   setGameOverText() {
     let text = new THREE.TextGeometry( 'game over', _.extend( {}, this.fontOptions, { size: 60 } ) );
-    let mesh = new THREE.Mesh( text, this.material );
+    let mesh = new THREE.Mesh( text, this.material.clone() );
     mesh.position.set( -175, 0, basePosition.z );
 
     this.scene.add( mesh );
@@ -62,7 +83,7 @@ export default class GameOverOverlay {
     this._menu.gameOverMenuItems.forEach( ( item, index ) => {
       if ( item.type !== 'separator' ) {
         let text = new THREE.TextGeometry( item.label, this.fontOptions );
-        let mesh = new THREE.Mesh( text, this.material );
+        let mesh = new THREE.Mesh( text, this.material.clone() );
         mesh.position.set( basePosition.x, basePosition.y - itemGap * index, basePosition.z );
         this.items.add( mesh );
       } else {

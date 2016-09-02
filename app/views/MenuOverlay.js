@@ -73,7 +73,7 @@ export default class MenuOverlay {
     this._menu.menuItems.forEach( ( item, index ) => {
       if ( item.type !== 'separator' ) {
         let text = new THREE.TextGeometry( item.label, this.fontOptions );
-        let mesh = new THREE.Mesh( text, this.material );
+        let mesh = new THREE.Mesh( text, this.material.clone() );
         mesh.position.set( basePosition.x, basePosition.y - itemGap * index, basePosition.z );
         this.items.add( mesh );
       } else {
