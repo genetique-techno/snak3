@@ -3,8 +3,8 @@ import Menu from 'app/controllers/Menu.js';
 require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
 
 const alegreya = require('app/fonts/Alegreya Sans SC Light_Regular.json');
-const basePosition = { x: 0, y: -5, z: 0 };
-const itemGap = 1.2;
+const basePosition = { x: 0, y: -100, z: 0 };
+const itemGap = 30;
 
 export default class MenuOverlay {
 
@@ -18,14 +18,16 @@ export default class MenuOverlay {
     });
     this.fontOptions = {
       font: this.font,
-      size: 1.1,
+      size: 25,
       height: 0,
       curveSegments: 10,
       bevelEnabled: false
     };
 
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, window.__GAME_DIV__.clientWidth / window.__GAME_DIV__.clientHeight, 0.1, 1000);
+    this.camera = new THREE.OrthographicCamera(window.__GAME_DIV__.clientWidth / - 2, window.__GAME_DIV__.clientWidth / 2, window.__GAME_DIV__.clientHeight / 2, window.__GAME_DIV__.clientHeight / -2, 0.1, 1000);
+    // this.camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, near, far );
+    // this.camera = new THREE.PerspectiveCamera(75, window.__GAME_DIV__.clientWidth / window.__GAME_DIV__.clientHeight, 0.1, 1000);
 
     this.setItems();
 
@@ -61,7 +63,7 @@ export default class MenuOverlay {
     let item = this.items.children[index];
 
     let selectorPosition = {
-      x: item.position.x - 2,
+      x: item.position.x - 30,
       y: item.position.y,
       z: item.position.z
     };
