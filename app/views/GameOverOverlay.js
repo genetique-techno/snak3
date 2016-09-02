@@ -41,13 +41,19 @@ export default class GameOverOverlay {
     
   }
 
+  unloader() {
+    window.setTimeout(() => {
+      this.renderPass.enabled = false;
+    }, 500 );
+  }
+
   setGameOverText() {
     let text = new THREE.TextGeometry( 'game over', _.extend( {}, this.fontOptions, { size: 60 } ) );
     let mesh = new THREE.Mesh( text, this.material );
     mesh.position.set( -175, 0, basePosition.z );
 
     this.scene.add( mesh );
-    console.log( mesh);
+    console.log( this.scene );
   }
 
   setItems() {

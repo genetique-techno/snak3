@@ -31,7 +31,7 @@ export default [
       },
       overlayPass: {
         change: true,
-        delay: true,
+        delay: 7000,
         value: 'menuOverlay'
       }
     }

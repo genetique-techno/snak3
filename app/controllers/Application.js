@@ -43,18 +43,40 @@ class Application {
   setApplicationView( state ) {
     let delay = 0;
 
+    // Things to do only if there's a mainPass change
     if ( state.mainPass.change ) {
+
+      // If there's a mainPass unloader, execute it and add some more delay
       if ( this.mainPass && this.mainPass.unloader ) {
         this.mainPass.unloader();
         delay = 2000;
+
+        if ( this.overlayPass && this.overlayPass.unloader ) {
+          this.overlayPass.unloader();
+        }
       }
 
+      // This timer takes care of unloader delay
       window.setTimeout(() => {
         this.setMainPass( state );
-        this.setOverlayPass( state );
+
+        // This timer accounts for overlayPass delay
+        window.setTimeout(() => {
+          this.setOverlayPass( state );
+        }, state.overlayPass.delay || 0);
+
       }, delay );
     } else if ( state.overlayPass.change ) {
-      this.setOverlayPass( state );
+
+      if ( this.overlayPass && this.overlayPass.unloader ) {
+        this.overlayPass.unloader();
+      }
+
+      // Set the overlayPass if there's no change in mainPass
+      window.setTimeout(() => {
+        this.setOverlayPass( state );
+      }, state.overlayPass.delay );
+
     }
   }
 

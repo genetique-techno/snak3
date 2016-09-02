@@ -79,7 +79,7 @@ class StateManager extends EventEmitter {
       },
       overlayPass: {
         change: true,
-        delay: true,
+        delay: 5000,
         value: 'menuOverlay'
       },
       gameType: gameTypes[0]

@@ -130,7 +130,7 @@ class Game extends EventEmitter {
       },
       overlayPass: {
         change: true,
-        delay: true,
+        delay: 1000,
         value: 'gameOverOverlay'
       }
     });

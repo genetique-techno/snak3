@@ -36,7 +36,35 @@ export default class MenuOverlay {
 
     this.setSelection(0);
     this._menu.on( 'changeSelection', this.setSelection.bind( this ) );
+    this._menu.on( 'acceptSelection', this.acceptSelection.bind( this ) );
     
+  }
+
+  acceptSelection(e) {
+
+    let counter = 0;
+    let white =  new THREE.Color( 0xffffff );
+    let darker = new THREE.Color( 0x000000 );
+    let timer = window.setInterval(() => {
+      if ( counter % 2 === 0 ) {
+        // set the item's fount color to 0xffffff
+        this.selector.material.color = white;
+        this.items.children[ this._menu.selectionIndex ].material.color = white;
+      } else {
+        // set the item's font color to darker
+        this.selector.material.color = darker;
+        this.items.children[ this._menu.selectionIndex ].material.color = darker;
+      }
+      counter++;
+      if ( counter === 20 ) { window.clearInterval( timer ); };
+    }, 25 );
+
+  }
+
+  unloader() {
+    window.setTimeout(() => {
+      this.renderPass.enabled = false;
+    }, 500 );
   }
 
   setItems() {
