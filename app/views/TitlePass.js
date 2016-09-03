@@ -23,7 +23,7 @@ export default class TitlePass extends CubeDrawer {
     this._setTitleText();
 
     this.renderPass = new THREE.RenderPass( this.scene, this.camera );
-    this.renderPass.renderToScreen = true;
+    this.renderPass.renderToScreen = false;
 
     this.nodes = [];
     this.startRemovingNodes = false;

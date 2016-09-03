@@ -31,7 +31,7 @@ export default class GamePass extends CubeDrawer {
     this.setLevelUpPosition( this._game.levelUpPosition );
     this.setInitialCameraPosition();
     this.renderPass = new THREE.RenderPass( this.scene, this.camera );
-    this.renderPass.renderToScreen = true;
+    this.renderPass.renderToScreen = false;
     this.renderPass.setSize( window.__GAME_DIV__.width, window.__GAME_DIV__.height );
 
     this.addGrid({

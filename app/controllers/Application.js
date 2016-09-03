@@ -10,11 +10,12 @@ require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/post
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/BloomPass.js' );
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/ShaderPass.js' );
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/TexturePass.js' );
+require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/RGBShiftShader.js' );
 
 
 const _main_ = 0;
-const _overlay_ = 2;
-const _effect1_ = 1;
+const _overlay_ = 1;
+const _effect1_ = 2;
 const _effect2_ = 3;
 
 
@@ -36,7 +37,9 @@ class Application {
       strength: 1.0,
       distinction: 1.4
     };
-    this.bloomPass = new THREE.BloomPass( bloomOptions );
+    // this.bloomPass = new THREE.BloomPass( bloomOptions );
+    this.bloomPass = new THREE.ShaderPass( THREE.RGBShiftShader );
+    this.bloomPass.renderToScreen = true;
     // this.bloomPass.renderToScreen = true;
     this.bloomPass.setSize( this.width, this.height );
 
@@ -67,9 +70,7 @@ class Application {
         this.setMainPass( state );
 
         // This timer accounts for overlayPass delay
-        window.setTimeout(() => {
-          this.setOverlayPass( state );
-        }, state.overlayPass.delay || 0);
+        this.setOverlayPass( state );
 
       }, delay );
     } else if ( state.overlayPass.change ) {
@@ -79,12 +80,9 @@ class Application {
       }
 
       // Set the overlayPass if there's no change in mainPass
-      window.setTimeout(() => {
-        this.setOverlayPass( state );
-      }, state.overlayPass.delay );
+      this.setOverlayPass( state );
 
     }
-
   }
 
   setMainPass( state ) {
@@ -94,13 +92,19 @@ class Application {
   }
 
   setEffects() {
+
     this.composer.passes[_effect1_] = this.bloomPass;
   }
 
   setOverlayPass( state ) {
     if ( stateMappings.overlays[ state.overlayPass.value ] ) {
       this.overlayPass = new stateMappings.overlays[ state.overlayPass.value ]();
+      this.overlayPass.renderPass.enabled = false;
       this.composer.passes[_overlay_] = this.overlayPass.renderPass;
+
+      window.setTimeout(() => {
+        this.overlayPass.renderPass.enabled = true;
+      }, state.overlayPass.delay );
     } else if ( this.composer.passes[_overlay_] ) {
       this.composer.passes[_overlay_].enabled = false;
     }
@@ -108,13 +112,13 @@ class Application {
 
 
   render() {
+    window.requestAnimationFrame( this.render.bind( this ) );
     
     let delta = this.clock.getDelta();
 
     this.composer.render(delta);
     // this.renderer.render( this.mainPass.scene, this.mainPass.camera );
 
-    window.requestAnimationFrame( this.render.bind( this ) );
 
     TWEEN.update();
   }

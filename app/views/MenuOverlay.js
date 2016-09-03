@@ -32,7 +32,7 @@ export default class MenuOverlay {
     this.camera.position.set( 0, 0, 20);
     this.renderPass = new THREE.RenderPass( this.scene, this.camera );
     this.renderPass.clear = false;
-    this.renderPass.renderToScreen = true;
+    this.renderPass.renderToScreen = false;
 
     this.setSelection(0);
     this._menu.on( 'changeSelection', this.setSelection.bind( this ) );
