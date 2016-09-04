@@ -12,6 +12,7 @@ require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/post
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/TexturePass.js' );
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/RGBShiftShader.js' );
 
+import { vertShader, fragShader } from 'app/shaders/FXAA.js';
 
 const _main_ = 0;
 const _overlay_ = 1;
@@ -28,24 +29,19 @@ class Application {
     this.renderer.setSize( this.width, this.height );
     window.__GAME_DIV__.appendChild( this.renderer.domElement );
 
-    this.composer = new THREE.EffectComposer( this.renderer );
+    this.renderTarget = createRenderTarget( this.renderer, this.width, this.height );
+
+    this.composer = new THREE.EffectComposer( this.renderer, this.renderTarget );
     this.clock = new THREE.Clock();
 
-    let bloomOptions = {
-      resolutionScale: 0.2,
-      blurriness: 0,
-      strength: 1.0,
-      distinction: 1.4
-    };
-    // this.bloomPass = new THREE.BloomPass( bloomOptions );
     this.bloomPass = new THREE.ShaderPass( THREE.RGBShiftShader );
-    this.bloomPass.renderToScreen = true;
-    // this.bloomPass.renderToScreen = true;
+    // this.bloomPass.uniforms.amount = 0.005;
     this.bloomPass.setSize( this.width, this.height );
 
     stateManager.on( 'newApplicationState', this.setApplicationView.bind( this ) );
     stateManager.emitCurrentState();
 
+    this.post = setupPostProcessing( this.renderer, this.width, this.height, this.renderTarget );
     this.render();
   }
 
@@ -94,6 +90,7 @@ class Application {
   setEffects() {
 
     this.composer.passes[_effect1_] = this.bloomPass;
+    console.log(this.composer);
   }
 
   setOverlayPass( state ) {
@@ -117,7 +114,7 @@ class Application {
     let delta = this.clock.getDelta();
 
     this.composer.render(delta);
-    // this.renderer.render( this.mainPass.scene, this.mainPass.camera );
+    this.renderer.render( this.post.scene, this.post.camera );
 
 
     TWEEN.update();
@@ -126,3 +123,52 @@ class Application {
 }
 
 export default Application;
+
+function createRenderTarget(renderer, width, height) {
+  var rtWidth = width||2,
+      rtHeight = height||2;
+
+  var gl = renderer.getContext();
+  var maxRenderTargetSize = gl.getParameter(gl.MAX_RENDERBUFFER_SIZE);
+
+  rtWidth = Math.min(rtWidth, maxRenderTargetSize);
+  rtHeight = Math.min(rtHeight, maxRenderTargetSize);
+
+  var renderTarget = new THREE.WebGLRenderTarget(rtWidth, rtHeight, {
+      minFilter: THREE.LinearFilter,
+      magFilter: THREE.LinearFilter,
+      format: THREE.RGBFormat,
+      generateMipmaps: false
+  });
+  return renderTarget;
+}
+
+function setupPostProcessing(renderer, width, height, renderTarget) {
+  var fxaaMaterial = new THREE.ShaderMaterial({
+      uniforms: {
+          //the scene texture...
+          texture: {type:'t', value: renderTarget.texture},
+          resolution: {type:'v2', value: new THREE.Vector2(width, height)}
+      },
+      vertexShader: vertShader,
+      fragmentShader: fragShader
+  });
+
+  
+  var postQuad = new THREE.Mesh(new THREE.PlaneGeometry( 2, 2 ), fxaaMaterial);
+  console.log(postQuad);
+
+  var postCamera = new THREE.OrthographicCamera( -1, 1, 1, -1, -1, 1 );
+  postCamera.updateProjectionMatrix();
+
+  var postScene = new THREE.Scene();
+  postScene.add(postQuad);
+  console.log(fxaaMaterial);
+
+  return {
+      camera: postCamera,
+      scene: postScene,
+      quad: postQuad,
+      fxaaMaterial: fxaaMaterial,
+    };
+}
