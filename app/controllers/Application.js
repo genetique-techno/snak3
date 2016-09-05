@@ -46,6 +46,31 @@ class Application {
 
     this.post = setupPostProcessing( this.renderer, this.width, this.height, this.renderTarget );
     this.render();
+
+    this.resize = this.resize.bind( this );
+    window.addEventListener( "resize", _.throttle( this.resize, 200 ), false );
+  }
+
+  resize(e) {
+    this.width = window.__GAME_DIV__.clientWidth;
+    this.height = window.__GAME_DIV__.clientHeight;
+
+    this.renderer.setSize( this.width, this.height );
+    this.composer.setSize( this.width, this.height );
+
+    this.renderTarget.width = this.width;
+    this.renderTarget.height = this.height;
+
+    this.mainPass.camera.aspect = this.width / this.height;
+    this.overlayPass.camera.aspect = this.mainPass.camera.aspect;
+
+    this.mainPass.camera.updateProjectionMatrix();
+
+    this.overlayPass.camera.left = this.width / -2;
+    this.overlayPass.camera.right = this.width / 2;
+    this.overlayPass.camera.top = this.height / 2;
+    this.overlayPass.camera.bottom = this.height / -2;
+    this.overlayPass.camera.updateProjectionMatrix();
   }
 
   setApplicationView( state ) {
