@@ -1,6 +1,7 @@
 
 import stateManager from 'app/controllers/stateManager.js';
 import stateMappings from 'app/config/stateMappings.js';
+import _ from 'underscore';
 
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/ConvolutionShader.js' );
@@ -34,8 +35,10 @@ class Application {
     this.composer = new THREE.EffectComposer( this.renderer, this.renderTarget );
     this.clock = new THREE.Clock();
 
-    this.bloomPass = new THREE.ShaderPass( THREE.RGBShiftShader );
-    // this.bloomPass.uniforms.amount = 0.005;
+    this.rgbShiftShader = new THREE.ShaderMaterial( THREE.RGBShiftShader );
+    this.rgbShiftShader.uniforms.amount.value = 0.004;
+    this.rgbShiftShader.uniforms.angle.value = 0.35;
+    this.bloomPass = new THREE.ShaderPass( this.rgbShiftShader );
     this.bloomPass.setSize( this.width, this.height );
 
     stateManager.on( 'newApplicationState', this.setApplicationView.bind( this ) );
