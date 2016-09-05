@@ -92,11 +92,13 @@ export default class TitlePass extends CubeDrawer {
 
   _animateTitleCubes() {
 
+    let lengthCubeTrail = 12;
+
     if ( titleCubes.length ) {
       this.nodes.push( titleCubes.shift() );
     }
 
-    if ( this.nodes.length === 8 ) {
+    if ( this.nodes.length === lengthCubeTrail ) {
       this.startRemovingNodes = true;
     }
 
@@ -127,13 +129,12 @@ export default class TitlePass extends CubeDrawer {
     addNodes.forEach((node) => {
       this.addCube({
         group: 'cubes',
-        color: 0x55ff22,
+        color: 0xA8ED1F,
         pos: node
       });
     }); 
-    
     this.cubes.children.forEach((cube, index) => {
-      cube.material.color.set( util.colorLuminance( 0x00FF00, 0 ) );
+      cube.material.color.set( util.colorLuminance( "#A8ED1F", -( lengthCubeTrail - index) / lengthCubeTrail ) );
     });
   }
 
