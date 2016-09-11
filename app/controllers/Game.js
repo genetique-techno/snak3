@@ -67,7 +67,6 @@ class Game extends EventEmitter {
     window.addEventListener( 'keydown', this.keyListener );
     let dontExtendSnake = true;
     this.levelUp( dontExtendSnake );
-    console.log(this.gameStatus);
   }
 
 
@@ -76,7 +75,7 @@ class Game extends EventEmitter {
     let avoid = this._snake.nodes;
     let rnd;
 
-    avoid.map( function( item ) {
+    avoid = avoid.map( function( item ) {
       return item.join('$');
     });
 
