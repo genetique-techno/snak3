@@ -84,6 +84,17 @@ class StateManager extends EventEmitter {
       },
       gameType: gameTypes[0]
     };
+
+
+    // score in the state
+    
+    this._score = {
+      value: null,
+      difficulty: null,
+      name: null
+    };
+
+    
   }
 
   setNewApplicationState( obj ) {
@@ -98,6 +109,21 @@ class StateManager extends EventEmitter {
   emitCurrentState() {
     this.emit( 'newApplicationState', this._state );
   }
+
+  setNewScore( obj ) {
+    if ( !( obj instanceof Object ) && typeof obj['score'] === 'undefined' ) {
+      return console.log( `Invalid State Transition: new Score updated with no score: ${obj}`);
+    }
+
+    this._score = _.extend( {}, this._score, obj );
+    this.emitCurrentScore();
+  }
+
+  emitCurrentScore() {
+    // this.emit( 'newScoreState', this._score );
+    console.log(this._score.value);
+  }
+
 }
 
 export default new StateManager();

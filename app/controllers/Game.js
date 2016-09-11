@@ -56,10 +56,14 @@ class Game extends EventEmitter {
     util.assignKeys.call( this, gameType );
     
     this.level = 0;
-    this.score = 0;
     this.gameStatus = 'ready';
     this._ticker;
     this._snake = new Snake( this.limits );
+
+    this.score = 0;
+    stateManager.setNewScore({
+      value: this.score
+    });
 
     // game over listener
     this._snake.on( 'gameOver', this.endGame.bind( this ) );
@@ -108,16 +112,20 @@ class Game extends EventEmitter {
       this.levelUp();
     }
 
+    if ( this._snake.extensions ) {
+
+      this.score++;
+      stateManager.setNewScore({
+        value: this.score
+      });
+
+    }
+
     this.emit( 'tick', {
       nodes: this._snake.nodes,
       head: this._snake.head,
       levelUpPosition: this.levelUpPosition
     });
-
-    if ( this._snake.extensions ) {
-      this.score++;
-      console.log( this.score );
-    }
 
   }
 
