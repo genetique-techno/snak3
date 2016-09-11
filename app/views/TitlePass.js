@@ -92,10 +92,11 @@ export default class TitlePass extends CubeDrawer {
 
   _animateTitleCubes() {
 
-    let lengthCubeTrail = 12;
+    let lengthCubeTrail = 20;
+    var titleCubesCopy = titleCubes;
 
-    if ( titleCubes.length ) {
-      this.nodes.push( titleCubes.shift() );
+    if ( titleCubesCopy.length ) {
+      this.nodes.push( titleCubesCopy.shift() );
     }
 
     if ( this.nodes.length === lengthCubeTrail ) {

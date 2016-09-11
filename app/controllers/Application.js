@@ -118,7 +118,6 @@ class Application {
   setEffects() {
 
     this.composer.passes[_effect1_] = this.bloomPass;
-    console.log(this.composer);
   }
 
   setOverlayPass( state ) {
@@ -184,14 +183,12 @@ function setupPostProcessing(renderer, width, height, renderTarget) {
 
   
   var postQuad = new THREE.Mesh(new THREE.PlaneGeometry( 2, 2 ), fxaaMaterial);
-  console.log(postQuad);
 
   var postCamera = new THREE.OrthographicCamera( -1, 1, 1, -1, -1, 1 );
   postCamera.updateProjectionMatrix();
 
   var postScene = new THREE.Scene();
   postScene.add(postQuad);
-  console.log(fxaaMaterial);
 
   return {
       camera: postCamera,
