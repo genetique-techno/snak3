@@ -120,8 +120,8 @@ class StateManager extends EventEmitter {
   }
 
   emitCurrentScore() {
-    // this.emit( 'newScoreState', this._score );
-    console.log(this._score.value);
+    this.emit( 'newScoreState', this._score );
+    // console.log(this._score.value);
   }
 
 }
