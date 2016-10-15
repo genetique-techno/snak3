@@ -115,7 +115,7 @@ class Game extends EventEmitter {
 
     if ( this._snake.extensions ) {
 
-      this.score++;
+      this.score += 10;
       stateManager.setNewScore({
         value: this.score
       });
