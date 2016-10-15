@@ -36,7 +36,7 @@ class Application {
     this.clock = new THREE.Clock();
 
     this.rgbShiftShader = new THREE.ShaderMaterial( THREE.RGBShiftShader );
-    this.rgbShiftShader.uniforms.amount.value = 0.004;
+    this.rgbShiftShader.uniforms.amount.value = 0.002;
     this.rgbShiftShader.uniforms.angle.value = 0.35;
     this.bloomPass = new THREE.ShaderPass( this.rgbShiftShader );
     this.bloomPass.setSize( this.width, this.height );

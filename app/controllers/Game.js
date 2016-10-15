@@ -12,9 +12,9 @@ function keyListener(e) {
 
     case 'ready':
       if ( [
-          'ArrowUp', 
-          'ArrowDown', 
-          'ArrowRight', 
+          'ArrowUp',
+          'ArrowDown',
+          'ArrowRight',
           'ArrowLeft',
           'ShiftLeft',
           'ControlLeft'
@@ -29,9 +29,9 @@ function keyListener(e) {
 
     case 'live':
       if ( [
-          'ArrowUp', 
-          'ArrowDown', 
-          'ArrowRight', 
+          'ArrowUp',
+          'ArrowDown',
+          'ArrowRight',
           'ArrowLeft',
           'ShiftLeft',
           'ControlLeft'
@@ -54,7 +54,7 @@ class Game extends EventEmitter {
     super();
 
     util.assignKeys.call( this, gameType );
-    
+
     this.level = 0;
     this.gameStatus = 'ready';
     this._ticker;
@@ -62,7 +62,8 @@ class Game extends EventEmitter {
 
     this.score = 0;
     stateManager.setNewScore({
-      value: this.score
+      value: this.score,
+      difficulty: gameType.difficulty
     });
 
     // game over listener
@@ -102,7 +103,7 @@ class Game extends EventEmitter {
 
   tick() {
 
-    if ( this.gameStatus === 'gameOver' ) { 
+    if ( this.gameStatus === 'gameOver' ) {
       return null;
     }
 
@@ -139,7 +140,7 @@ class Game extends EventEmitter {
       mainPass: {
         change: false,
         delay: false,
-        value: 'gamePass'        
+        value: 'gamePass'
       },
       overlayPass: {
         change: true,
