@@ -9,12 +9,12 @@ export default [
       mainPass: {
         change: true,
         delay: false,
-        value: 'gamePass'        
+        value: 'gamePass'
       },
       overlayPass: {
         change: true,
         delay: false,
-        value: 'none'
+        value: 'scoreOverlay'
       }
     }
   },
@@ -27,7 +27,7 @@ export default [
       mainPass: {
         change: true,
         delay: false,
-        value: 'titlePass'        
+        value: 'titlePass'
       },
       overlayPass: {
         change: true,

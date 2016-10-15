@@ -71,6 +71,8 @@ class Application {
     this.overlayPass.camera.top = this.height / 2;
     this.overlayPass.camera.bottom = this.height / -2;
     this.overlayPass.camera.updateProjectionMatrix();
+
+    stateManager.emitCurrentScore();
   }
 
   setApplicationView( state ) {
@@ -137,7 +139,7 @@ class Application {
 
   render() {
     window.requestAnimationFrame( this.render.bind( this ) );
-    
+
     let delta = this.clock.getDelta();
 
     this.composer.render(delta);
@@ -181,7 +183,7 @@ function setupPostProcessing(renderer, width, height, renderTarget) {
       fragmentShader: fragShader
   });
 
-  
+
   var postQuad = new THREE.Mesh(new THREE.PlaneGeometry( 2, 2 ), fxaaMaterial);
 
   var postCamera = new THREE.OrthographicCamera( -1, 1, 1, -1, -1, 1 );

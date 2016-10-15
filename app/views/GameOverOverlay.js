@@ -74,7 +74,6 @@ export default class GameOverOverlay {
     mesh.position.set( -175, 0, basePosition.z );
 
     this.scene.add( mesh );
-    console.log( this.scene );
   }
 
   setItems() {
@@ -89,7 +88,7 @@ export default class GameOverOverlay {
       } else {
         this.items.add( new THREE.Object3D() );
       }
-    });   
+    });
 
     this.scene.add( this.items );
   }

@@ -75,7 +75,7 @@ class StateManager extends EventEmitter {
       mainPass: {
         change: true,
         delay: false,
-        value: 'titlePass'        
+        value: 'titlePass'
       },
       overlayPass: {
         change: true,
@@ -87,14 +87,14 @@ class StateManager extends EventEmitter {
 
 
     // score in the state
-    
+
     this._score = {
-      value: null,
+      value: 0,
       difficulty: null,
       name: null
     };
 
-    
+
   }
 
   setNewApplicationState( obj ) {
