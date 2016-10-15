@@ -44,7 +44,8 @@ export default class ScoreOverlay {
 
     let text = new THREE.TextGeometry( updatedScore, this.fontOptions );
     this.scoreMesh = new THREE.Mesh( text, this.material.clone() );
-    this.scoreMesh.position.set( basePosition.x, basePosition.y, basePosition.z );
+    text.computeBoundingBox();
+    this.scoreMesh.position.set( basePosition.x - text.boundingBox.max.x, basePosition.y, basePosition.z );
 
     this.scene.add( this.scoreMesh );
   }
