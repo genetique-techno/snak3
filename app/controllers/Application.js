@@ -41,7 +41,8 @@ class Application {
     this.bloomPass = new THREE.ShaderPass( this.rgbShiftShader );
     this.bloomPass.setSize( this.width, this.height );
 
-    stateManager.on( 'newApplicationState', this.setApplicationView.bind( this ) );
+    const funcSetApplicationView = this.setApplicationView.bind( this );
+    stateManager.on( 'newApplicationState', funcSetApplicationView );
     stateManager.emitCurrentState();
 
     this.post = setupPostProcessing( this.renderer, this.width, this.height, this.renderTarget );
