@@ -94,10 +94,10 @@ class Application {
 
       // This timer takes care of unloader delay
       window.setTimeout(() => {
-        this.setMainPass( state );
+        setMainPass.call( this, state );
 
         // This timer accounts for overlayPass delay
-        this.setOverlayPass( state );
+        setOverlayPass.call( this, state );
 
       }, delay );
     } else if ( state.overlayPass.change ) {
@@ -107,35 +107,38 @@ class Application {
       }
 
       // Set the overlayPass if there's no change in mainPass
-      this.setOverlayPass( state );
+      setOverlayPass.call( this, state );
 
     }
-  }
 
-  setMainPass( state ) {
-    this.mainPass = new stateMappings.mainPasses[ state.mainPass.value ]( state.gameType );
-    this.composer.passes[_main_] = this.mainPass.renderPass;
-    this.setEffects();
-  }
-
-  setEffects() {
-
-    this.composer.passes[_effect1_] = this.bloomPass;
-  }
-
-  setOverlayPass( state ) {
-    if ( stateMappings.overlays[ state.overlayPass.value ] ) {
-      this.overlayPass = new stateMappings.overlays[ state.overlayPass.value ]();
-      this.overlayPass.renderPass.enabled = false;
-      this.composer.passes[_overlay_] = this.overlayPass.renderPass;
-
-      window.setTimeout(() => {
-        this.overlayPass.renderPass.enabled = true;
-      }, state.overlayPass.delay );
-    } else if ( this.composer.passes[_overlay_] ) {
-      this.composer.passes[_overlay_].enabled = false;
+    function setMainPass( state ) {
+      this.mainPass = new stateMappings.mainPasses[ state.mainPass.value ]( state.gameType );
+      this.composer.passes[_main_] = this.mainPass.renderPass;
+      setEffects.call( this );
     }
+
+    function setOverlayPass( state ) {
+      if ( stateMappings.overlays[ state.overlayPass.value ] ) {
+        this.overlayPass = new stateMappings.overlays[ state.overlayPass.value ]();
+        this.overlayPass.renderPass.enabled = false;
+        this.composer.passes[_overlay_] = this.overlayPass.renderPass;
+
+        window.setTimeout(() => {
+          this.overlayPass.renderPass.enabled = true;
+        }, state.overlayPass.delay );
+      } else if ( this.composer.passes[_overlay_] ) {
+        this.composer.passes[_overlay_].enabled = false;
+      }
+    }
+
+    function setEffects() {
+      this.composer.passes[_effect1_] = this.bloomPass;
+    }
+
   }
+
+
+
 
 
   render() {
