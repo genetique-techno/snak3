@@ -1,5 +1,6 @@
 import util from 'app/util';
 import EventEmitter from 'events';
+import audioEngine from 'app/controllers/audioEngine.js';
 
 class Snake extends EventEmitter {
 
@@ -38,6 +39,8 @@ class Snake extends EventEmitter {
         reason: 'crashed into own snake'
       } );
 
+      return true;
+
     // Check if crashed into floor, wall, or ceiling
     } else if (
         (this.head[0] < 0 || this.head[0] > this.limits[0] - 1)
@@ -49,7 +52,12 @@ class Snake extends EventEmitter {
         reason: 'crashed into the wall, floor, or ceiling'
       } );
 
+      return true;
+
     }
+
+    // didn't crash
+    return false;
   }
 
 
@@ -58,7 +66,7 @@ class Snake extends EventEmitter {
     let newDir = util.keyToAction[ code ];
 
     if (this.nodes.length === 1) { return this.direction = newDir };
-    
+
     // ignore inputs that would reverse the snake on itself
     if ( newDir === 'up' && this.direction === 'down' ) {
       return null;
@@ -85,31 +93,38 @@ class Snake extends EventEmitter {
 
   advance() {
     var headStub = [0, 0, 0];
+    var directionalSound = '';
 
     switch ( this.direction ) {
 
       case 'up':
         headStub = [0, 1, 0];
+        directionalSound = 'SnakeSideways'
         break;
 
       case 'down':
         headStub = [0, -1, 0];
+        directionalSound = 'SnakeSideways'
         break;
 
       case 'left':
         headStub = [-1, 0, 0];
+        directionalSound = 'SnakeSideways'
         break;
 
       case 'right':
         headStub = [1, 0, 0];
+        directionalSound = 'SnakeSideways'
         break;
 
       case 'out':
         headStub = [0, 0, 1];
+        directionalSound = 'SnakeOut'
         break;
 
       case 'in':
         headStub = [0, 0, -1];
+        directionalSound = 'SnakeIn'
         break;
     }
 
@@ -118,8 +133,8 @@ class Snake extends EventEmitter {
     this.nodes.push( this.head );
 
     // Check if the snake crashed
-    this._didSnakeCrash()
-    
+    let crashed = this._didSnakeCrash();
+
     // extend the snake if necessary
     if ( this.extensions === 0 ) {
       // remove node from tail of snake
@@ -127,9 +142,15 @@ class Snake extends EventEmitter {
     } else {
       this.extensions--;
     }
-    
+
+    if ( crashed ) {
+      audioEngine.trigger( 'SnakeCrash' );
+    } else {
+      audioEngine.trigger( directionalSound );
+    }
+
     // return the nodes
-    return this.nodes; 
+    return this.nodes;
   }
 
 }
