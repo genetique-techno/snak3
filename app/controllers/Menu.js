@@ -1,6 +1,7 @@
 import EventEmitter from 'events';
 import _ from 'underscore';
 import stateManager from 'app/controllers/stateManager.js';
+import audioEngine from 'app/controllers/audioEngine.js';
 
 import menuItems from 'app/config/menuItems.js';
 
@@ -15,7 +16,7 @@ function keyListener(e) {
     // '17': 'out',
     '13': 'return'
   }, e.keyCode, null);
-  
+
   switch ( keyCode ) {
     case 'up':
       this.decrementSelection();
@@ -49,6 +50,7 @@ export default class Menu extends EventEmitter {
       this.selectionIndex--;
     }
     this.emit( 'changeSelection', this.selectionIndex );
+    audioEngine.trigger( "MenuChange" );
   }
 
   incrementSelection() {
@@ -57,6 +59,7 @@ export default class Menu extends EventEmitter {
       this.selectionIndex++;
     }
     this.emit( 'changeSelection', this.selectionIndex );
+    audioEngine.trigger( "MenuChange" );
   }
 
   acceptSelection() {
@@ -67,6 +70,7 @@ export default class Menu extends EventEmitter {
       stateManager[ item.value ]( item.config );
     }
 
+    audioEngine.trigger( "MenuAccept" );
     window.removeEventListener( 'keydown', this.keyListener );
 
   }

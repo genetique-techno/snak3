@@ -2,6 +2,7 @@ import 'app/util';
 import EventEmitter from 'events';
 import util from 'app/util';
 import stateManager from 'app/controllers/stateManager.js';
+import audioEngine from 'app/controllers/audioEngine.js';
 import _ from 'underscore';
 
 import Snake from 'app/controllers/Snake';
@@ -12,9 +13,9 @@ function keyListener(e) {
 
     case 'ready':
       if ( [
-          'ArrowUp', 
-          'ArrowDown', 
-          'ArrowRight', 
+          'ArrowUp',
+          'ArrowDown',
+          'ArrowRight',
           'ArrowLeft',
           'ShiftLeft',
           'ControlLeft'
@@ -29,9 +30,9 @@ function keyListener(e) {
 
     case 'live':
       if ( [
-          'ArrowUp', 
-          'ArrowDown', 
-          'ArrowRight', 
+          'ArrowUp',
+          'ArrowDown',
+          'ArrowRight',
           'ArrowLeft',
           'ShiftLeft',
           'ControlLeft'
@@ -54,7 +55,7 @@ class Game extends EventEmitter {
     super();
 
     util.assignKeys.call( this, gameType );
-    
+
     this.level = 0;
     this.gameStatus = 'ready';
     this._ticker;
@@ -90,7 +91,8 @@ class Game extends EventEmitter {
 
     if ( !initialBool ) {
       this.level++;
-      this._snake.extendBy( this.level );      
+      this._snake.extendBy( this.level );
+      audioEngine.trigger( 'LevelUp' );
     }
 
     this.levelUpPosition = rnd;
@@ -98,7 +100,7 @@ class Game extends EventEmitter {
 
   tick() {
 
-    if ( this.gameStatus === 'gameOver' ) { 
+    if ( this.gameStatus === 'gameOver' ) {
       return null;
     }
 
@@ -126,7 +128,7 @@ class Game extends EventEmitter {
       mainPass: {
         change: false,
         delay: false,
-        value: 'gamePass'        
+        value: 'gamePass'
       },
       overlayPass: {
         change: true,

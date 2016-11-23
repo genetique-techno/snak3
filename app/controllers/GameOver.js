@@ -1,6 +1,7 @@
 import EventEmitter from 'events';
 import _ from 'underscore';
 import stateManager from 'app/controllers/stateManager.js';
+import audioEngine from 'app/controllers/audioEngine.js';
 
 import gameOverMenuItems from 'app/config/gameOverMenuItems.js';
 
@@ -15,7 +16,7 @@ function keyListener(e) {
     // '17': 'out',
     '13': 'return'
   }, e.keyCode, null);
-  
+
   switch ( keyCode ) {
     case 'up':
       this.decrementSelection();
@@ -49,6 +50,7 @@ export default class GameOver extends EventEmitter {
       this.selectionIndex--;
     }
     this.emit( 'changeSelection', this.selectionIndex );
+    audioEngine.trigger( 'MenuChange' );
   }
 
   incrementSelection() {
@@ -57,6 +59,7 @@ export default class GameOver extends EventEmitter {
       this.selectionIndex++;
     }
     this.emit( 'changeSelection', this.selectionIndex );
+    audioEngine.trigger( 'MenuChange' );
   }
 
   acceptSelection() {
@@ -66,7 +69,7 @@ export default class GameOver extends EventEmitter {
     if ( item.type = 'function' ) {
       stateManager[ item.value ]( item.config );
     }
-
+    audioEngine.trigger( 'MenuAccept' );
     window.removeEventListener( 'keydown', this.keyListener );
 
   }
