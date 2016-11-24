@@ -2,6 +2,7 @@ import 'app/util';
 import EventEmitter from 'events';
 import util from 'app/util';
 import stateManager from 'app/controllers/stateManager.js';
+import audioEngine from 'app/controllers/audioEngine.js';
 import _ from 'underscore';
 
 import Snake from 'app/controllers/Snake';
@@ -96,6 +97,7 @@ class Game extends EventEmitter {
     if ( !initialBool ) {
       this.level++;
       this._snake.extendBy( this.level );
+      audioEngine.trigger( 'LevelUp' );
     }
 
     this.levelUpPosition = rnd;

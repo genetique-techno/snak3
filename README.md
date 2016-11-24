@@ -13,7 +13,7 @@ Visit `http://localhost:8999/`.  Use arrow keys to change direction, shift to go
 
 # Things that need doing: #
 
-- Add Scoring
+X Add Scoring
 	- difficulty level provides a multiplier
 
 - Adjust snake extensions by difficulty level ( harder === more extensions per level up )
@@ -24,3 +24,9 @@ Visit `http://localhost:8999/`.  Use arrow keys to change direction, shift to go
 
 - Add high score entry screen
 
+X AudioEngine
+  - sound library
+
+- Fix bug that allows menu incrementing when it's not displayed
+
+- You can crash into yourself sometimes (backwards into your snake shouldn't be allowed)
