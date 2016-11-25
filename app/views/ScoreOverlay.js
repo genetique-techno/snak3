@@ -1,5 +1,4 @@
 import _ from 'underscore';
-import stateManager from 'app/controllers/stateManager.js';
 
 require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
 
@@ -25,16 +24,10 @@ export default class ScoreOverlay {
     this.camera.position.set( 0, 0, 20);
     this.renderPass = new THREE.RenderPass( this.scene, this.camera );
     this.renderPass.clear = false;
-    this.renderPass.renderToScreen = false;
-
-
-    stateManager.on( 'newScoreState', this.updateScore.bind( this ) );
-    stateManager.emitCurrentScore();
+    this.renderPass.renderToScreen = true;
   }
 
-  updateScore( scoreState ) {
-
-    let updatedScore = scoreState.value;
+  updateScore( updatedScore ) {
 
     const basePosition = { x: this.camera.right - 50, y: this.camera.top - 50, z: 0 };
 
@@ -42,7 +35,8 @@ export default class ScoreOverlay {
       this.scene.remove( this.scoreMesh );
     }
 
-    let text = new THREE.TextGeometry( updatedScore, this.fontOptions );
+    let paddedScore = padScore( updatedScore );
+    let text = new THREE.TextGeometry( paddedScore, this.fontOptions );
     this.scoreMesh = new THREE.Mesh( text, this.material.clone() );
     text.computeBoundingBox();
     this.scoreMesh.position.set( basePosition.x - text.boundingBox.max.x, basePosition.y, basePosition.z );
@@ -50,5 +44,14 @@ export default class ScoreOverlay {
     this.scene.add( this.scoreMesh );
   }
 
+}
 
+function padScore( score ) {
+
+  let base = "00000000";
+  score = score.toString();
+  let out = base.substring(0, base.length-1-score.length)
+  out = out.concat( score );
+
+  return out;
 }

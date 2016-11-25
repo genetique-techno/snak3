@@ -3,8 +3,6 @@ import _ from 'underscore';
 import stateManager from 'app/controllers/stateManager.js';
 import audioEngine from 'app/controllers/audioEngine.js';
 
-import gameOverMenuItems from 'app/config/gameOverMenuItems.js';
-
 function keyListener(e) {
 
   let keyCode = _.result({
@@ -35,7 +33,13 @@ export default class GameOver extends EventEmitter {
   constructor() {
     super();
 
-    this.gameOverMenuItems = gameOverMenuItems;
+    this.gameOverMenuItems = [
+      "retry",
+      "main menu",
+      "separator",
+      "high scores"
+    ];
+
     this.selectionIndex = 0;
     this.logSelection;
     this.keyListener = keyListener.bind( this );
@@ -46,7 +50,7 @@ export default class GameOver extends EventEmitter {
 
   decrementSelection() {
     this.selectionIndex = this.selectionIndex === 0 ? 0 : this.selectionIndex - 1;
-    if ( this.gameOverMenuItems[ this.selectionIndex ].type === 'separator' ) {
+    if ( this.gameOverMenuItems[ this.selectionIndex ] === 'separator' ) {
       this.selectionIndex--;
     }
     this.emit( 'changeSelection', this.selectionIndex );
@@ -55,7 +59,7 @@ export default class GameOver extends EventEmitter {
 
   incrementSelection() {
     this.selectionIndex = this.selectionIndex === this.gameOverMenuItems.length - 1 ? this.gameOverMenuItems.length - 1 : this.selectionIndex + 1;
-    if ( this.gameOverMenuItems[ this.selectionIndex ].type === 'separator' ) {
+    if ( this.gameOverMenuItems[ this.selectionIndex ] === 'separator' ) {
       this.selectionIndex++;
     }
     this.emit( 'changeSelection', this.selectionIndex );
@@ -65,12 +69,26 @@ export default class GameOver extends EventEmitter {
   acceptSelection() {
     let item = this.gameOverMenuItems[ this.selectionIndex ];
 
-    this.emit( 'acceptSelection', item );
-    if ( item.type = 'function' ) {
-      stateManager[ item.value ]( item.config );
-    }
     audioEngine.trigger( 'MenuAccept' );
     window.removeEventListener( 'keydown', this.keyListener );
+
+    switch (item) {
+
+      case "retry":
+        this.emit( "acceptSelection", { mainPass: "gamePass" });
+        break;
+
+      case "main menu":
+        this.emit( "acceptSelection", { mainPass: "titlePass" });
+        break;
+
+      case "high scores":
+        console.log("high scores: Not implemented" );
+        break;
+
+      default:
+
+    }
 
   }
 }

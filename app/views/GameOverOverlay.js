@@ -1,4 +1,5 @@
-import _ from 'underscore';
+import EventEmitter from "events";
+import _ from "underscore";
 import GameOver from 'app/controllers/GameOver.js';
 require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
 
@@ -6,9 +7,10 @@ const alegreya = require('app/fonts/Alegreya Sans SC Light_Regular.json');
 const basePosition = { x: -35, y: -100, z: 0 };
 const itemGap = 30;
 
-export default class GameOverOverlay {
+export default class GameOverOverlay extends EventEmitter {
 
-  constructor( emitter ) {
+  constructor( cb ) {
+    super();
 
     this._menu = new GameOver();
 
@@ -34,14 +36,14 @@ export default class GameOverOverlay {
     this.camera.position.set( 0, 0, 20);
     this.renderPass = new THREE.RenderPass( this.scene, this.camera );
     this.renderPass.clear = false;
-    this.renderPass.renderToScreen = false;
+    this.renderPass.renderToScreen = true;
 
     this.setSelection(0);
     this._menu.on( 'changeSelection', this.setSelection.bind( this ) );
     this._menu.on( 'acceptSelection', this.acceptSelection.bind( this ) );
   }
 
-  acceptSelection(e) {
+  acceptSelection( newState ) {
 
     let counter = 0;
     let white =  new THREE.Color( 0xffffff );
@@ -60,11 +62,13 @@ export default class GameOverOverlay {
       if ( counter === 20 ) { window.clearInterval( timer ); };
     }, 25 );
 
+    this.unloader( newState );
   }
 
-  unloader() {
+  unloader( newState ) {
     window.setTimeout(() => {
       this.renderPass.enabled = false;
+      this.emit( "gameOverOverlayDone", newState );
     }, 500 );
   }
 
@@ -80,8 +84,8 @@ export default class GameOverOverlay {
 
     this.items = new THREE.Group();
     this._menu.gameOverMenuItems.forEach( ( item, index ) => {
-      if ( item.type !== 'separator' ) {
-        let text = new THREE.TextGeometry( item.label, this.fontOptions );
+      if ( item !== 'separator' ) {
+        let text = new THREE.TextGeometry( item, this.fontOptions );
         let mesh = new THREE.Mesh( text, this.material.clone() );
         mesh.position.set( basePosition.x, basePosition.y - itemGap * index, basePosition.z );
         this.items.add( mesh );

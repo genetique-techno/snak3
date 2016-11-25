@@ -1,7 +1,6 @@
 import 'app/util';
 import EventEmitter from 'events';
 import util from 'app/util';
-import stateManager from 'app/controllers/stateManager.js';
 import audioEngine from 'app/controllers/audioEngine.js';
 import _ from 'underscore';
 
@@ -62,10 +61,6 @@ class Game extends EventEmitter {
     this._snake = new Snake( this.limits );
 
     this.score = 0;
-    stateManager.setNewScore({
-      value: this.score,
-      difficulty: gameType.difficulty
-    });
 
     // game over listener
     this._snake.on( 'gameOver', this.endGame.bind( this ) );
@@ -118,16 +113,14 @@ class Game extends EventEmitter {
     if ( this._snake.extensions ) {
 
       this.score += 10;
-      stateManager.setNewScore({
-        value: this.score
-      });
 
     }
 
     this.emit( 'tick', {
       nodes: this._snake.nodes,
       head: this._snake.head,
-      levelUpPosition: this.levelUpPosition
+      levelUpPosition: this.levelUpPosition,
+      score: this.score
     });
 
   }
@@ -138,18 +131,12 @@ class Game extends EventEmitter {
     window.clearTimeout( this.ticker );
     this.gameStatus = 'gameOver';
     window.removeEventListener( 'keydown', this.keyListener );
-    stateManager.setNewApplicationState({
-      mainPass: {
-        change: false,
-        delay: false,
-        value: 'gamePass'
-      },
-      overlayPass: {
-        change: true,
-        delay: 1000,
-        value: 'gameOverOverlay'
-      }
-    });
+
+    // Check score to see if it's an entry
+    //    using whatever module I write later for that
+    // check highscore
+    // if highscore, set to gameOverOverlayWithEntry
+    this.emit( "gameOver" );
 
   }
 
