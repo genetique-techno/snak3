@@ -25,8 +25,10 @@ X Add Scoring
 - Add high score entry screen
 
 X AudioEngine
-  - sound library
+  X sound library
 
-- Fix bug that allows menu incrementing when it's not displayed
+X Fix bug that allows menu incrementing when it's not displayed
 
 - You can crash into yourself sometimes (backwards into your snake shouldn't be allowed)
+
+X Window Resizing triggers new aspect ratio
