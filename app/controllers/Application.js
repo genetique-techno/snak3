@@ -15,10 +15,10 @@ require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shad
 
 import { vertShader, fragShader } from 'app/shaders/FXAA.js';
 
-const _main_ = 0;
-const _overlay_ = 1;
-const _effect1_ = 2;
-const _effect2_ = 3;
+// const _main_ = 0;
+// const _overlay_ = 1;
+// const _effect1_ = 2;
+// const _effect2_ = 3;
 
 
 class Application {
@@ -30,22 +30,22 @@ class Application {
     this.renderer.setSize( this.width, this.height );
     window.__GAME_DIV__.appendChild( this.renderer.domElement );
 
-    this.renderTarget = createRenderTarget( this.renderer, this.width, this.height );
+    // this.renderTarget = createRenderTarget( this.renderer, this.width, this.height );
 
     this.composer = new THREE.EffectComposer( this.renderer, this.renderTarget );
     this.clock = new THREE.Clock();
 
-    this.rgbShiftShader = new THREE.ShaderMaterial( THREE.RGBShiftShader );
-    this.rgbShiftShader.uniforms.amount.value = 0.002;
-    this.rgbShiftShader.uniforms.angle.value = 0.35;
-    this.bloomPass = new THREE.ShaderPass( this.rgbShiftShader );
-    this.bloomPass.setSize( this.width, this.height );
+    // this.rgbShiftShader = new THREE.ShaderMaterial( THREE.RGBShiftShader );
+    // this.rgbShiftShader.uniforms.amount.value = 0.002;
+    // this.rgbShiftShader.uniforms.angle.value = 0.35;
+    // this.bloomPass = new THREE.ShaderPass( this.rgbShiftShader );
+    // this.bloomPass.setSize( this.width, this.height );
 
     const funcSetApplicationView = this.setApplicationView.bind( this );
     stateManager.on( 'newApplicationState', funcSetApplicationView );
     stateManager.emitCurrentState();
 
-    this.post = setupPostProcessing( this.renderer, this.width, this.height, this.renderTarget );
+    // this.post = setupPostProcessing( this.renderer, this.width, this.height, this.renderTarget );
     this.render();
 
     this.resize = this.resize.bind( this );
@@ -73,12 +73,18 @@ class Application {
     this.overlayPass.camera.bottom = this.height / -2;
     this.overlayPass.camera.updateProjectionMatrix();
 
-    stateManager.emitCurrentScore();
   }
 
-  setApplicationView( state ) {
-    let delay = 0;
 
+
+  setApplicationView( state ) {
+
+    this.mainPass = new stateMappings.mainPasses[ state.mainPass ]( this.composer, state );
+
+    // let delay = 0;
+
+
+/*
     // Things to do only if there's a mainPass change
     if ( state.mainPass.change ) {
 
@@ -108,7 +114,6 @@ class Application {
 
       // Set the overlayPass if there's no change in mainPass
       setOverlayPass.call( this, state );
-
     }
 
     function setMainPass( state ) {
@@ -135,6 +140,7 @@ class Application {
       this.composer.passes[_effect1_] = this.bloomPass;
     }
 
+*/
   }
 
 
@@ -147,7 +153,7 @@ class Application {
     let delta = this.clock.getDelta();
 
     this.composer.render(delta);
-    this.renderer.render( this.post.scene, this.post.camera );
+    // this.renderer.render( this.post.scene, this.post.camera );
 
 
     TWEEN.update();
@@ -156,7 +162,7 @@ class Application {
 }
 
 export default Application;
-
+/*
 function createRenderTarget(renderer, width, height) {
   var rtWidth = width||2,
       rtHeight = height||2;
@@ -203,3 +209,4 @@ function setupPostProcessing(renderer, width, height, renderTarget) {
       fxaaMaterial: fxaaMaterial,
     };
 }
+*/

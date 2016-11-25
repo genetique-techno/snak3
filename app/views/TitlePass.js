@@ -1,5 +1,7 @@
 import _ from 'underscore';
 import util from 'app/util';
+import MenuOverlay from 'app/views/MenuOverlay.js';
+import stateManager from 'app/controllers/stateManager.js';
 
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
@@ -12,7 +14,7 @@ import CubeDrawer from 'app/views/CubeDrawer.js';
 
 export default class TitlePass extends CubeDrawer {
 
-  constructor() {
+  constructor( composer, state ) {
     super();
 
     this.scene = new THREE.Scene();
@@ -22,8 +24,17 @@ export default class TitlePass extends CubeDrawer {
     this._setLighting();
     this._setTitleText();
 
-    this.renderPass = new THREE.RenderPass( this.scene, this.camera );
-    this.renderPass.renderToScreen = false;
+    const renderPass = new THREE.RenderPass( this.scene, this.camera );
+    renderPass.renderToScreen = true;
+    composer.passes = [];
+    composer.addPass( renderPass );
+
+    this.overlay = {};
+    window.setTimeout(() => {
+      this.overlay = new MenuOverlay();
+      composer.addPass( this.overlay.renderPass );
+      this.overlay.on( "acceptSelection", this.unloader.bind( this ) );
+    }, 7000 );
 
     this.nodes = [];
     this.startRemovingNodes = false;
@@ -61,10 +72,13 @@ export default class TitlePass extends CubeDrawer {
     this.scene.add( this.pivot );
   }
 
-  unloader() {
+  unloader( newState ) {
     this.fogTween = new TWEEN.Tween( this.scene.fog )
       .to( { near: 0, far: 0 }, 2000 )
       .start();
+    window.setTimeout(() => {
+      stateManager.setNewApplicationState( newState );
+    }, 2000 );
   }
 
   loader() {
@@ -119,7 +133,7 @@ export default class TitlePass extends CubeDrawer {
 
     // remove any cubes no longer in the snake nodes
     removeNodes.forEach((node) => {
-      this.removeCube({ 
+      this.removeCube({
         node,
         group: 'cubes'
       });
@@ -133,7 +147,7 @@ export default class TitlePass extends CubeDrawer {
         color: 0xA8ED1F,
         pos: node
       });
-    }); 
+    });
     this.cubes.children.forEach((cube, index) => {
       cube.material.color.set( util.colorLuminance( "#A8ED1F", -( lengthCubeTrail - index) / lengthCubeTrail ) );
     });

@@ -2,7 +2,6 @@
 export default [
   {
     label: 'easy',
-    difficulty: 'easy',
     limits: [10, 10, 1],
     interval: 500,
     colors: {
@@ -13,7 +12,6 @@ export default [
 
   {
     label: 'medium',
-    difficulty: 'medium',
     limits: [10, 10, 3],
     interval: 500,
     colors: {
@@ -24,7 +22,6 @@ export default [
 
   {
     label: 'hard',
-    difficulty: 'hard',
     limits: [15, 15, 6],
     interval: 250,
     colors: {
@@ -35,7 +32,6 @@ export default [
 
   {
     label: 'impossible',
-    difficulty: 'impossible',
     limits: [30, 30, 10],
     interval: 150,
     colors: {
