@@ -2,6 +2,7 @@ import _ from 'underscore';
 import util from 'app/util';
 import MenuOverlay from 'app/views/MenuOverlay.js';
 import stateManager from 'app/controllers/stateManager.js';
+import passRegistry from 'app/controllers/passRegistry.js';
 
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
@@ -28,11 +29,13 @@ export default class TitlePass extends CubeDrawer {
     renderPass.renderToScreen = true;
     composer.passes = [];
     composer.addPass( renderPass );
+    passRegistry.register( this );
 
     this.overlay = {};
     window.setTimeout(() => {
       this.overlay = new MenuOverlay();
       composer.addPass( this.overlay.renderPass );
+      passRegistry.register( this.overlay );
       this.overlay.on( "acceptSelection", this.unloader.bind( this ) );
     }, 7000 );
 
@@ -77,6 +80,7 @@ export default class TitlePass extends CubeDrawer {
       .to( { near: 0, far: 0 }, 2000 )
       .start();
     window.setTimeout(() => {
+      passRegistry.removeAll();
       stateManager.setNewApplicationState( newState );
     }, 2000 );
   }

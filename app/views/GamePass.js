@@ -3,6 +3,7 @@ import util from 'app/util';
 import stateManager from 'app/controllers/stateManager';
 import stateMappings from 'app/config/stateMappings.js';
 import gameTypes from 'app/config/gameTypes.js';
+import passRegistry from 'app/controllers/passRegistry.js';
 
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
@@ -41,6 +42,7 @@ export default class GamePass extends CubeDrawer {
     renderPass.setSize( window.__GAME_DIV__.width, window.__GAME_DIV__.height );
     composer.passes = [];
     composer.passes[0] = renderPass;
+    passRegistry.register( this );
     this.composer = composer;
 
     this.addGrid({
@@ -61,6 +63,7 @@ export default class GamePass extends CubeDrawer {
       .start();
 
     window.setTimeout(() => {
+      passRegistry.removeAll();
       stateManager.setNewApplicationState( newState );
     }, 2000 );
 
@@ -78,6 +81,7 @@ export default class GamePass extends CubeDrawer {
     this.scoreOverlay = new stateMappings.overlays[ "scoreOverlay" ]();
     this.scoreOverlay.updateScore( 0 );
     this.composer.passes[_overlay_] = this.scoreOverlay.renderPass;
+    passRegistry.register( this.scoreOverlay );
 
   }
 
