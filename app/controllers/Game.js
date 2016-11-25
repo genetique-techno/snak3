@@ -2,6 +2,7 @@ import 'app/util';
 import EventEmitter from 'events';
 import util from 'app/util';
 import stateManager from 'app/controllers/stateManager.js';
+import audioEngine from 'app/controllers/audioEngine.js';
 import _ from 'underscore';
 
 import Snake from 'app/controllers/Snake';
@@ -12,9 +13,9 @@ function keyListener(e) {
 
     case 'ready':
       if ( [
-          'ArrowUp', 
-          'ArrowDown', 
-          'ArrowRight', 
+          'ArrowUp',
+          'ArrowDown',
+          'ArrowRight',
           'ArrowLeft',
           'ShiftLeft',
           'ControlLeft'
@@ -29,9 +30,9 @@ function keyListener(e) {
 
     case 'live':
       if ( [
-          'ArrowUp', 
-          'ArrowDown', 
-          'ArrowRight', 
+          'ArrowUp',
+          'ArrowDown',
+          'ArrowRight',
           'ArrowLeft',
           'ShiftLeft',
           'ControlLeft'
@@ -54,11 +55,17 @@ class Game extends EventEmitter {
     super();
 
     util.assignKeys.call( this, gameType );
-    
+
     this.level = 0;
     this.gameStatus = 'ready';
     this._ticker;
     this._snake = new Snake( this.limits );
+
+    this.score = 0;
+    stateManager.setNewScore({
+      value: this.score,
+      difficulty: gameType.difficulty
+    });
 
     // game over listener
     this._snake.on( 'gameOver', this.endGame.bind( this ) );
@@ -89,7 +96,8 @@ class Game extends EventEmitter {
 
     if ( !initialBool ) {
       this.level++;
-      this._snake.extendBy( this.level );      
+      this._snake.extendBy( this.level );
+      audioEngine.trigger( 'LevelUp' );
     }
 
     this.levelUpPosition = rnd;
@@ -97,7 +105,7 @@ class Game extends EventEmitter {
 
   tick() {
 
-    if ( this.gameStatus === 'gameOver' ) { 
+    if ( this.gameStatus === 'gameOver' ) {
       return null;
     }
 
@@ -105,6 +113,15 @@ class Game extends EventEmitter {
 
     if (this._snake.head.join('$') === this.levelUpPosition.join('$')) {
       this.levelUp();
+    }
+
+    if ( this._snake.extensions ) {
+
+      this.score += 10;
+      stateManager.setNewScore({
+        value: this.score
+      });
+
     }
 
     this.emit( 'tick', {
@@ -125,7 +142,7 @@ class Game extends EventEmitter {
       mainPass: {
         change: false,
         delay: false,
-        value: 'gamePass'        
+        value: 'gamePass'
       },
       overlayPass: {
         change: true,

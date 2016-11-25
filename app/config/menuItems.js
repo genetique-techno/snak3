@@ -9,12 +9,12 @@ export default [
       mainPass: {
         change: true,
         delay: false,
-        value: 'gamePass'        
+        value: 'gamePass'
       },
       overlayPass: {
         change: true,
         delay: false,
-        value: 'none'
+        value: 'scoreOverlay'
       },
       gameType: gameTypes[0]
     }
@@ -28,12 +28,12 @@ export default [
       mainPass: {
         change: true,
         delay: false,
-        value: 'gamePass'        
+        value: 'gamePass'
       },
       overlayPass: {
         change: true,
         delay: false,
-        value: 'none'
+        value: 'scoreOverlay'
       },
       gameType: gameTypes[1]
     }
@@ -47,12 +47,12 @@ export default [
       mainPass: {
         change: true,
         delay: false,
-        value: 'gamePass'        
+        value: 'gamePass'
       },
       overlayPass: {
         change: true,
         delay: false,
-        value: 'none'
+        value: 'scoreOverlay'
       },
       gameType: gameTypes[2]
     }
@@ -66,12 +66,12 @@ export default [
       mainPass: {
         change: true,
         delay: false,
-        value: 'gamePass'        
+        value: 'gamePass'
       },
       overlayPass: {
         change: true,
         delay: false,
-        value: 'none'
+        value: 'scoreOverlay'
       },
       gameType: gameTypes[3]
     }
