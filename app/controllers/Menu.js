@@ -104,7 +104,9 @@ export default class Menu extends EventEmitter {
         break;
 
       case "how to play":
-        console.log("how to play: Not Implemented");
+        this.emit( "acceptSelection", _.defaults({
+          mainPass: "howToPlayPass"
+        }, gameState ));
 
         break;
 
