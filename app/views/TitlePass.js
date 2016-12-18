@@ -102,59 +102,59 @@ export default class TitlePass extends CubeDrawer {
       .start();
 
     window.setTimeout(() => {
-      this.cubeInterval = window.setInterval(() => {
-        this._animateTitleCubes();
-      }, 100);
+      this._animateTitleCubes( [].concat(titleCubes) );
     }, 7000 );
   }
 
-  _animateTitleCubes() {
+  _animateTitleCubes( titleCubes ) {
+    var cubeInterval = window.setInterval(() => {
 
-    let lengthCubeTrail = 20;
-    var titleCubesCopy = titleCubes;
+      let lengthCubeTrail = 20;
 
-    if ( titleCubesCopy.length ) {
-      this.nodes.push( titleCubesCopy.shift() );
-    }
-
-    if ( this.nodes.length === lengthCubeTrail ) {
-      this.startRemovingNodes = true;
-    }
-
-    if ( this.startRemovingNodes ) {
-      this.nodes.shift();
-      if ( this.nodes.length === 0 ) {
-        window.clearInterval( this.cubeInterval );
+      if ( titleCubes.length ) {
+        this.nodes.push( titleCubes.shift() );
       }
-    }
 
-    let renderedCubes = this.cubes.children.map((node) => {
-      return node.name;
-    });
+      if ( this.nodes.length === lengthCubeTrail ) {
+        this.startRemovingNodes = true;
+      }
 
-    let removeNodes = _.difference( renderedCubes, this.nodes );
-    let addNodes = _.difference( this.nodes, renderedCubes );
+      if ( this.startRemovingNodes ) {
+        this.nodes.shift();
+        if ( this.nodes.length === 0 ) {
+          window.clearInterval( cubeInterval );
+        }
+      }
 
-    // remove any cubes no longer in the snake nodes
-    removeNodes.forEach((node) => {
-      this.removeCube({
-        node,
-        group: 'cubes'
+      let renderedCubes = this.cubes.children.map((node) => {
+        return node.name;
       });
-    });
 
-    // add new cubes for any new snake nodes
+      let removeNodes = _.difference( renderedCubes, this.nodes );
+      let addNodes = _.difference( this.nodes, renderedCubes );
 
-    addNodes.forEach((node) => {
-      this.addCube({
-        group: 'cubes',
-        color: 0xA8ED1F,
-        pos: node
+      // remove any cubes no longer in the snake nodes
+      removeNodes.forEach((node) => {
+        this.removeCube({
+          node,
+          group: 'cubes'
+        });
       });
-    });
-    this.cubes.children.forEach((cube, index) => {
-      cube.material.color.set( util.colorLuminance( "#A8ED1F", -( lengthCubeTrail - index) / lengthCubeTrail ) );
-    });
+
+      // add new cubes for any new snake nodes
+
+      addNodes.forEach((node) => {
+        this.addCube({
+          group: 'cubes',
+          color: 0xA8ED1F,
+          pos: node
+        });
+      });
+      this.cubes.children.forEach((cube, index) => {
+        cube.material.color.set( util.colorLuminance( "#A8ED1F", -( lengthCubeTrail - index) / lengthCubeTrail ) );
+      });
+
+    }, 100);
   }
 
   _setLighting() {
