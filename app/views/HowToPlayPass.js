@@ -11,28 +11,8 @@ require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/Re
 import CubeDrawer from 'app/views/CubeDrawer';
 
 function keyListener(e) {
-
-  let keyCode = _.result({
-    '37': 'left',
-    // '38': 'up',
-    '39': 'right',
-    // '40': 'down',
-    // '16': 'in',
-    // '17': 'out',
-    '13': 'return'
-  }, e.keyCode, null);
-
-  switch ( keyCode ) {
-    case 'left':
-      this.decrementSelection();
-      break;
-    case 'right':
-      this.incrementSelection();
-      break;
-    case 'return':
-      // this.acceptSelection();
-      break;
-  }
+  // step through the pages on any key press
+  this.incrementPage();
 }
 
 export default class HowToPlayPass extends CubeDrawer {
@@ -77,24 +57,36 @@ export default class HowToPlayPass extends CubeDrawer {
 
   }
 
-  decrementSelection() {
-    this.page--;
-    if ( this.page < 0 ) this.page = this.pages.length - 1;
-    this.pages[this.page].call( this );
-  }
-
-  incrementSelection() {
+  incrementPage() {
+    // increment the page number, and exit on last page
     this.page++;
-    if ( this.page > this.pages.length-1 ) this.page = 0;
+    if ( this.page > this.pages.length-1 ) return this.unloader();
     this.pages[this.page].call( this );
   }
 
   unloader() {
 
+    this.fogTween = new TWEEN.Tween( this.scene.fog )
+      .to( { near: 0, far: 0 }, 2000 )
+      .start();
+
+    const newState = {
+      mainPass: "titlePass",
+      difficulty: 0,
+      name: "",
+      score: 0
+    };
+
+    window.setTimeout(() => {
+      window.removeEventListener( 'keydown', this.keyListener );
+      passRegistry.removeAll();
+      stateManager.setNewApplicationState( newState );
+    }, 2000 );
+
   }
 
   loader() {
-    var lim = 20;
+    var lim = 5;
 
     this.scene.fog = new THREE.Fog( 0x000000, 0, 0 );
     this.setCameraPosition( 0, 0, 20);
