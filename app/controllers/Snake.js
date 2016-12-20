@@ -4,13 +4,13 @@ import audioEngine from 'app/controllers/audioEngine.js';
 
 class Snake extends EventEmitter {
 
-  constructor( limits ) {
+  constructor( limits, options = {} ) {
     super();
-
+    this.options = options;
     this.limits = limits;
-    this.head = this._getStartingHead( limits );
+    this.head = options.nodes ? options.nodes[ options.nodes.length-1 ] : null || this._getStartingHead( limits );
     this.direction = null;
-    this.nodes = [ this.head ];
+    this.nodes = options.nodes || [ this.head ];
     this.extensions = 0;
 
   }
@@ -143,10 +143,12 @@ class Snake extends EventEmitter {
       this.extensions--;
     }
 
-    if ( crashed ) {
-      audioEngine.trigger( 'SnakeCrash' );
-    } else {
-      audioEngine.trigger( directionalSound );
+    if ( !this.options.noSound ) {
+      if ( crashed ) {
+        audioEngine.trigger( 'SnakeCrash' );
+      } else {
+        audioEngine.trigger( directionalSound );
+      }
     }
 
     // return the nodes

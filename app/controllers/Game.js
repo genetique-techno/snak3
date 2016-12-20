@@ -50,25 +50,37 @@ function keyListener(e) {
 
 class Game extends EventEmitter {
 
-  constructor( gameType ) {
+  constructor( gameType, options = {} ) {
     super();
 
     util.assignKeys.call( this, gameType );
+    this.options = options;
 
+    // assign level 0 unless an override is passed
     this.level = 0;
-    this.gameStatus = 'ready';
     this._ticker;
-    this._snake = new Snake( this.limits );
+    this._snake = new Snake( this.limits, options );
 
     this.score = 0;
+    if ( this.options.demo ) {
 
-    // game over listener
-    this._snake.on( 'gameOver', this.endGame.bind( this ) );
+      this.gameStatus = 'ready';
+      this.levelUpPosition = options.levelUpPosition;
 
-    this.keyListener = keyListener.bind( this );
-    window.addEventListener( 'keydown', this.keyListener );
-    let dontExtendSnake = true;
-    this.levelUp( dontExtendSnake );
+    } else {
+
+      this.gameStatus = 'ready';
+      // game over listener
+      this._snake.on( 'gameOver', this.endGame.bind( this ) );
+
+      this.keyListener = keyListener.bind( this );
+
+      window.addEventListener( 'keydown', this.keyListener );
+      let dontExtendSnake = true;
+      this.levelUp( dontExtendSnake );
+
+    }
+
   }
 
 
@@ -92,7 +104,7 @@ class Game extends EventEmitter {
     if ( !initialBool ) {
       this.level++;
       this._snake.extendBy( this.level );
-      audioEngine.trigger( 'LevelUp' );
+      this.options.noSound ? null : audioEngine.trigger( 'LevelUp' );
     }
 
     this.levelUpPosition = rnd;
