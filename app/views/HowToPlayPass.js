@@ -9,32 +9,68 @@ require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/post
 require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
 
 import CubeDrawer from 'app/views/CubeDrawer';
-
-function keyListener(e) {
-  // step through the pages on any key press
-  this.incrementPage();
-}
+import Game from 'app/controllers/Game.js';
+import snakeDirections from 'app/config/demoSnakeDirections';
 
 export default class HowToPlayPass extends CubeDrawer {
 
   constructor( composer ) {
     super();
 
-    this.page = 0;
-    this.pages = [
-      this.snakePage,
-      this.levelPage
-    ];
+    // create a fake game type
+    const miniGameType = {
+      label: "demo",
+      limits: [ 8, 8, 3 ],
+      interval: 350,
+      colors: {
+        boundaryCubes: '#33aacc',
+        cubes: '#55ff22'
+      }
+    };
+    // assign the fake game type props to this
+    util.assignKeys.call( this, miniGameType );
+    // make a fake game instance in demo mode
+    const miniGameOptions = {
+      demo: true,
+      nodes: [
+        [7,5,0],
+        [7,4,0],
+        [7,3,0],
+        [7,2,0],
+        [7,1,0],
+        [7,0,0],
+        [6,0,0],
+        [5,0,0],
+        [4,0,0],
+        [3,0,0],
+        [2,0,0],
+        [1,0,0],
+        [0,0,0]
+      ],
+      noSound: true,
+      levelUpPosition: [3,3,1]
+    };
 
+    this._game = new Game( miniGameType, miniGameOptions );
 
+    // camera setup -- this page uses a different FOV and camera offset to get the perspective correct for the miniGame demo
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, window.__GAME_DIV__.clientWidth / window.__GAME_DIV__.clientHeight, 0.1, 1000);
+    this.camera = new THREE.PerspectiveCamera(60, window.__GAME_DIV__.clientWidth / window.__GAME_DIV__.clientHeight, 0.1, 1000);
+    const w = window.__GAME_DIV__.clientWidth * 1.5;
+    const h = window.__GAME_DIV__.clientHeight * 1.5;
+    this.camera.setViewOffset( window.__GAME_DIV__.clientWidth, window.__GAME_DIV__.clientHeight, 0, 0, w, h);
+    this.cameraPosition = [ 4, 3, 15 ];
 
     this.ambientLight = new THREE.AmbientLight( 0x404040, 2 );
     this.scene.add( this.ambientLight );
 
     this.light = new THREE.PointLight( 0xffffff, 1, 100, 1 );
     this.scene.add( this.light );
+
+    this.setBoundaryCubePositions();
+    this.setInitialCube();
+    this.highlightBoundaryCubes();
+    this.setLevelUpPosition(  miniGameOptions.levelUpPosition );
 
     const renderPass = new THREE.RenderPass( this.scene, this.camera );
     renderPass.renderToScreen = true;
@@ -49,19 +85,28 @@ export default class HowToPlayPass extends CubeDrawer {
       step: 200
     });
 
-    // events for page selection here
+
+    this.setNodeCubes();
+    this.animationLoopInterval = window.setInterval( this.tick.bind( this ), miniGameType.interval );
+
+    function keyListener(e) {
+      // step through the pages on any key press
+      this.unloader();
+    }
     this.keyListener = keyListener.bind( this );
     window.addEventListener( 'keydown', this.keyListener );
 
+    this.snakeDirections = snakeDirections();
     this.loader();
 
   }
 
-  incrementPage() {
-    // increment the page number, and exit on last page
-    this.page++;
-    if ( this.page > this.pages.length-1 ) return this.unloader();
-    this.pages[this.page].call( this );
+  tick() {
+    let dir = this.snakeDirections.next();
+    this._game._snake.changeDirection( dir );
+    dir !== 'stop' ? this._game.tick() : null;
+    this.setNodeCubes();
+    this.highlightBoundaryCubes();
   }
 
   unloader() {
@@ -77,6 +122,7 @@ export default class HowToPlayPass extends CubeDrawer {
       score: 0
     };
 
+    window.clearInterval( this.animationLoopInterval );
     window.setTimeout(() => {
       window.removeEventListener( 'keydown', this.keyListener );
       passRegistry.removeAll();
@@ -89,10 +135,10 @@ export default class HowToPlayPass extends CubeDrawer {
     var lim = 5;
 
     this.scene.fog = new THREE.Fog( 0x000000, 0, 0 );
-    this.setCameraPosition( 0, 0, 20);
+    this.setCameraPosition.apply( this, this.cameraPosition );
 
     // load the initial page
-    this.pages[this.page].call( this );
+    // this.pages[this.page].call( this );
 
     this.fogTween = new TWEEN.Tween( this.scene.fog )
       .to( { near: lim+10, far: 10*lim+10 }, 2000 )
@@ -107,58 +153,43 @@ export default class HowToPlayPass extends CubeDrawer {
     this.light.position.set( x+5, y+5, z )
   }
 
-  snakePage() {
+  // howToPlay() {
 
-    let camPos = {
-      x: 0,
-      y: 0,
-      z: 20
-    };
+  //   // establish the camera positon
+  //   let camPos = {
+  //     x: 0,
+  //     y: 0,
+  //     z: 20
+  //   };
 
-    this.moveCameraPosition( camPos.x, camPos.y, camPos.z );
-    // this.setTextOverlay( "howToPlaySnakeOverlay" );
-  }
+  //   // add snake cubes and start animating them?
 
-  levelPage() {
-    let camPos = {
-      x: 50,
-      y: 0,
-      z: 20
-    };
+  //   // return a function which moves camera to this page
+  //   return () => {
+  //     this.moveCameraPosition( camPos.x, camPos.y, camPos.z );
+  //   }
+  // }
 
-    this.moveCameraPosition( camPos.x, camPos.y, camPos.z );
-    // this.setTextOverlay( "howToPlayLevelOverlay" );
-  }
+  // moveCameraPosition( x, y, z ) {
 
-  setTextOverlay( overlayDescriptor ) {
-    this.overlay = new stateMappings.overlays[ overlayDescriptor ]();
-    this.overlay
-    this.composer.passes[_overlay_] = this.overlay.renderPass;
-    passRegistry.register( this.overlay );
-  }
+  //   let camZ = this.camera.position.z;
+  //   let newCamZ = z;
 
-  moveCameraPosition( x, y, z ) {
+  //   let camX = this.camera.position.x;
+  //   let newCamX = x;
 
-    let camZ = this.camera.position.z;
-    let newCamZ = z;
+  //   let camY = this.camera.position.y;
+  //   let newCamY = y;
 
-    let camX = this.camera.position.x;
-    let newCamX = x;
+  //   this.camZTween = new TWEEN.Tween( this.camera.position )
+  //     .to( { x: newCamX, y: newCamY, z: newCamZ }, 1000 )
+  //     .easing( TWEEN.Easing.Quadratic.InOut )
+  //     .start();
 
-    let camY = this.camera.position.y;
-    let newCamY = y;
+  //   this.lightTween = new TWEEN.Tween( this.light.position )
+  //     .to( { x: newCamZ+5, y: newCamY+5, z: newCamZ }, 1000 )
+  //     .easing( TWEEN.Easing.Quadratic.InOut )
+  //     .start();
 
-    this.camZTween = new TWEEN.Tween( this.camera.position )
-      .to( { x: newCamX, y: newCamY, z: newCamZ }, 1000 )
-      .easing( TWEEN.Easing.Quadratic.InOut )
-      .start();
-
-    this.lightTween = new TWEEN.Tween( this.light.position )
-      .to( { x: newCamZ+5, y: newCamY+5, z: newCamZ }, 1000 )
-      .easing( TWEEN.Easing.Quadratic.InOut )
-      .start();
-
-  }
+  // }
 }
-
-
