@@ -1,15 +1,8 @@
 import _ from 'underscore';
 import util from 'app/util';
-import stateManager from 'app/controllers/stateManager';
 import stateMappings from 'app/config/stateMappings.js';
 import gameTypes from 'app/config/gameTypes.js';
-import passRegistry from 'app/controllers/passRegistry.js';
-
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
-require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
-
-import CubeDrawer from 'app/views/CubeDrawer';
+import CubeDrawer from 'app/classes/CubeDrawer';
 import Game from 'app/controllers/Game.js';
 
 const _overlay_ = 1;
@@ -17,13 +10,10 @@ const _overlay_ = 1;
 export default class GamePass extends CubeDrawer {
 
   constructor( composer, { difficulty } ) {
-    super();
+    super( composer );
 
     util.assignKeys.call( this, gameTypes[ difficulty ] ); // limits, interval, colors
     this._game = new Game( gameTypes[ difficulty ] );
-
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, window.__GAME_DIV__.clientWidth / window.__GAME_DIV__.clientHeight, 0.1, 1000);
 
     this.ambientLight = new THREE.AmbientLight( 0x404040, 2 );
     this.scene.add( this.ambientLight );
@@ -36,14 +26,6 @@ export default class GamePass extends CubeDrawer {
     this.highlightBoundaryCubes();
     this.setLevelUpPosition( this._game.levelUpPosition );
     this.setInitialCameraPosition();
-
-    const renderPass = new THREE.RenderPass( this.scene, this.camera );
-    renderPass.renderToScreen = true;
-    renderPass.setSize( window.__GAME_DIV__.width, window.__GAME_DIV__.height );
-    composer.passes = [];
-    composer.passes[0] = renderPass;
-    passRegistry.register( this );
-    this.composer = composer;
 
     this.addGrid({
       size: 100,
@@ -63,8 +45,7 @@ export default class GamePass extends CubeDrawer {
       .start();
 
     window.setTimeout(() => {
-      passRegistry.removeAll();
-      stateManager.setNewApplicationState( newState );
+      this.unload( newState );
     }, 2000 );
 
   }
@@ -80,15 +61,10 @@ export default class GamePass extends CubeDrawer {
 
     this.scoreOverlay = new stateMappings.overlays[ "scoreOverlay" ]();
     this.scoreOverlay.updateScore( 0 );
-    this.composer.passes[_overlay_] = this.scoreOverlay.renderPass;
-    passRegistry.register( this.scoreOverlay );
+    this.loadOverlay( this.scoreOverlay );
 
   }
 
-  // investigate this whole "loadOverlay" thing.  It's not working out like I hoped.
-  // How do you efficiently tell the gamePass that the gameOverOverlayWithEntry or gameOverOverlay was used,
-  // and how does gameOverOverlayWithEntry tell gamePass to load gameOverlay after it's done
-  // maybe it's all handled in the gameOverOverlay...instead of having a second overlay!!
   gameOver() {
     window.setTimeout(() => {
       let gameOverOverlay = new stateMappings.overlays[ "gameOverOverlay" ]();

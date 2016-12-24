@@ -11,33 +11,16 @@ require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/post
 const geoOblique = require('app/fonts/Geo_Oblique.json');
 import titleCubes from 'app/config/titleCubes.js';
 
-import CubeDrawer from 'app/views/CubeDrawer.js';
+import CubeDrawer from 'app/classes/CubeDrawer.js';
 
 export default class TitlePass extends CubeDrawer {
 
   constructor( composer, state ) {
-    super();
-
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, window.__GAME_DIV__.clientWidth / window.__GAME_DIV__.clientHeight, 0.1, 1000);
+    super( composer );
 
     this._setCameraPosition();
     this._setLighting();
     this._setTitleText();
-
-    const renderPass = new THREE.RenderPass( this.scene, this.camera );
-    renderPass.renderToScreen = true;
-    composer.passes = [];
-    composer.addPass( renderPass );
-    passRegistry.register( this );
-
-    this.overlay = {};
-    window.setTimeout(() => {
-      this.overlay = new MenuOverlay();
-      composer.addPass( this.overlay.renderPass );
-      passRegistry.register( this.overlay );
-      this.overlay.on( "acceptSelection", this.unloader.bind( this ) );
-    }, 7000 );
 
     this.nodes = [];
     this.startRemovingNodes = false;
@@ -80,8 +63,7 @@ export default class TitlePass extends CubeDrawer {
       .to( { near: 0, far: 0 }, 2000 )
       .start();
     window.setTimeout(() => {
-      passRegistry.removeAll();
-      stateManager.setNewApplicationState( newState );
+      this.unload( newState );
     }, 2000 );
   }
 
@@ -100,6 +82,12 @@ export default class TitlePass extends CubeDrawer {
       .to( { x: 0, y: 0, z: 0 }, 7000 )
       .easing( TWEEN.Easing.Quadratic.InOut )
       .start();
+
+    window.setTimeout(() => {
+      this.overlay = new MenuOverlay();
+      this.loadOverlay( this.overlay );
+      this.overlay.on( "acceptSelection", this.unloader.bind( this ) );
+    }, 7000 );
 
     window.setTimeout(() => {
       this._animateTitleCubes( [].concat(titleCubes) );
