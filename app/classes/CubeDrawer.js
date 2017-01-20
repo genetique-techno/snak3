@@ -1,9 +1,10 @@
 import _ from 'underscore';
 import util from 'app/util';
+import MainPass from "app/classes/MainPass";
 
-class CubeDrawer {
+export default class CubeDrawer extends MainPass {
 
-  constructor() {}
+  constructor( composer ) { super( composer ) }
 
   addGrid( options = {} ) {
     if ( !this.scene ) {
@@ -242,5 +243,3 @@ class CubeDrawer {
   }
 
 };
-
-export default CubeDrawer;
