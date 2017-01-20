@@ -8,14 +8,14 @@ require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shad
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
 require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
 
-import CubeDrawer from 'app/views/CubeDrawer';
+import CubeDrawer from 'app/classes/CubeDrawer';
 import Game from 'app/controllers/Game.js';
 import snakeDirections from 'app/config/demoSnakeDirections';
 
 export default class HowToPlayPass extends CubeDrawer {
 
   constructor( composer ) {
-    super();
+    super( composer );
 
     // create a fake game type
     const miniGameType = {
