@@ -6,10 +6,13 @@ A "3D"-ish take on the classic snake game using ThreeJS.
 
 Run the dev-server with this command:
 
-`webpack-dev-server --port=8999`
+`webpack-dev-server`
 
-Visit `http://localhost:8999/`.  Use arrow keys to change direction, shift to go in and ctrl to go out.
+Visit `http://localhost:8080/`.
 
+# Controls
+
+Use arrow keys to change direction, shift to go in and ctrl to go out.
 
 # Things that need doing: #
 
@@ -26,7 +29,7 @@ X Add Scoring
 
 X AudioEngine
   X sound library
-
+k
 X Fix bug that allows menu incrementing when it's not displayed
 
 - You can crash into yourself sometimes (backwards into your snake shouldn't be allowed)
