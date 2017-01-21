@@ -36,33 +36,23 @@ export default class HowToPlayOverlay extends EventEmitter {
 
   setItems() {
 
-    // this.items = new THREE.Group();
-    // this._menu.menuItems.forEach( ( item, index ) => {
-    //   if ( item !== 'separator' ) {
-    //     let text = new THREE.TextGeometry( item, this.fontOptions );
-    //     let mesh = new THREE.Mesh( text, this.material.clone() );
-    //     mesh.position.set( basePosition.x, basePosition.y - itemGap * index, basePosition.z );
-    //     this.items.add( mesh );
-    //   } else {
-    //     this.items.add( new THREE.Object3D() );
-    //   }
-    // });
-
     const base = { x: -380, y: 180, z: 0 };
     const gap = 30;
 
     const textGroup = new THREE.Group();
 
     items.forEach( ( line, index ) => {
+
       if (line.text) {
         let options = _.extend({}, this.fontOptions, _.omit( line, ["text", "x", "y"] ) );
         let text = new THREE.TextGeometry( line.text.toLowerCase(), options );
         let mesh = new THREE.Mesh( text, this.material.clone() );
         mesh.position.set( base.x + ( line.x || 0 ), (_.isUndefined(line.y) ? base.y - gap * index : line.y), base.z );
-        // console.log(mesh.position);
+
         // add to the THREE Group
         textGroup.add( mesh );
       }
+
     });
 
     this.scene.add( textGroup );
