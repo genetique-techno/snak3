@@ -91,7 +91,7 @@ export default class HowToPlayPass extends CubeDrawer {
     this.animationLoopInterval = window.setInterval( this.tick.bind( this ), miniGameType.interval );
 
     function keyListener(e) {
-      // step through the pages on any key press
+      // unloads on any keypress
       this.unloader();
     }
     this.keyListener = keyListener.bind( this );
@@ -142,57 +142,17 @@ export default class HowToPlayPass extends CubeDrawer {
       .to( { near: lim+10, far: 10*lim+10 }, 2000 )
       .start();
 
-    // window.setTimeout(() => {
+    window.setTimeout(() => {
       this.overlay = new HowToPlayOverlay();
       this.loadOverlay( this.overlay );
-    // }, 2000);
+    }, 1000);
 
   }
 
   setCameraPosition(x, y, z) {
 
     this.camera.position.set( x, y, z );
-    // this.camera.lookAt( new THREE.Vector3(-1, 1, -1) );
     this.light.position.set( x+5, y+5, z )
   }
 
-  // howToPlay() {
-
-  //   // establish the camera positon
-  //   let camPos = {
-  //     x: 0,
-  //     y: 0,
-  //     z: 20
-  //   };
-
-  //   // add snake cubes and start animating them?
-
-  //   // return a function which moves camera to this page
-  //   return () => {
-  //     this.moveCameraPosition( camPos.x, camPos.y, camPos.z );
-  //   }
-  // }
-
-  // moveCameraPosition( x, y, z ) {
-
-  //   let camZ = this.camera.position.z;
-  //   let newCamZ = z;
-
-  //   let camX = this.camera.position.x;
-  //   let newCamX = x;
-
-  //   let camY = this.camera.position.y;
-  //   let newCamY = y;
-
-  //   this.camZTween = new TWEEN.Tween( this.camera.position )
-  //     .to( { x: newCamX, y: newCamY, z: newCamZ }, 1000 )
-  //     .easing( TWEEN.Easing.Quadratic.InOut )
-  //     .start();
-
-  //   this.lightTween = new TWEEN.Tween( this.light.position )
-  //     .to( { x: newCamZ+5, y: newCamY+5, z: newCamZ }, 1000 )
-  //     .easing( TWEEN.Easing.Quadratic.InOut )
-  //     .start();
-
-  // }
-}
+};
