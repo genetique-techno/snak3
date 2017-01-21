@@ -3,6 +3,7 @@ import util from 'app/util';
 import stateManager from 'app/controllers/stateManager';
 import stateMappings from 'app/config/stateMappings';
 import passRegistry from 'app/controllers/passRegistry';
+import HowToPlayOverlay from 'app/views/HowToPlayOverlay';
 
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
 require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
@@ -137,12 +138,14 @@ export default class HowToPlayPass extends CubeDrawer {
     this.scene.fog = new THREE.Fog( 0x000000, 0, 0 );
     this.setCameraPosition.apply( this, this.cameraPosition );
 
-    // load the initial page
-    // this.pages[this.page].call( this );
-
     this.fogTween = new TWEEN.Tween( this.scene.fog )
       .to( { near: lim+10, far: 10*lim+10 }, 2000 )
       .start();
+
+    // window.setTimeout(() => {
+      this.overlay = new HowToPlayOverlay();
+      this.loadOverlay( this.overlay );
+    // }, 2000);
 
   }
 
