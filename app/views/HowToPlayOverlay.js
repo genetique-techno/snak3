@@ -13,7 +13,9 @@ export default class HowToPlayOverlay extends EventEmitter {
 
     this.font = new THREE.Font( alegreya );
     this.material = new THREE.MeshBasicMaterial({
-      color: 0xffffff
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0,
     });
     this.fontOptions = {
       font: this.font,
@@ -56,6 +58,11 @@ export default class HowToPlayOverlay extends EventEmitter {
     });
 
     this.scene.add( textGroup );
+
+    // Fade in the instruction text
+    textGroup.children.forEach( item => new TWEEN.Tween( item.material )
+        .to( { opacity: 1 }, 1000 )
+        .start() );
   }
 
 };

@@ -124,6 +124,7 @@ export default class HowToPlayPass extends CubeDrawer {
     };
 
     window.clearInterval( this.animationLoopInterval );
+
     window.setTimeout(() => {
       window.removeEventListener( 'keydown', this.keyListener );
       passRegistry.removeAll();
