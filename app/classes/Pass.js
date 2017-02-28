@@ -44,3 +44,10 @@ export default class Pass extends EventEmitter {
     stateManager.setNewApplicationState( newState );
   }
 };
+
+
+/*
+
+ABSTRACT OUT THE COMPOSER PASS BULLSHIT AND MAKE IT NOT SUCK
+
+*/

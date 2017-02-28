@@ -2,20 +2,14 @@ import _ from 'underscore';
 import util from 'app/util';
 import stateManager from 'app/controllers/stateManager';
 import stateMappings from 'app/config/stateMappings';
-import passRegistry from 'app/controllers/passRegistry';
-
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
-require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
-
-import CubeDrawer from 'app/views/CubeDrawer';
+import CubeDrawer from 'app/classes/CubeDrawer';
 import Game from 'app/controllers/Game.js';
 import snakeDirections from 'app/config/demoSnakeDirections';
 
 export default class HowToPlayPass extends CubeDrawer {
 
   constructor( composer ) {
-    super();
+    super( composer );
 
     // create a fake game type
     const miniGameType = {
@@ -54,7 +48,6 @@ export default class HowToPlayPass extends CubeDrawer {
     this._game = new Game( miniGameType, miniGameOptions );
 
     // camera setup -- this page uses a different FOV and camera offset to get the perspective correct for the miniGame demo
-    this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(60, window.__GAME_DIV__.clientWidth / window.__GAME_DIV__.clientHeight, 0.1, 1000);
     const w = window.__GAME_DIV__.clientWidth * 1.5;
     const h = window.__GAME_DIV__.clientHeight * 1.5;
@@ -71,14 +64,6 @@ export default class HowToPlayPass extends CubeDrawer {
     this.setInitialCube();
     this.highlightBoundaryCubes();
     this.setLevelUpPosition(  miniGameOptions.levelUpPosition );
-
-    const renderPass = new THREE.RenderPass( this.scene, this.camera );
-    renderPass.renderToScreen = true;
-    renderPass.setSize( window.__GAME_DIV__.width, window.__GAME_DIV__.height );
-    composer.passes = [];
-    composer.passes[0] = renderPass;
-    passRegistry.register( this );
-    this.composer = composer;
 
     this.addGrid({
       size: 100,
@@ -125,8 +110,7 @@ export default class HowToPlayPass extends CubeDrawer {
     window.clearInterval( this.animationLoopInterval );
     window.setTimeout(() => {
       window.removeEventListener( 'keydown', this.keyListener );
-      passRegistry.removeAll();
-      stateManager.setNewApplicationState( newState );
+      this.unload( newState );
     }, 2000 );
 
   }
