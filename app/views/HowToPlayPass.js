@@ -125,6 +125,8 @@ export default class HowToPlayPass extends CubeDrawer {
 
     window.clearInterval( this.animationLoopInterval );
 
+    this.overlay.unloader();
+
     window.setTimeout(() => {
       window.removeEventListener( 'keydown', this.keyListener );
       passRegistry.removeAll();

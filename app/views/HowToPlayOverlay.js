@@ -33,15 +33,15 @@ export default class HowToPlayOverlay extends EventEmitter {
     this.renderPass.clear = false;
     this.renderPass.renderToScreen = true;
 
-    this.setItems();
+    this.loader();
   }
 
-  setItems() {
+  loader() {
 
     const base = { x: -380, y: 180, z: 0 };
     const gap = 30;
 
-    const textGroup = new THREE.Group();
+    this.textGroup = new THREE.Group();
 
     items.forEach( ( line, index ) => {
 
@@ -52,17 +52,22 @@ export default class HowToPlayOverlay extends EventEmitter {
         mesh.position.set( base.x + ( line.x || 0 ), (_.isUndefined(line.y) ? base.y - gap * index : line.y), base.z );
 
         // add to the THREE Group
-        textGroup.add( mesh );
+        this.textGroup.add( mesh );
       }
 
     });
 
-    this.scene.add( textGroup );
+    this.scene.add( this.textGroup );
 
     // Fade in the instruction text
-    textGroup.children.forEach( item => new TWEEN.Tween( item.material )
+    this.textGroup.children.forEach( item => new TWEEN.Tween( item.material )
         .to( { opacity: 1 }, 1000 )
         .start() );
   }
 
+  unloader() {
+    this.textGroup.children.forEach( item => new TWEEN.Tween( item.material )
+        .to( { opacity: 0 }, 1000 )
+        .start() );
+  }
 };
