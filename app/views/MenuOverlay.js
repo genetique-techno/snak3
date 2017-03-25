@@ -30,7 +30,7 @@ export default class MenuOverlay extends EventEmitter {
     this.scene = new THREE.Scene();
     this.camera = new THREE.OrthographicCamera(window.__GAME_DIV__.clientWidth / - 2, window.__GAME_DIV__.clientWidth / 2, window.__GAME_DIV__.clientHeight / 2, window.__GAME_DIV__.clientHeight / -2, 0.1, 1000);
 
-    this.setItems();
+    this.loader();
 
     this.camera.position.set( 0, 0, 20);
     this.renderPass = new THREE.RenderPass( this.scene, this.camera );
@@ -74,7 +74,7 @@ export default class MenuOverlay extends EventEmitter {
     }, 500 );
   }
 
-  setItems() {
+  loader() {
 
     this.items = new THREE.Group();
     this._menu.menuItems.forEach( ( item, index ) => {

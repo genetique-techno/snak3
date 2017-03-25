@@ -27,6 +27,10 @@ export default class ScoreOverlay {
     this.renderPass.renderToScreen = true;
   }
 
+  loader() {
+    // NOOP
+  }
+
   updateScore( updatedScore ) {
 
     const basePosition = { x: this.camera.right - 50, y: this.camera.top - 50, z: 0 };
