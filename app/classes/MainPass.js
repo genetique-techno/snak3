@@ -15,6 +15,7 @@ export default class MainPass extends Pass {
 
     this.composer.addPass( overlay.renderPass );
     passRegistry.register( overlay );
+    overlay.loader();
   }
 
   setInitialCameraPosition() {

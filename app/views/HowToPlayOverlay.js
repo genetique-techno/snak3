@@ -33,7 +33,6 @@ export default class HowToPlayOverlay extends EventEmitter {
     this.renderPass.clear = false;
     this.renderPass.renderToScreen = true;
 
-    this.loader();
   }
 
   loader() {

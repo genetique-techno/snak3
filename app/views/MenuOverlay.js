@@ -29,17 +29,7 @@ export default class MenuOverlay extends EventEmitter {
 
     this.scene = new THREE.Scene();
     this.camera = new THREE.OrthographicCamera(window.__GAME_DIV__.clientWidth / - 2, window.__GAME_DIV__.clientWidth / 2, window.__GAME_DIV__.clientHeight / 2, window.__GAME_DIV__.clientHeight / -2, 0.1, 1000);
-
-    this.loader();
-
-    this.camera.position.set( 0, 0, 20);
     this.renderPass = new THREE.RenderPass( this.scene, this.camera );
-    this.renderPass.clear = false;
-    this.renderPass.renderToScreen = true;
-
-    this.setSelection(0);
-    this._menu.on( 'changeSelection', this.setSelection.bind( this ) );
-    this._menu.on( 'acceptSelection', this.acceptSelection.bind( this ) );
 
   }
 
@@ -89,6 +79,13 @@ export default class MenuOverlay extends EventEmitter {
     });
 
     this.scene.add( this.items );
+    this.camera.position.set( 0, 0, 20);
+    this.renderPass.clear = false;
+    this.renderPass.renderToScreen = true;
+
+    this.setSelection(0);
+    this._menu.on( 'changeSelection', this.setSelection.bind( this ) );
+    this._menu.on( 'acceptSelection', this.acceptSelection.bind( this ) );
   }
 
   setSelection( index ) {

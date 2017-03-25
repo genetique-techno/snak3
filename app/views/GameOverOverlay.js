@@ -29,18 +29,8 @@ export default class GameOverOverlay extends EventEmitter {
 
     this.scene = new THREE.Scene();
     this.camera = new THREE.OrthographicCamera(window.__GAME_DIV__.clientWidth / - 2, window.__GAME_DIV__.clientWidth / 2, window.__GAME_DIV__.clientHeight / 2, window.__GAME_DIV__.clientHeight / -2, 0.1, 1000);
-
-    this.setGameOverText();
-    this.loader();
-
-    this.camera.position.set( 0, 0, 20);
     this.renderPass = new THREE.RenderPass( this.scene, this.camera );
-    this.renderPass.clear = false;
-    this.renderPass.renderToScreen = true;
 
-    this.setSelection(0);
-    this._menu.on( 'changeSelection', this.setSelection.bind( this ) );
-    this._menu.on( 'acceptSelection', this.acceptSelection.bind( this ) );
   }
 
   acceptSelection( newState ) {
@@ -72,14 +62,6 @@ export default class GameOverOverlay extends EventEmitter {
     }, 500 );
   }
 
-  setGameOverText() {
-    let text = new THREE.TextGeometry( 'game over', _.extend( {}, this.fontOptions, { size: 60 } ) );
-    let mesh = new THREE.Mesh( text, this.material.clone() );
-    mesh.position.set( -175, 0, basePosition.z );
-
-    this.scene.add( mesh );
-  }
-
   loader() {
 
     this.items = new THREE.Group();
@@ -95,6 +77,24 @@ export default class GameOverOverlay extends EventEmitter {
     });
 
     this.scene.add( this.items );
+    this.setGameOverText();
+
+    this.camera.position.set( 0, 0, 20);
+    this.renderPass.clear = false;
+    this.renderPass.renderToScreen = true;
+
+    this.setSelection(0);
+    this._menu.on( 'changeSelection', this.setSelection.bind( this ) );
+    this._menu.on( 'acceptSelection', this.acceptSelection.bind( this ) );
+
+  }
+
+  setGameOverText() {
+    let text = new THREE.TextGeometry( 'game over', _.extend( {}, this.fontOptions, { size: 60 } ) );
+    let mesh = new THREE.Mesh( text, this.material.clone() );
+    mesh.position.set( -175, 0, basePosition.z );
+
+    this.scene.add( mesh );
   }
 
   setSelection( index ) {

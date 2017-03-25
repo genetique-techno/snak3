@@ -63,13 +63,14 @@ export default class GamePass extends CubeDrawer {
     this.scoreOverlay.updateScore( 0 );
     this.loadOverlay( this.scoreOverlay );
 
+    this.gameOverOverlay = new stateMappings.overlays[ "gameOverOverlay" ]();
+    this.gameOverOverlay.on( "gameOverOverlayDone", this.unloader.bind( this ) );
+
   }
 
   gameOver() {
     window.setTimeout(() => {
-      let gameOverOverlay = new stateMappings.overlays[ "gameOverOverlay" ]();
-      this.composer.passes[_overlay_] = gameOverOverlay.renderPass;
-      gameOverOverlay.on( "gameOverOverlayDone", this.unloader.bind( this ) );
+      this.loadOverlay( this.gameOverOverlay );
     }, 2000 );
   }
 
