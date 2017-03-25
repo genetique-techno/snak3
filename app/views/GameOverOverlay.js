@@ -12,7 +12,6 @@ export default class GameOverOverlay extends EventEmitter {
   constructor( cb ) {
     super();
 
-    this._menu = new GameOver();
 
     this.font = new THREE.Font( alegreya );
     this.material = new THREE.MeshBasicMaterial({
@@ -65,6 +64,7 @@ export default class GameOverOverlay extends EventEmitter {
   loader() {
 
     this.items = new THREE.Group();
+    this._menu = new GameOver();
     this._menu.gameOverMenuItems.forEach( ( item, index ) => {
       if ( item !== 'separator' ) {
         let text = new THREE.TextGeometry( item, this.fontOptions );
@@ -83,6 +83,7 @@ export default class GameOverOverlay extends EventEmitter {
     this.renderPass.clear = false;
     this.renderPass.renderToScreen = true;
 
+
     this.setSelection(0);
     this._menu.on( 'changeSelection', this.setSelection.bind( this ) );
     this._menu.on( 'acceptSelection', this.acceptSelection.bind( this ) );
@@ -98,7 +99,7 @@ export default class GameOverOverlay extends EventEmitter {
   }
 
   setSelection( index ) {
-
+    console.log(index);
     let item = this.items.children[index];
 
     let selectorPosition = {
