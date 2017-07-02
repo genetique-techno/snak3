@@ -15,6 +15,9 @@
   "bugs": {
     "url": "https://github.com/genetique-techno/snak3/issues"
   },
+  "scripts": {
+    "start": "webpack-dev-server"
+  },
   "homepage": "https://github.com/genetique-techno/snak3#readme",
   "devDependencies": {
     "babel-core": "^6.11.4",

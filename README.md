@@ -4,9 +4,9 @@ A "3D"-ish take on the classic snake game using ThreeJS.
 
 ### Running ###
 
-Run the dev-server with this command:
+Run the app's dev-server using npm:
 
-`webpack-dev-server`
+`npm start`
 
 Visit `http://localhost:8080/`.
 
