@@ -12,35 +12,86 @@ module.exports = {
     app: ["babel-polyfill", path.resolve(appPaths.rootDir, "app", "index.js") ]
   },
   output: {
-    path: "build",
+    path: path.resolve(__dirname, "build"),
     filename: "app.bundle.js"
   },
   module: {
-    loaders: [
+    rules: [
       { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
-      { test: /\.css$/, exclude: /\.useable\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader') },
-      { test: /\.less$/, exclude: /\.useable\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader') },
-      { test: /\.json/, loader: 'json-loader' }
+      {
+        test: /\.css$/,
+        use: [{
+          loader: "style-loader",
+        }, {
+          loader: "css-loader",
+        }],
+      },
+      {
+        test: /\.less$/,
+        use: [{
+          loader: "style-loader",
+        }, {
+          loader: "css-loader",
+        }, {
+          loader: "less-loader",
+        }],
+      },
+      { test: /\.json/, loader: 'json-loader' },
+      {
+        test: /EffectComposer\.js/,
+        loader: "expose-loader?THREE!imports-loader?this=>global!exports-loader?THREE",
+      },
+      {
+        test: /RenderPass\.js/,
+        loader: "expose-loader?THREE!imports-loader?this=>global!exports-loader?THREE",
+      },
+      {
+        test: /CopyShader\.js/,
+        loader: "expose-loader?THREE!imports-loader?this=>global!exports-loader?THREE",
+      },
+      {
+        test: /ConvolutionShader\.js/,
+        loader: "expose-loader?THREE!imports-loader?this=>global!exports-loader?THREE",
+      },
+      {
+        test: /BloomPass\.js/,
+        loader: "expose-loader?THREE!imports-loader?this=>global!exports-loader?THREE",
+      },
+      {
+        test: /ShaderPass\.js/,
+        loader: "expose-loader?THREE!imports-loader?this=>global!exports-loader?THREE",
+      },
+      {
+        test: /TexturePass\.js/,
+        loader: "expose-loader?THREE!imports-loader?this=>global!exports-loader?THREE",
+      },
+      {
+        test: /RGBShiftShader\.js/,
+        loader: "expose-loader?THREE!imports-loader?this=>global!exports-loader?THREE",
+      },
     ]
   },
   resolveLoader: {
-    modulesDirectories: [path.join(appPaths.rootDir, "node_modules")]
+    modules: ["node_modules"],
+    extensions: [".js"],
   },
   resolve: {
-    extensions: [ "", ".js" ],
-    modulesDirectories: ["node_modules"],
+    extensions: [".js", ".json"],
     alias: {
       app: path.join(appPaths.appSrcDir),
-      node_modules: path.join(appPaths.modulesDirectory)
     }
   },
   plugins: [
-
+    // makes THREE available in the global scope anywhere in the app
     new webpack.ProvidePlugin({
-        THREE: "three",
-        TWEEN: "tween.js",
+      THREE: "three"
     }),
-    
+
+    // makes TWEEN available in the global scope anywhere in the app
+    new webpack.ProvidePlugin({
+      TWEEN: "tween.js",
+    }),
+
     new HtmlWebpackPlugin({
       chunks: ['app', 'devServer'],
       template: path.join(appPaths.appDir, "example.template.html"),
@@ -50,6 +101,6 @@ module.exports = {
     new ExtractTextPlugin('[name].bundle.css', {
       allChunks: true
     })
-  
+
   ]
 };

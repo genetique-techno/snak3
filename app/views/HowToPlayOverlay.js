@@ -2,8 +2,6 @@ import EventEmitter from 'events';
 import _ from 'underscore';
 import items from 'app/config/howToPlayText';
 
-require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
-
 const alegreya = require('app/fonts/Alegreya Sans SC Light_Regular.json');
 
 export default class HowToPlayOverlay extends EventEmitter {

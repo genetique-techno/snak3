@@ -3,10 +3,6 @@ import _ from 'underscore';
 import passRegistry from 'app/controllers/passRegistry';
 import stateManager from 'app/controllers/stateManager';
 
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
-require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
-
 export default class Pass extends EventEmitter {
 
   constructor( composer ) {

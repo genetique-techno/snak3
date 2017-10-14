@@ -1,7 +1,5 @@
 import _ from 'underscore';
 
-require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
-
 const alegreya = require('app/fonts/Alegreya Sans SC Light_Regular.json');
 
 export default class ScoreOverlay {

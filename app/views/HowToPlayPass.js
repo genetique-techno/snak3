@@ -5,10 +5,6 @@ import stateMappings from 'app/config/stateMappings';
 import passRegistry from 'app/controllers/passRegistry';
 import HowToPlayOverlay from 'app/views/HowToPlayOverlay';
 
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
-require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
-
 import CubeDrawer from 'app/classes/CubeDrawer';
 import Game from 'app/controllers/Game.js';
 import snakeDirections from 'app/config/demoSnakeDirections';

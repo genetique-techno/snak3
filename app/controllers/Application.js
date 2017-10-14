@@ -4,15 +4,16 @@ import stateMappings from 'app/config/stateMappings.js';
 import passRegistry from 'app/controllers/passRegistry.js';
 import _ from 'underscore';
 
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/ConvolutionShader.js' );
-
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/BloomPass.js' );
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/ShaderPass.js' );
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/TexturePass.js' );
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/RGBShiftShader.js' );
+// requiring these plugins adds their functionality to the THREE variable
+//   which is globally available
+require("app/deps/EffectComposer.js");
+require("app/deps/RenderPass.js");
+require("app/deps/BloomPass.js");
+require("app/deps/ShaderPass.js");
+require("app/deps/TexturePass.js");
+require("app/deps/RGBShiftShader.js");
+require("app/deps/CopyShader.js");
+require("app/deps/ConvolutionShader.js");
 
 import { vertShader, fragShader } from 'app/shaders/FXAA.js';
 

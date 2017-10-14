@@ -2,8 +2,6 @@ import EventEmitter from 'events';
 import _ from 'underscore';
 import Menu from 'app/controllers/Menu.js';
 
-require( 'imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
-
 const alegreya = require('app/fonts/Alegreya Sans SC Light_Regular.json');
 const basePosition = { x: 0, y: -100, z: 0 };
 const itemGap = 30;

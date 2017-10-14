@@ -4,10 +4,6 @@ import MenuOverlay from 'app/views/MenuOverlay.js';
 import stateManager from 'app/controllers/stateManager.js';
 import passRegistry from 'app/controllers/passRegistry.js';
 
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/shaders/CopyShader.js' );
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/EffectComposer.js' );
-require( 'expose?THREE!imports?this=>global!exports?THREE!three/examples/js/postprocessing/RenderPass.js' );
-
 const geoOblique = require('app/fonts/Geo_Oblique.json');
 import titleCubes from 'app/config/titleCubes.js';
 
