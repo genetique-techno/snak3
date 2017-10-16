@@ -17,7 +17,7 @@ Use arrow keys to change direction, shift to go in and ctrl to go out.
 # Things that need doing: #
 
 - [ ] bugs
-  - [ ] You can crash into yourself sometimes (backwards into your snake shouldn't be allowed)
+  - [x] You can crash into yourself sometimes (backwards into your snake shouldn't be allowed)
 - [ ] app
   - [ ] new views
     - [ ] playing instructions

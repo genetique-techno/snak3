@@ -65,7 +65,7 @@ class Snake extends EventEmitter {
 
     let newDir = util.keyToAction[ code ];
 
-    if (this.nodes.length === 1) { return this.direction = newDir };
+    if (this.nodes.length === 1) { return this.nextDirection = newDir };
 
     // ignore inputs that would reverse the snake on itself
     if ( newDir === 'up' && this.direction === 'down' ) {
@@ -81,7 +81,7 @@ class Snake extends EventEmitter {
     } else if ( newDir === 'out' && this.direction === 'in' ) {
       return null;
     } else {
-      this.direction = newDir;
+      this.nextDirection = newDir;
     }
 
   }
@@ -94,7 +94,8 @@ class Snake extends EventEmitter {
   advance() {
     var headStub = [0, 0, 0];
     var directionalSound = '';
-
+    // set the direction off of the nextDirection
+    this.direction = this.nextDirection;
     switch ( this.direction ) {
 
       case 'up':
