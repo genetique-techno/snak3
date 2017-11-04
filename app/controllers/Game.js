@@ -83,8 +83,6 @@ class Game extends EventEmitter {
 
   }
 
-
-
   levelUp( initialBool ) {
     let avoid = this._snake.nodes;
     let rnd;
